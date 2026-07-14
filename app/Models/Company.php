@@ -22,4 +22,24 @@ class Company extends Model
         'iata_expiry' => 'date',
         'director_cnic_expiry' => 'date',
     ];
+
+    public function addresses()
+    {
+        return $this->hasMany(CompanyAddress::class);
+    }
+
+    public function contactNumbers()
+    {
+        return $this->hasMany(CompanyContactNumber::class);
+    }
+
+    public function emails()
+    {
+        return $this->hasMany(CompanyEmail::class);
+    }
+
+    public function licenses()
+    {
+        return $this->hasMany(CompanyLicense::class);
+    }
 }
