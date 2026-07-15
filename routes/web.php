@@ -12,6 +12,7 @@ use App\Http\Controllers\ExpenseTransactionController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserActivityController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\PackageController;
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -159,5 +160,17 @@ Route::middleware('auth')->group(function () {
             Route::get('trash', 'trash')->name('company.trash');
             Route::get('restore/{id}', 'restore')->name('company.restore');
         });
+
+        Route::controller(PackageController::class)
+            ->prefix('package') ->group(function () {
+                Route::get('/', 'index')->name('package.index');
+                Route::get('create', 'create')->name('package.create');
+                Route::post('store', 'store')->name('package.store');
+                Route::get('edit/{id}', 'edit')->name('package.edit');
+                Route::put('update/{id}', 'update')->name('package.update');
+                Route::delete('delete/{id}', 'destroy')->name('package.delete');
+                Route::get('trash', 'trash')->name('package.trash');
+                Route::get('restore/{id}', 'restore')->name('package.restore');
+            });
     });
 });

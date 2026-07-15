@@ -140,7 +140,7 @@
                        </a>
                    </li>
                    <li>
-                       <a href="#">
+                       <a href="{{ route('package.index') }}">
                            <i data-feather="package"></i>
                            <span>Packages</span>
                        </a>
