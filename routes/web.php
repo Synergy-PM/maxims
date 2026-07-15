@@ -1,72 +1,163 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RoleController;
-use App\Http\Controllers\UserActivityController;
 use App\Http\Controllers\UserController;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\ClientController;
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\ExpenseTransactionController;
+use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\UserActivityController;
+use App\Http\Controllers\CompanyController;
 
-Route::controller(AuthController::class)->prefix('user')->group(function () {
-    Route::get('change-password', 'showChangePasswordForm')->name('user.show-change-password');
-    Route::post('change-password', 'changePassword')->name('user.change-password');
-});
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 
-Route::controller(AuthController::class)->group(function () {
-    Route::prefix('/')->group(function () {
-        Route::get('/', 'showLoginForm')->name('login');
-        Route::get('login', 'showLoginForm')->name('login');
-        Route::post('/login', 'login')->name('login1');
-        Route::post('/logout', 'logout')->name('logout1');
+    Route::get('/', function () {
+        return redirect()->route('login');
     });
 });
+
+Route::get('/booking/{booking}/hajj-agreement', [BookingController::class, 'agreement'])->middleware('signed')->name('booking.agreement');
+Route::post('/save-agreement-signature', [BookingController::class, 'saveAgreementSignature'])->name('save.agreement.signature');
+// URL::signedRoute('booking.agreement',['booking' => $booking->id]);
 
 Route::middleware('auth')->group(function () {
+    Route::get('/', [DashboardController::class, 'welcome'])->name('welcome');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/change-password', [AuthController::class, 'changePassword'])->name('change.password');
+    Route::post('/change-password', [AuthController::class, 'changePasswordPost'])->name('change.password.post');
+
+
     Route::prefix('admin')->group(function () {
-        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-        Route::get('/logout', function () {
-            Auth::logout();
-            return redirect('/');
-        })->name('logout');
-    });
+        Route::controller(RoleController::class)
+            ->prefix('role')
+            ->group(function () {
+                Route::get('/', 'index')->name('role.index');
+                Route::get('create', 'create')->name('role.create');
+                Route::post('store', 'store')->name('role.store');
+                Route::get('edit/{id}', 'edit')->name('role.edit');
+                Route::put('update/{id}', 'update')->name('role.update');
+                Route::delete('delete/{id}', 'destroy')->name('role.delete');
+                Route::get('trash', 'trash')->name('role.trash');
+                Route::put('restore/{id}', 'restore')->name('role.restore');
+            });
 
+        /*
+        |-------------------------
+        | USER MODULE (FIXED)
+        |-------------------------
+        */
+        Route::controller(UserController::class)
+            ->prefix('user')
+            ->group(function () {
+                Route::get('/', 'index')->name('user.index');
+                Route::get('create', 'create')->name('user.create');
+                Route::post('store', 'store')->name('user.store');
+                Route::get('edit/{id}', 'edit')->name('user.edit');
+                Route::put('update/{id}', 'update')->name('user.update');
+                Route::delete('delete/{id}', 'destroy')->name('user.delete');
+                Route::get('trash', 'trash')->name('user.trash');
+                Route::get('restore/{id}', 'restore')->name('user.restore');
+            });
 
-    Route::controller(RoleController::class)->prefix('role')->group(function () {
-        Route::get('/', 'index')->name('role.index');
-        Route::get('create', 'create')->name('role.create');
-        Route::post('store', 'store')->name('role.store');
-        Route::get('edit/{id}', 'edit')->name('role.edit');
-        Route::delete('delete/{id}', 'destroy')->name('role.delete');
-        Route::put('update/{id}', 'update')->name('role.update');
-        Route::get('trash', 'trash')->name('role.trash');
-        Route::get('restore/{id}', 'restore')->name('role.restore');
-    });
+        Route::controller(UserActivityController::class)
+            ->prefix('user_activity')
+            ->group(function () {
+                Route::get('/', 'index')->name('user_activity.index');
+            });
 
-    Route::controller(UserController::class)->prefix('user')->group(function () {
-        Route::get('/', 'index')->name('user.index');
-        Route::get('create', 'create')->name('user.create');
-        Route::post('store', 'store')->name('user.store');
-        Route::get('edit/{id}', 'edit')->name('user.edit');
-        Route::delete('delete/{id}', 'destroy')->name('user.delete');
-        Route::put('update/{id}', 'update')->name('user.update');
-        Route::get('trash', 'trash')->name('user.trash');
-        Route::get('restore/{id}', 'restore')->name('user.restore');
-    });
+        Route::controller(ClientController::class)
+            ->prefix('client')
+            ->group(function () {
+                Route::get('/',            'index')->name('client.index');
+                Route::get('create',       'create')->name('client.create');
+                Route::post('store',       'store')->name('client.store');
+                Route::get('edit/{id}',    'edit')->name('client.edit');
+                Route::put('update/{id}',  'update')->name('client.update');
+                Route::delete('delete/{id}', 'destroy')->name('client.delete');
+                Route::get('trash',        'trash')->name('client.trash');
+                Route::get('restore/{id}', 'restore')->name('client.restore');
+            });
 
-    Route::controller(UserActivityController::class)->prefix('user_activity')->group(function () {
-        Route::get('/', 'index')->name('user_activity.index');
-    });
+        Route::controller(BookingController::class)
+            ->prefix('booking')
+            ->group(function () {
+                Route::get('/',            'index')->name('booking.index');
+                Route::get('create',       'create')->name('booking.create');
+                Route::post('store',       'store')->name('booking.store');
+                Route::get('show/{id}',    'show')->name('booking.show');
+                Route::get('edit/{id}',    'edit')->name('booking.edit');
+                Route::put('update/{id}',  'update')->name('booking.update');
+                Route::delete('delete/{id}', 'destroy')->name('booking.delete');
+                Route::get('trash',        'trash')->name('booking.trash');
+                Route::get('restore/{id}', 'restore')->name('booking.restore');
+                Route::get('voucher/{booking}', 'voucher')->name('booking.voucher');
+            });
 
-    Route::controller(CompanyController::class)->prefix('company')->group(function () {
-        Route::get('/', 'index')->name('company.index');
-        Route::get('create', 'create')->name('company.create');
-        Route::post('store', 'store')->name('company.store');
-        Route::get('edit/{id}', 'edit')->name('company.edit');
-        Route::delete('delete/{id}', 'destroy')->name('company.delete');
-        Route::put('update/{id}', 'update')->name('company.update');
-        Route::get('trash', 'trash')->name('company.trash');
-        Route::get('restore/{id}', 'restore')->name('company.restore');
+        Route::controller(ExpenseController::class)
+            ->prefix('expense')
+            ->group(function () {
+
+                Route::get('/', 'index')->name('expense.index');
+                Route::get('create', 'create')->name('expense.create');
+                Route::post('store', 'store')->name('expense.store');
+
+                Route::get('edit/{id}', 'edit')->name('expense.edit');
+                Route::put('update/{id}', 'update')->name('expense.update');
+
+                Route::delete('delete/{id}', 'destroy')->name('expense.delete');
+                Route::get('trash', 'trash')->name('expense.trash');
+                Route::get('restore/{id}', 'restore')->name('expense.restore');
+            });
+
+        Route::controller(ExpenseTransactionController::class)
+            ->prefix('expense-transaction')
+            ->group(function () {
+                Route::get('/', 'index')->name('expense.transaction.index');
+                Route::get('create', 'create')->name('expense.transaction.create');
+                Route::post('store', 'store')->name('expense.transaction.store');
+                Route::get('edit/{id}', 'edit')->name('expense.transaction.edit');
+                Route::put('update/{id}', 'update')->name('expense.transaction.update');
+                Route::delete('delete/{id}', 'destroy')->name('expense.transaction.delete');
+                Route::get('report/filter', 'reportFilter')->name('expense.transaction.report.filter');
+                Route::post('report', 'report')->name('expense.transaction.report');
+            });
+
+        Route::controller(TransactionController::class)
+            ->prefix('transaction')
+            ->group(function () {
+                Route::get('/', 'index')->name('transaction.index');
+                Route::get('create', 'create')->name('transaction.create');
+                Route::post('store', 'store')->name('transaction.store');
+                Route::get('trash', 'trash')->name('transaction.trash');
+                Route::post('restore/{id}', 'restore')->name('transaction.restore');
+                Route::get('ledger/filter', 'ledgerFilter')->name('transaction.ledger.filter');
+                Route::post('ledger/view', 'ledgerView')->name('transaction.ledger.view');
+                Route::get('company-ledger/filter', 'companyLedgerFilter')->name('transaction.company-ledger.filter');
+                Route::get('company-ledger/view', 'companyLedgerView')->name('transaction.company-ledger.view');
+                Route::get('show/{id}', 'show')->name('transaction.show');
+                Route::get('edit/{id}', 'edit')->name('transaction.edit');
+                Route::put('update/{id}', 'update')->name('transaction.update');
+                Route::post('delete/{id}', 'destroy')->name('transaction.destroy');
+                Route::get('invoice/filter', 'invoiceFilter')->name('transaction.invoice.filter');
+                Route::get('invoice/{id}', 'invoice')->name('transaction.invoice');
+            });
+
+        Route::controller(CompanyController::class)->prefix('company')->group(function () {
+            Route::get('/', 'index')->name('company.index');
+            Route::get('create', 'create')->name('company.create');
+            Route::post('store', 'store')->name('company.store');
+            Route::get('edit/{id}', 'edit')->name('company.edit');
+            Route::delete('delete/{id}', 'destroy')->name('company.delete');
+            Route::put('update/{id}', 'update')->name('company.update');
+            Route::get('trash', 'trash')->name('company.trash');
+            Route::get('restore/{id}', 'restore')->name('company.restore');
+        });
     });
 });

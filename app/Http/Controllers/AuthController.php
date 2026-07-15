@@ -2,20 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-     public function showLoginForm()
+    public function showLoginForm()
     {
-        return view('auth.login');
+        return view('login');
     }
 
-    /**
-     * Handle the Login Request.
-     */
     public function login(Request $request)
     {
         $request->validate([
@@ -23,48 +21,49 @@ class AuthController extends Controller
             'password' => 'required|min:3',
         ]);
 
-        if (Auth::attempt($request->only('email', 'password'))) {
-            return redirect()->route('dashboard')->with('success', 'Login successful');
+        if (Auth::attempt($request->only('email', 'password'), $request->boolean('remember'))) {
+            $request->session()->regenerate();
+            return redirect()->route('welcome')
+                ->with('success', 'Login successful! Welcome back.');
         }
 
-        return back()->withErrors(['email' => 'Invalid credentials']);
+        return back()
+            ->withInput($request->only('email'))
+            ->withErrors([
+                'email' => 'Invalid email or password. Please try again.'
+            ]);
     }
 
-    /**
-     * Logout the user.
-     */
     public function logout()
     {
         Auth::logout();
-        return redirect()->route('login')->with('success', 'Logged out successfully');
+        return redirect()->route('login')
+            ->with('success', 'You have been logged out successfully.');
     }
 
-    /**
-     * Show the Change Password Form.
-     */
-    public function showChangePasswordForm()
+    public function changePassword()
     {
-        return view('auth.change-password');
+        return view('change-password');
     }
 
-    /**
-     * Handle the Change Password request.
-     */
-    public function changePassword(Request $request)
+    public function changePasswordPost(Request $request)
     {
         $request->validate([
-            'current_password' => ['required', 'current_password'],
-            'new_password'     => ['required', 'min:6', 'confirmed'],
-        ], [
-            'current_password.current_password' => 'The current password is invalid.',
+            'current_password' => 'required',
+            'new_password'     => 'required|min:3|confirmed',
         ]);
 
-        $user = $request->user();
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        if (!Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'Current password is incorrect.']);
+        }
+
         $user->password = Hash::make($request->new_password);
         $user->save();
 
-        Auth::logout();
-
-        return redirect()->route('login')->with('success', 'Password changed successfully. Please login again.');
+        return redirect()->route('login')
+            ->with('success', 'Password changed successfully!');
     }
 }

@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('company_addresses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('company_id')->constrained()->onDelete('cascade');
-            $table->string('address_of');
-            $table->text('address');
-            $table->string('country');
-            $table->string('city');
+            $table->foreignId('company_id')->nullable()->constrained()->onDelete('cascade');
+            $table->string('address_of')->nullable();
+            $table->text('address')->nullable();
+            $table->string('country')->nullable();
+            $table->string('city')->nullable();
             $table->string('po_box')->nullable();
             $table->string('zip_code')->nullable();
-            $table->boolean('is_preferred')->default(false);
+            $table->boolean('is_preferred')->nullable()->default(false);
             $table->softDeletes();
             $table->timestamps();
         });

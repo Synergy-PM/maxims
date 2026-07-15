@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('company_emails', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('company_id')->constrained()->onDelete('cascade');
-            $table->string('email_type');
-            $table->string('email');
-            $table->boolean('is_preferred')->default(false);
+            $table->foreignId('company_id')->nullable()->constrained()->onDelete('cascade');
+            $table->string('email_type')->nullable();
+            $table->string('email')->nullable();
+            $table->boolean('is_preferred')->nullable()->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

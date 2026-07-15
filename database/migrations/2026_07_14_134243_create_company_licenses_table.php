@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('company_licenses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('company_id')->constrained()->onDelete('cascade');
-            $table->string('license_type');
-            $table->string('license_no');
-            $table->string('place_of_issue');
-            $table->date('date_of_issue');
-            $table->date('valid_upto');
-            $table->boolean('is_preferred')->default(false);
+            $table->foreignId('company_id')->nullable()->constrained()->onDelete('cascade');
+            $table->string('license_type')->nullable();
+            $table->string('license_no')->nullable();
+            $table->string('place_of_issue')->nullable();
+            $table->date('date_of_issue')->nullable();
+            $table->date('valid_upto')->nullable();
+            $table->boolean('is_preferred')->nullable()->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

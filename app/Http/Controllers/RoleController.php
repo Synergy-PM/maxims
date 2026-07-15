@@ -2,119 +2,107 @@
 
 namespace App\Http\Controllers;
 
-use Spatie\Permission\Models\Role;
-use Exception;
-use Illuminate\Container\Attributes\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class RoleController extends Controller
 {
+    use AuthorizesRequests;
+
     public function index()
     {
-        $this->authorize('role_view');
-        $trashrole = Role::onlyTrashed()->count();
-        $roles = Role::orderBy('created_at', 'desc')->get();
-        return view('role.index', compact('roles', 'trashrole'));
+        $roles = Role::latest()->get();
+        return view('role.index', compact('roles'));
     }
 
     public function create()
     {
-        $this->authorize('role_create');
-        $permissions = Permission::get();
+        $permissions = Permission::all();
         return view('role.create', compact('permissions'));
     }
 
     public function store(Request $request)
     {
-        DB::beginTransaction();
+        $request->validate([
+            'name' => 'required|unique:roles,name'
+        ]);
 
+        DB::beginTransaction();
         try {
-            $request->validate([
-                'name' => 'required|string|max:255',
-            ]);
             $role = Role::create([
-                'name' => $request->name,
-                'guard_name' => 'web',
+                'name'       => $request->name,
+                'guard_name' => 'web'
             ]);
-            logUserActivity('Role', 'Created Role ' . $role->name, $role->id, 'Role');
+
             if ($request->has('permissions')) {
                 $permissions = Permission::whereIn('id', $request->permissions)->get();
                 $role->syncPermissions($permissions);
             }
+
             DB::commit();
-            return redirect()->route('role.index')->with('success', 'Role created successfully.');
-        } catch (\Exception $ex) {
-            DB::rollBack();
-            return redirect()->back()->with('error', 'Error creating role: ' . $ex->getMessage());
+
+            logUserActivity('Role Created', 'Role: ' . $role->name . ' | Permissions: ' . count($request->permissions ?? []), $role->id, 'Role');
+
+            return redirect()->route('role.index')->with('success', 'Role Created Successfully');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return back()->with('error', $e->getMessage());
         }
     }
 
     public function edit($id)
     {
-        $this->authorize('role_edit');
-        $role = Role::findOrFail($id);
-        $permissions = Permission::get();
-        return view('role.edit', compact('role', 'permissions'));
+        $role            = Role::findOrFail($id);
+        $permissions     = Permission::all();
+        $rolePermissions = $role->permissions->pluck('id')->toArray();
+
+        return view('role.edit', compact('role', 'permissions', 'rolePermissions'));
     }
 
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'name' => 'required|unique:roles,name,' . $id
+        ]);
+
         DB::beginTransaction();
         try {
-            $request->validate([
-                'name' => 'required|string|max:255',
+            $role = Role::findOrFail($id);
+
+            $role->update([
+                'name'       => $request->name,
+                'guard_name' => 'web'
             ]);
 
-            $role = Role::findOrFail($id);
-            $role->name = $request->name;
-            $role->save();
-            logUserActivity('Role', 'Updated Role ' . $role->name, $role->id, 'Role');
             if ($request->has('permissions')) {
                 $permissions = Permission::whereIn('id', $request->permissions)->get();
                 $role->syncPermissions($permissions);
+            } else {
+                $role->syncPermissions([]);
             }
+
             DB::commit();
-            return redirect()->route('role.index')->with('success', 'Role updated successfully.');
-        } catch (\Exception $ex) {
-            DB::rollBack();
-            return redirect()->back()->with('error', 'Error updating role: ' . $ex->getMessage());
+
+            logUserActivity('Role Updated', 'Role: ' . $role->name . ' | Permissions: ' . count($request->permissions ?? []), $role->id, 'Role');
+
+            return redirect()->route('role.index')->with('success', 'Role Updated Successfully');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return back()->with('error', $e->getMessage());
         }
     }
+
     public function destroy($id)
     {
-        DB::beginTransaction();
+        $role = Role::findOrFail($id);
 
-        try {
-            $role = Role::findOrFail($id);
-            logUserActivity('Role', 'Deleted Role ' . $role->name, $role->id, 'Role');
-            $role->delete();
-            DB::commit();
-            return redirect()->route('role.index')->with('success', 'Role deleted successfully.');
-        } catch (\Exception $ex) {
-            DB::rollBack();
-            return redirect()->back()->with('error', 'Error deleting role: ' . $ex->getMessage());
-        }
-    }
+        logUserActivity('Role Deleted', 'Role: ' . $role->name, $role->id, 'Role');
 
+        $role->delete();
 
-    public function trash()
-    {
-        $this->authorize('user_trash_view');
-        $roles = Role::onlyTrashed()->orderBy('created_at', 'desc')->get();
-        return view('role.trash', compact('roles'));
-    }
-
-    public function restore($id)
-    {
-        try {
-            $roles = Role::withTrashed()->findOrFail($id);
-            $roles->restore();
-            return redirect()->route('trash.index')->with('success', 'Role restored successfully.');
-        } catch (Exception $e) {
-            // Log::error('Role restoration failed: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Error restoring Role: ' . $e->getMessage());
-        }
+        return back()->with('success', 'Role Deleted');
     }
 }
