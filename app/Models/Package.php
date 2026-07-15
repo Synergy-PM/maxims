@@ -53,4 +53,9 @@ class Package extends Model
     {
         return $this->belongsToMany(Giveaway::class, 'package_giveaway');
     }
+
+    public function trainingSessions()
+    {
+        return $this->belongsToMany(TrainingSession::class, 'package_training_session');
+    }
 }

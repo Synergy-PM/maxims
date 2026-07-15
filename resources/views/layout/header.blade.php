@@ -125,14 +125,14 @@
                            </ul>
                        </div>
                    </li>
-                   @can('client_view')
+                   {{-- @can('client_view')
                        <li>
                            <a href="{{ route('client.index') }}">
                                <i data-feather="user-plus"></i>
                                <span>Clients</span>
                            </a>
                        </li>
-                   @endcan
+                   @endcan --}}
                    <li>
                        <a href="{{ route('company.index') }}">
                            <i data-feather="briefcase"></i>
@@ -143,6 +143,12 @@
                        <a href="{{ route('package.index') }}">
                            <i data-feather="package"></i>
                            <span>Packages</span>
+                       </a>
+                   </li>
+                   <li>
+                       <a href="{{ route('training-session.index') }}">
+                           <i data-feather="book-open"></i>
+                           <span>Training Sessions</span>
                        </a>
                    </li>
                    @can('booking_view')

@@ -13,6 +13,7 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserActivityController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\PackageController;
+use App\Http\Controllers\TrainingSessionController;
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -171,6 +172,16 @@ Route::middleware('auth')->group(function () {
                 Route::delete('delete/{id}', 'destroy')->name('package.delete');
                 Route::get('trash', 'trash')->name('package.trash');
                 Route::get('restore/{id}', 'restore')->name('package.restore');
+            });
+
+        Route::controller(TrainingSessionController::class)
+            ->prefix('training-session')->group(function () {
+                Route::get('/', 'index')->name('training-session.index');
+                Route::get('create', 'create')->name('training-session.create');
+                Route::post('store', 'store')->name('training-session.store');
+                Route::get('edit/{id}', 'edit')->name('training-session.edit');
+                Route::put('update/{id}', 'update')->name('training-session.update');
+                Route::delete('delete/{id}', 'destroy')->name('training-session.delete');
             });
     });
 });

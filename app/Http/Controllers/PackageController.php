@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Company;
 use App\Models\Giveaway;
 use App\Models\Package;
+use App\Models\TrainingSession;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -26,8 +27,9 @@ class PackageController extends Controller
         $package = new Package();
         $giveaways = Giveaway::all();
         $companies = Company::all();
+        $trainingSessions = TrainingSession::all();
 
-        return view('package.create', compact('package', 'giveaways', 'companies'));
+        return view('package.create', compact('package', 'giveaways', 'companies', 'trainingSessions'));
     }
 
     public function store(Request $request)
@@ -61,12 +63,14 @@ class PackageController extends Controller
             'transportFlights',
             'transportTrains',
             'giveaways',
+            'trainingSessions',
         ])->findOrFail($id);
 
         $giveaways = Giveaway::all();
         $companies = Company::all();
+        $trainingSessions = TrainingSession::all();
 
-        return view('package.edit', compact('package', 'giveaways', 'companies'));
+        return view('package.edit', compact('package', 'giveaways', 'companies', 'trainingSessions'));
     }
 
     public function update(Request $request, $id)
@@ -268,6 +272,11 @@ class PackageController extends Controller
             'giveaways.*' => 'integer|exists:giveaways,id',
         ])['giveaways'] ?? [];
 
+        $trainingSessions = $request->validate([
+            'training_sessions' => 'nullable|array',
+            'training_sessions.*' => 'integer|exists:training_sessions,id',
+        ])['training_sessions'] ?? [];
+
         return compact(
             'package',
             'accommodations',
@@ -277,7 +286,8 @@ class PackageController extends Controller
             'flights',
             'trains',
             'maktabAddress',
-            'giveaways'
+            'giveaways',
+            'trainingSessions'
         );
     }
 
@@ -349,5 +359,8 @@ class PackageController extends Controller
 
         // Giveaways (checkboxes)
         $package->giveaways()->sync($data['giveaways']);
+
+        // Training Sessions (checkboxes)
+        $package->trainingSessions()->sync($data['trainingSessions']);
     }
 }
