@@ -75,6 +75,13 @@ class PermissionTableSeeder extends Seeder
             ['name' => 'company_trash_view', 'guard_name' => 'web', 'group_name' => 'Company'],
             ['name' => 'company_restore', 'guard_name' => 'web', 'group_name' => 'Company'],
 
+            ['name' => 'package_view', 'guard_name' => 'web', 'group_name' => 'Package'],
+            ['name' => 'package_create', 'guard_name' => 'web', 'group_name' => 'Package'],
+            ['name' => 'package_edit', 'guard_name' => 'web', 'group_name' => 'Package'],
+            ['name' => 'package_trash', 'guard_name' => 'web', 'group_name' => 'Package'],
+            ['name' => 'package_trash_view', 'guard_name' => 'web', 'group_name' => 'Package'],
+            ['name' => 'package_restore', 'guard_name' => 'web', 'group_name' => 'Package'],
+
             ['name' => 'Ledger_Filter_view', 'guard_name' => 'web', 'group_name' => 'Ledger Filter'],
 
         ]);
