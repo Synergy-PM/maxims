@@ -55,27 +55,23 @@
             break-before: avoid;
         }
 
-        /* Package Pricing block (title + price grid + ROE row) always moves
-           together as one unit. */
         .pricing-keep-together {
             page-break-inside: avoid;
             break-inside: avoid;
         }
 
-        /* ROE row was 5 label/value pairs forced onto one line with
-           white-space:nowrap, which pushed the last pair past the page
-           edge. Fixed layout + allowed wrapping keeps everything on-page. */
         .roe-table {
-            table-layout: fixed;
+            table-layout: auto;
             width: 100%;
+            margin-top: 15px;
         }
 
         .roe-table th,
         .roe-table td {
-            white-space: normal !important;
-            word-break: break-word;
-            font-size: 9px;
-            padding: 6px 4px;
+            white-space: nowrap !important;
+            word-break: normal !important;
+            font-size: 8px;
+            padding: 5px 3px;
         }
     </style>
 @endif
@@ -135,7 +131,7 @@
 
     @if ($package->image)
         <div class="brochure-cover">
-            <img src="{{ $forPdf ? public_path('storage/' . $package->image) : asset('storage/' . $package->image) }}"
+            <img src="{{ $forPdf ? public_path('assets/images/packages/' . $package->image) : asset('assets/images/packages/' . $package->image) }}"
                 alt="{{ $package->name }}">
         </div>
     @endif
@@ -506,7 +502,7 @@
                         @foreach ($chunk as $field => $label)
                             <td class="image-grid-cell">
                                 <div class="itinerary-image-card">
-                                    <img src="{{ $forPdf ? public_path('storage/' . $itineraryModel->{$field}) : asset('storage/' . $itineraryModel->{$field}) }}"
+                                    <img src="{{ $forPdf ? public_path('assets/images/packages/itinerary/' . $itineraryModel->{$field}) : asset('assets/images/packages/itinerary/' . $itineraryModel->{$field}) }}"
                                         alt="{{ $label }}">
                                     <p>{{ $label }}</p>
                                 </div>
@@ -648,15 +644,16 @@
     }
 
     .brochure-cover {
-        width: 100%;
-        max-height: 350px;
-        overflow: hidden;
+        max-height: none;
+        text-align: center;
     }
 
     .brochure-cover img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+        width: auto;
+        height: 150px;
+        max-width: 100%;
+        object-fit: initial;
+        margin-top: 10px;
     }
 
     .brochure-section {
@@ -813,18 +810,25 @@
         border-radius: 8px;
         overflow: hidden;
         text-align: center;
+        /* background: #f8f9fa; */
     }
 
     .itinerary-image-card img {
         width: 100%;
-        height: 160px;
-        object-fit: cover;
+        height: 180px;
+        object-fit: contain;
+        object-position: center;
+        display: block;
+        /* background: #f8f9fa; */
+        padding: 6px;
+        box-sizing: border-box;
     }
 
     .itinerary-image-card p {
         margin: 8px 0;
         font-size: 12px;
         font-weight: 600;
+        padding: 0 6px;
     }
 
     .brochure-footer {
