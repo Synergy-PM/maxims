@@ -49,6 +49,11 @@ class Package extends Model
         return $this->hasMany(PackageTransportTrain::class);
     }
 
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
     public function giveaways()
     {
         return $this->belongsToMany(Giveaway::class, 'package_giveaway');

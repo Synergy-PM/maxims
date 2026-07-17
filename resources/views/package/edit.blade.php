@@ -100,11 +100,11 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="col-md-4">
+                                    {{-- <div class="col-md-4">
                                         <label class="form-label">Color</label>
                                         <input type="color" name="color" class="form-control form-control-color"
                                             value="{{ old('color', $package->color ?? '#000000') }}">
-                                    </div>
+                                    </div> --}}
                                     <div class="col-md-4">
                                         <label class="form-label">Maktab *</label>
                                         <input type="text" name="maktab" class="form-control" required
