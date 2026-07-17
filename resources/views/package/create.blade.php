@@ -41,7 +41,7 @@
                                 type="button">MAKTAB ADDRESS</button></li>
                     </ul>
 
-                    <div class="tab-content">
+                    <div class="tab-content card">
 
                         {{-- ================= PACKAGE ================= --}}
                         <div class="tab-pane fade show active card" id="tab-package">
@@ -558,13 +558,13 @@
                                 <h5 class="mb-3">Images</h5>
                                 <div class="row g-3">
                                     @foreach ([
-            'mina_image' => 'MINA',
-            'arafat_image' => 'ARAFAT',
-            'muzdalifah_image' => 'MUZDALIFAH',
-            'makkah_mina_rami_day_one_image' => 'MAKKAH / MINA RAMI - DAY ONE',
-            'mina_rami_day_two_image' => 'MINA RAMI - DAY TWO',
-            'mina_makkah_rami_day_three_image' => 'MINA / MAKKAH RAMI - DAY THREE',
-        ] as $field => $label)
+                            'mina_image' => 'MINA',
+                            'arafat_image' => 'ARAFAT',
+                            'muzdalifah_image' => 'MUZDALIFAH',
+                            'makkah_mina_rami_day_one_image' => 'MAKKAH / MINA RAMI - DAY ONE',
+                            'mina_rami_day_two_image' => 'MINA RAMI - DAY TWO',
+                            'mina_makkah_rami_day_three_image' => 'MINA / MAKKAH RAMI - DAY THREE',
+                            ] as $field => $label)
                                         <div class="col-md-4">
                                             <label class="form-label">{{ $label }}</label>
                                             <input type="file" name="{{ $field }}" class="form-control">
@@ -581,22 +581,20 @@
                                 <div class="row g-3">
                                     <div class="col-md-6">
                                         <label class="form-label">Maktab Address *</label>
-                                        <input type="text" name="maktab_address" class="form-control" required
+                                        <input type="text" name="maktab_address" class="form-control"
                                             value="{{ old('maktab_address') }}">
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Office Address *</label>
-                                        <input type="text" name="office_address" class="form-control" required
+                                        <input type="text" name="office_address" class="form-control"
                                             value="{{ old('office_address') }}">
                                     </div>
                                 </div>
-
-                                <div class="text-end mt-4">
-                                    <button type="submit" class="btn btn-success">Create</button>
-                                </div>
                             </div>
                         </div>
-
+                        <div class="text-end" style="margin: 20px">
+                            <button type="submit" class="btn btn-success">Create</button>
+                        </div>
                     </div>
                 </form>
 

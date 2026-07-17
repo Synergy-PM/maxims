@@ -303,8 +303,8 @@ class PackageController extends Controller
         ])['trains'] ?? [];
 
         $maktabAddress = $request->validate([
-            'maktab_address' => 'required|string|max:200',
-            'office_address' => 'required|string|max:200',
+            'maktab_address' => 'nullable|string|max:200',
+            'office_address' => 'nullable|string|max:200',
         ]);
 
         $giveaways = $request->validate([

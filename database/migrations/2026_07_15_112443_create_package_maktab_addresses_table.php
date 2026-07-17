@@ -11,8 +11,8 @@ return new class extends Migration
         Schema::create('package_maktab_addresses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('package_id')->unique()->constrained('packages')->onDelete('cascade');
-            $table->string('maktab_address');
-            $table->string('office_address');
+            $table->string('maktab_address')->nullable();
+            $table->string('office_address')->nullable();
             $table->timestamps();
         });
     }
