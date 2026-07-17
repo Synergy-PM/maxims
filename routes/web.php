@@ -163,11 +163,13 @@ Route::middleware('auth')->group(function () {
         });
 
         Route::controller(PackageController::class)
-            ->prefix('package') ->group(function () {
+            ->prefix('package')->group(function () {
                 Route::get('/', 'index')->name('package.index');
                 Route::get('create', 'create')->name('package.create');
                 Route::post('store', 'store')->name('package.store');
                 Route::get('edit/{id}', 'edit')->name('package.edit');
+                Route::get('show/{id}', 'show')->name('package.show');
+                Route::get('pdf/{id}', 'pdf')->name('package.pdf');
                 Route::put('update/{id}', 'update')->name('package.update');
                 Route::delete('delete/{id}', 'destroy')->name('package.delete');
                 Route::get('trash', 'trash')->name('package.trash');

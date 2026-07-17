@@ -7,6 +7,7 @@ use App\Models\Giveaway;
 use App\Models\Package;
 use App\Models\TrainingSession;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 
 class PackageController extends Controller
@@ -71,6 +72,45 @@ class PackageController extends Controller
         $trainingSessions = TrainingSession::all();
 
         return view('package.edit', compact('package', 'giveaways', 'companies', 'trainingSessions'));
+    }
+
+    public function show($id)
+    {
+        $package = Package::with([
+            'company',
+            'accommodations',
+            'itinerary',
+            'terms',
+            'maktabAddress',
+            'transport',
+            'transportFlights',
+            'transportTrains',
+            'trainingSessions',
+            'giveaways',
+        ])->findOrFail($id);
+
+        return view('package.show', compact('package'));
+    }
+
+    public function pdf($id)
+    {
+        $package = Package::with([
+            'company',
+            'accommodations',
+            'itinerary',
+            'terms',
+            'maktabAddress',
+            'transport',
+            'transportFlights',
+            'transportTrains',
+            'trainingSessions',
+            'giveaways',
+        ])->findOrFail($id);
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('package.pdf', compact('package'))
+            ->setPaper('a4', 'portrait');
+
+        return $pdf->download($package->name . '.pdf');
     }
 
     public function update(Request $request, $id)
@@ -297,7 +337,6 @@ class PackageController extends Controller
             $package->accommodations()->create($row);
         }
 
-        // ---- Itinerary: description + 6 images (move() into public_path) ----
         $existingItinerary = $package->itinerary;
         $itineraryData = ['description' => $data['itinerary']['itinerary_description'] ?? null];
 
