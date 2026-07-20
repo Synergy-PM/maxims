@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Client;
+use App\Models\Package;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Validation\Rule;
@@ -30,9 +31,11 @@ class ClientController extends Controller
 
         return view('client.index', compact('clients', 'trashCount'));
     }
+
     public function create()
     {
-        return view('client.create');
+        $packages = Package::all();
+        return view('client.create', compact('packages'));
     }
 
     public function store(Request $request)
@@ -40,15 +43,16 @@ class ClientController extends Controller
         $request->validate([
             'name'            => 'required|string|max:255',
             'type'            => 'required|in:client,vendor,customer',
-            'package_type'    => 'required|in:hajj,umrah',
             'company_name'    => 'nullable|string|max:255',
+            'package_id'      => 'required|exists:packages,id',
             'phone'           => 'nullable|string|max:20',
             'cnic'            => 'nullable|string|unique:clients,cnic',
             'passport_number' => 'nullable|string|unique:clients,passport_number',
         ], [
             'name.required'           => 'Client name is required.',
             'type.required'           => 'Please select a client type.',
-            'package_type.required'   => 'Please select a package type (Hajj or Umrah).',
+            'package_id.required'     => 'Please select a package.',
+            'package_id.exists'       => 'Selected package is invalid.',
             'cnic.unique'             => 'This CNIC is already registered with another client.',
             'passport_number.unique'  => 'This Passport Number is already registered with another client.',
         ]);
@@ -60,7 +64,7 @@ class ClientController extends Controller
             'cnic',
             'phone',
             'type',
-            'package_type',
+            'package_id',
             'status'
         ]));
 
@@ -72,7 +76,8 @@ class ClientController extends Controller
     public function edit($id)
     {
         $client = Client::findOrFail($id);
-        return view('client.edit', compact('client'));
+        $packages = Package::all();
+        return view('client.edit', compact('client', 'packages'));
     }
 
     public function update(Request $request, $id)
@@ -82,7 +87,7 @@ class ClientController extends Controller
         $request->validate([
             'name'            => 'required|string|max:255',
             'type'            => 'required|in:client,vendor,customer',
-            'package_type'    => 'required|in:hajj,umrah',
+            'package_id'      => 'required|exists:packages,id',
             'company_name'    => 'nullable|string|max:255',
             'phone'           => 'nullable|string|max:20',
             'cnic'            => ['nullable', 'string', Rule::unique('clients', 'cnic')->ignore($client->id)],
@@ -90,7 +95,8 @@ class ClientController extends Controller
         ], [
             'name.required'           => 'Client name is required.',
             'type.required'           => 'Please select a client type.',
-            'package_type.required'   => 'Please select a package type (Hajj or Umrah).',
+            'package_id.required'     => 'Please select a package.',
+            'package_id.exists'       => 'Selected package is invalid.',
             'cnic.unique'             => 'This CNIC is already registered with another client.',
             'passport_number.unique'  => 'This Passport Number is already registered with another client.',
         ]);
@@ -102,7 +108,7 @@ class ClientController extends Controller
             'cnic',
             'phone',
             'type',
-            'package_type',
+            'package_id',
             'status'
         ]));
 

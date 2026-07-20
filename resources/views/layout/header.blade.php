@@ -125,14 +125,41 @@
                            </ul>
                        </div>
                    </li>
-                   {{-- @can('client_view')
+
+                   <li>
+                       <a href="#sidebarLeadManagement" data-bs-toggle="collapse">
+                           <i data-feather="user-plus"></i>
+                           <span>Lead Management</span>
+                           <span class="menu-arrow"></span>
+                       </a>
+                       <div class="collapse" id="sidebarLeadManagement">
+                           <ul class="nav-second-level">
+                               {{-- @can('lead_view') --}}
+                                   <li>
+                                       <a class="tp-link" href="{{ route('lead.index') }}">
+                                           All Leads
+                                       </a>
+                                   </li>
+                               {{-- @endcan --}}
+                               {{-- @can('lead_create')
+                                   <li>
+                                       <a class="tp-link" href="{{ route('lead.create') }}">
+                                           Add Lead
+                                       </a>
+                                   </li>
+                               @endcan --}}
+                           </ul>
+                       </div>
+                   </li>
+
+                   @can('client_view')
                        <li>
                            <a href="{{ route('client.index') }}">
                                <i data-feather="user-plus"></i>
                                <span>Clients</span>
                            </a>
                        </li>
-                   @endcan --}}
+                   @endcan
                    <li>
                        <a href="{{ route('company.index') }}">
                            <i data-feather="briefcase"></i>

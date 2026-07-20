@@ -17,11 +17,16 @@ class Client extends Model
         'phone',
         'type',
         'status',
-        'package_type',
+        'package_id'
     ];
 
     public function bookings()
     {
         return $this->hasMany(Booking::class);
+    }
+
+    public function package()
+    {
+        return $this->belongsTo(Package::class);
     }
 }

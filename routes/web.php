@@ -12,6 +12,8 @@ use App\Http\Controllers\ExpenseTransactionController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserActivityController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\FollowUpController;
+use App\Http\Controllers\LeadController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\TrainingSessionController;
 
@@ -186,5 +188,20 @@ Route::middleware('auth')->group(function () {
                 Route::put('update/{id}', 'update')->name('training-session.update');
                 Route::delete('delete/{id}', 'destroy')->name('training-session.delete');
             });
+
+        Route::controller(LeadController::class)->prefix('lead')->group(function () {
+            Route::get('/', 'index')->name('lead.index');
+            Route::get('create', 'create')->name('lead.create');
+            Route::post('store', 'store')->name('lead.store');
+            Route::get('show/{lead}', 'show')->name('lead.show');
+            Route::get('edit/{lead}', 'edit')->name('lead.edit');
+            Route::put('update/{lead}', 'update')->name('lead.update');
+            Route::delete('delete/{lead}', 'destroy')->name('lead.delete');
+            Route::get('trash', 'trash')->name('lead.trash');
+            Route::get('restore/{id}', 'restore')->name('lead.restore');
+        });
+
+        Route::post('/leads/{lead}/follow-ups', [FollowUpController::class, 'store'])->name('followUp.store');
+        Route::post('/follow-ups/{followUp}/take', [FollowUpController::class, 'take'])->name('followUp.take');
     });
 });

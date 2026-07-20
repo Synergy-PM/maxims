@@ -38,12 +38,12 @@
                                         <th>#</th>
                                         <th>Name</th>
                                         <th>Company</th>
+                                        <th>Package</th>
                                         <th>Type</th>
                                         <th>Passport #</th>
                                         <th>CNIC</th>
                                         <th>Phone</th>
                                         <th>Status</th>
-                                        <th>Package Type</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -53,6 +53,10 @@
                                             <td>{{ $loop->iteration }}</td>
                                             <td><strong>{{ $client->name }}</strong></td>
                                             <td>{{ $client->company_name ?? '—' }}</td>
+                                            <td>{{ $client->package->name ?? '—' }} @if ($client->package)
+                                                    ({{ $client->package->code }})
+                                                @endif
+                                            </td>
                                             <td>
                                                 @php
                                                     $types = [
@@ -74,7 +78,6 @@
                                                     {{ ucfirst($client->status) }}
                                                 </span>
                                             </td>
-                                            <td>{{ $client->package_type ?? '—' }}</td>
                                             <td>
                                                 <div class="d-flex gap-1">
                                                     @can('client_edit')
