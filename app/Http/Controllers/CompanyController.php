@@ -513,4 +513,12 @@ class CompanyController extends Controller
                 ->with('error', 'Something went wrong. ' . $e->getMessage());
         }
     }
+
+    public function show($id)
+    {
+        $company = Company::with(['addresses', 'contactNumbers', 'emails', 'licenses'])
+            ->findOrFail($id);
+
+        return view('companies.show', compact('company'));
+    }
 }

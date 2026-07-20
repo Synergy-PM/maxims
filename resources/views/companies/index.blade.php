@@ -53,6 +53,12 @@
                                             <td>{{ \Carbon\Carbon::parse($company->established_on)->format('d-M-Y') }}</td>
                                             <td class="text-center text-center">
                                                 <div class="d-inline-flex gap-2">
+                                                    {{-- @can('company_show') --}}
+                                                    <a href="{{ route('company.show', $company->id) }}"
+                                                        class="btn btn-outline-primary btn-sm d-flex align-items-center justify-content-center">
+                                                        Show
+                                                    </a>
+                                                    {{-- @endcan --}}
                                                     {{-- @can('company_edit') --}}
                                                     <a href="{{ route('company.edit', $company->id) }}"
                                                         class="btn btn-outline-success btn-sm d-flex align-items-center justify-content-center">
