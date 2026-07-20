@@ -4,18 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Executive Platinum - {{ $package->days ?? '14' }} Days Package</title>
+    <title>{{ $package->name }}</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
     <link
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Poppins:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet">
-
-    <!-- html2pdf.js Library for PDF Generation -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
     <style>
         :root {
-            --navy: #1b1f4b;
+            --navy: {{ $package->color ?? '#1b1f4b' }};
             --gold: #d9a441;
             --gold-dark: #c8922e;
             --peach: #f3cfa0;
@@ -26,43 +22,15 @@
         body {
             font-family: 'Poppins', sans-serif;
             background: #f0f0f0;
-            color: #1b1f4b;
-            padding-top: 10px;
-        }
-
-        /* Top Action Bar for Download Button */
-        .action-bar {
-            max-width: 1050px;
-            margin: 0 auto 10px auto;
-            display: flex;
-            justify-content: flex-end;
-            padding: 0 10px;
-        }
-
-        .btn-download {
-            background-color: var(--gold);
             color: var(--navy);
-            font-weight: 700;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 4px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
         }
 
-        .btn-download:hover {
-            background-color: var(--gold-dark);
-            color: #fff;
-        }
-
-        /* Optimized for absolute 1-page printing */
         .sheet {
-            max-width: 1050px;
-            margin: 0 auto;
+            max-width: 1100px;
+            margin: 20px auto;
             background: #fff;
-            padding: 15px 20px;
+            padding: 25px;
             box-shadow: 0 0 15px rgba(0, 0, 0, .15);
-            box-sizing: border-box;
         }
 
         .header-banner {
@@ -70,31 +38,33 @@
             align-items: stretch;
             border-radius: 4px;
             overflow: hidden;
-            margin-bottom: 12px;
+            margin-bottom: 20px;
         }
 
         .header-left {
             background: var(--navy);
             color: var(--gold);
-            padding: 15px 20px;
+            padding: 27px 25px;
             flex: 2;
         }
 
         .header-left h1 {
             font-family: 'Poppins', sans-serif;
             font-weight: 900;
-            font-size: 2.2rem;
+            font-size: 2.6rem;
             margin: 0;
             letter-spacing: 1px;
             line-height: 1;
+            text-transform: uppercase;
         }
 
         .header-left .subtitle {
             color: #fff;
             font-weight: 600;
-            font-size: .85rem;
+            font-size: .95rem;
             letter-spacing: 1px;
             margin-top: 5px;
+            text-transform: uppercase;
         }
 
         .header-right {
@@ -104,8 +74,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
-            padding: 5px 15px;
+            gap: 15px;
+            padding: 10px 15px;
             flex-wrap: wrap;
         }
 
@@ -116,15 +86,15 @@
         }
 
         .pkg-code-box .lbl {
-            font-size: .65rem;
+            font-size: .7rem;
             letter-spacing: 1px;
         }
 
         .pkg-code-box .code {
-            font-size: 1.1rem;
+            font-size: 1.3rem;
             background: var(--navy);
             color: #fff;
-            padding: 2px 8px;
+            padding: 2px 10px;
             border-radius: 3px;
         }
 
@@ -132,31 +102,32 @@
             font-family: 'Playfair Display', serif;
             font-style: italic;
             font-weight: 700;
-            font-size: 2rem;
+            font-size: 2.3rem;
             color: var(--navy);
         }
 
         .tags-row {
             display: flex;
-            gap: 6px;
-            margin-top: 4px;
+            gap: 8px;
+            margin-top: 8px;
             width: 100%;
         }
 
         .tag-badge {
             background: var(--navy);
             color: #fff;
-            font-size: .68rem;
+            font-size: .72rem;
             font-weight: 700;
             letter-spacing: .5px;
-            padding: 3px 8px;
+            padding: 4px 10px;
             border-radius: 3px;
+            text-transform: uppercase;
         }
 
         .pkg-table {
             border-collapse: collapse;
             width: 100%;
-            font-size: .8rem;
+            font-size: .85rem;
         }
 
         .pkg-table th,
@@ -164,7 +135,7 @@
             border: 1px solid #333;
             text-align: center;
             vertical-align: middle;
-            padding: 5px 6px;
+            padding: 6px 8px;
         }
 
         .pkg-table thead th {
@@ -181,24 +152,29 @@
             background: #fff;
         }
 
+        .stars {
+            color: var(--gold-dark);
+            letter-spacing: 1px;
+        }
+
         .note-strip {
             display: flex;
             align-items: center;
             gap: 10px;
-            margin: 10px 0;
+            margin: 18px 0;
             flex-wrap: wrap;
         }
 
         .ticket-note {
             font-weight: 700;
-            font-size: 0.9rem;
+            font-size: 1rem;
         }
 
         .note-box {
             background: var(--navy);
             color: #fff;
-            font-size: .75rem;
-            padding: 6px 12px;
+            font-size: .78rem;
+            padding: 8px 14px;
             border-radius: 2px;
             flex: 1;
             text-align: center;
@@ -207,22 +183,22 @@
         .note-box b {
             background: #fff;
             color: var(--navy);
-            padding: 1px 6px;
-            margin-right: 6px;
+            padding: 2px 8px;
+            margin-right: 8px;
             border-radius: 2px;
         }
 
         .room-table {
             border-collapse: collapse;
             width: 100%;
-            font-size: .8rem;
-            margin-bottom: 5px;
+            font-size: .85rem;
+            margin-bottom: 10px;
         }
 
         .room-table td,
         .room-table th {
             border: 1px solid #333;
-            padding: 6px 8px;
+            padding: 8px 10px;
             text-align: center;
         }
 
@@ -230,13 +206,6 @@
             background: var(--navy);
             color: #fff;
             font-weight: 800;
-            width: 15%;
-        }
-
-        .room-table thead th {
-            background: var(--peach);
-            color: var(--navy);
-            font-weight: 700;
         }
 
         .room-table tbody tr:nth-child(odd) td:not(.room-header) {
@@ -246,103 +215,108 @@
         .price-caption {
             text-align: right;
             font-weight: 700;
-            font-size: 0.78rem;
-            margin: 4px 0 10px;
+            margin: 10px 0 20px;
         }
 
         .notes-title {
             font-family: 'Poppins', sans-serif;
             font-weight: 900;
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             letter-spacing: 1px;
-            margin-bottom: 6px;
+            margin-bottom: 10px;
         }
 
         .notes-list {
-            font-size: .78rem;
-            line-height: 1.4;
+            font-size: .85rem;
+            line-height: 1.5;
         }
 
         .notes-list li {
-            margin-bottom: 6px;
+            margin-bottom: 10px;
         }
 
         .icon-box {
             border: 2px solid var(--gold);
-            border-radius: 12px;
-            padding: 12px;
+            border-radius: 15px;
+            padding: 20px;
         }
 
         .icon-item {
             text-align: center;
-            margin-bottom: 8px;
+            margin-bottom: 15px;
         }
 
         .icon-circle {
-            width: 40px;
-            height: 40px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             background: var(--navy);
             color: #fff;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 4px;
-            font-size: 1.2rem;
+            margin: 0 auto 8px;
+            font-size: 1.5rem;
         }
 
         .icon-item .label {
             font-weight: 800;
-            font-size: .75rem;
+            font-size: .8rem;
             letter-spacing: .5px;
         }
 
         .icon-item .desc {
-            font-size: .65rem;
+            font-size: .68rem;
             color: #555;
-            line-height: 1.2;
         }
 
         .zone-badge {
             background: var(--navy);
             color: var(--gold);
             font-weight: 800;
-            padding: 4px 12px;
+            padding: 6px 20px;
             border-radius: 20px;
             display: inline-block;
-            font-size: .8rem;
+            font-size: .9rem;
             letter-spacing: 1px;
         }
 
         .zone-badge small {
             display: block;
             color: #fff;
-            font-size: .55rem;
+            font-size: .6rem;
             font-weight: 600;
         }
 
-        .taxi-strip {
+        .applicant-sign {
+            font-weight: 800;
+            font-size: 1.3rem;
+            margin-top: 25px;
+        }
+
+        .sign-line {
+            border-bottom: 2px solid #000;
+            display: inline-block;
+            width: 300px;
+            margin-left: 15px;
+        }
+
+        .page-footer {
             background: var(--navy);
             color: #fff;
-            font-size: .7rem;
             text-align: center;
             padding: 6px;
-            font-weight: 600;
-            margin-bottom: 4px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-top: 20px;
             border-radius: 2px;
         }
     </style>
 </head>
 
 <body>
-
-    <!-- Top Area for Download Button -->
-    <div class="action-bar">
-        <button class="btn-download" onclick="downloadPackagePDF()">📥 Download PDF</button>
-    </div>
-
-    <!-- Main Content Sheet -->
-    <div class="sheet" id="packageSheet">
+    <div class="sheet">
+        <!-- Banner Section -->
         <div class="header-banner">
             <div class="header-left">
                 <h1>{{ $package->name }}</h1>
@@ -355,13 +329,13 @@
                 </div>
                 <div class="days">{{ $package->days ?? '0' }} Days Package</div>
                 <div class="tags-row justify-content-end">
-                    <span class="tag-badge">{{ str_replace('_', ' ', $package->medina_arrival ?? '') }}</span>
-                    <!-- Fixed: Used strtoupper() instead of undefined uppercase() helper -->
-                    <span class="tag-badge">{{ strtoupper($package->hajj_duration ?? '') }} HAJJ</span>
+                    <span class="tag-badge">{{ str_replace('_', ' ', $package->medina_arrival) }}</span>
+                    <span class="tag-badge">{{ $package->hajj_duration }} HAJJ</span>
                 </div>
             </div>
         </div>
 
+        <!-- Main Accommodation Table -->
         <div class="table-responsive">
             <table class="pkg-table">
                 <thead>
@@ -375,19 +349,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Fixed: Calling accommodations dynamic relation from $package model -->
-                    @forelse(($package->accommodations ?? []) as $acc)
+                    @forelse($package->accommodations as $acc)
                         <tr>
-                            <td>{{ $acc['place'] ?? ($acc->place ?? '-') }}</td>
-                            <td>{{ $acc['accommodation_type'] ?? ($acc->accommodation_type ?? '-') }}</td>
-                            <td>{{ $acc['hotel'] ?? ($acc->hotel ?? '-') }}</td>
+                            <td>{{ $acc->place ?? '-' }}</td>
+                            <td>{{ $acc->accommodation_type ?? '-' }}</td>
+                            <td>{{ $acc->hotel ?? '-' }}</td>
                             <td>
-                                @php
-                                    $rating = $acc['saudi_star_rating'] ?? ($acc->saudi_star_rating ?? null);
-                                @endphp
-                                @if (!empty($rating))
+                                @if (!empty($acc->saudi_star_rating))
                                     <span class="stars">
-                                        @for ($i = 0; $i < intval($rating); $i++)
+                                        @for ($i = 0; $i < intval($acc->saudi_star_rating); $i++)
                                             ★
                                         @endfor
                                     </span>
@@ -395,8 +365,8 @@
                                     -
                                 @endif
                             </td>
-                            <td>{{ $acc['food_package'] ?? ($acc->food_package ?? '-') }}</td>
-                            <td>{{ $acc['shuttle'] ?? ($acc->shuttle ?? '-') }}</td>
+                            <td>{{ $acc->food_package ?? '-' }}</td>
+                            <td>{{ $acc->shuttle ?? '-' }}</td>
                         </tr>
                     @empty
                         <tr>
@@ -407,131 +377,101 @@
             </table>
         </div>
 
+        <!-- Note Strip -->
         <div class="note-strip">
-            <div class="ticket-note">Ticket &amp; Qurbani not Included</div>
+            <div class="ticket-note">Mina Maktab: {{ $package->maktab }} ({{ $package->maktab_number }})</div>
             <div class="note-box">
-                <b>NOTE:</b> MAKKAH HOTEL ROOMS WILL BE RETAINED FROM 08 ZIL HAJJ TO 12 ZIL HAJJ.
+                <b>INFO:</b> {{ $package->category_zone ?? 'Zone info' }} - {{ $package->nearby ?? 'Nearby info' }}
             </div>
         </div>
 
-        <!-- Dynamic Room Type Pricing Table -->
+        <!-- Pricing Table -->
         <div class="table-responsive">
             <table class="room-table">
                 <thead>
-                    <tr>
-                        <th>ROOM TYPE</th>
-                        <th>SAR PRICE</th>
-                        <th>PKR PRICE</th>
+                    <tr style="background: var(--navy); color: #fff; font-weight: 800;">
+                        <td>ROOM CATEGORY</td>
+                        <td>ADULT PRICE</td>
+                        <td>CHILD PRICE</td>
+                        <td>INFANT PRICE</td>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="fw-bold">QUAD Sharing</td>
+                        <td class="room-header">{{ $package->room_type ?? 'Standard Room' }} (SAR)</td>
                         <td>{{ $package->adult_sar ? 'SAR ' . number_format($package->adult_sar) . '/-' : 'NA' }}</td>
-                        <td>{{ $package->adult_pkr ? 'PKR ' . number_format($package->adult_pkr) . '/-' : 'NA' }}</td>
-                    </tr>
-                    <tr>
-                        <td class="fw-bold">TRIPLE Sharing</td>
                         <td>{{ $package->child_sar ? 'SAR ' . number_format($package->child_sar) . '/-' : 'NA' }}</td>
-                        <td>{{ $package->child_pkr ? 'PKR ' . number_format($package->child_pkr) . '/-' : 'NA' }}</td>
-                    </tr>
-                    <tr>
-                        <td class="fw-bold">DOUBLE Sharing</td>
                         <td>{{ $package->infant_sar ? 'SAR ' . number_format($package->infant_sar) . '/-' : 'NA' }}
                         </td>
-                        <td>{{ $package->infant_pkr ? 'PKR ' . number_format($package->infant_pkr) . '/-' : 'NA' }}
-                        </td>
                     </tr>
+                    @if ($package->adult_pkr)
+                        <tr>
+                            <td class="room-header">{{ $package->room_type ?? 'Standard Room' }} (PKR)</td>
+                            <td>{{ 'PKR ' . number_format($package->adult_pkr) . '/-' }}</td>
+                            <td>{{ $package->child_pkr ? 'PKR ' . number_format($package->child_pkr) . '/-' : 'NA' }}
+                            </td>
+                            <td>{{ $package->infant_pkr ? 'PKR ' . number_format($package->infant_pkr) . '/-' : 'NA' }}
+                            </td>
+                        </tr>
+                    @endif
                 </tbody>
             </table>
         </div>
-
         <div class="price-caption">"Book Early, Prices and Packages Subject to Change."</div>
 
+        <!-- Lower Section (Icon Box + Notes) -->
         <div class="row">
-            <div class="col-lg-5 mb-2">
+            <div class="col-lg-5 mb-4">
                 <div class="icon-box">
                     <div class="row">
                         <div class="col-6 icon-item">
-                            <div class="text-center mb-2">
-                                <span class="zone-badge">ZONE {{ $package->category_zone ?? '1' }}<small>MAKTAB
-                                        {{ $package->maktab ?? 'A-CATEGORY' }}</small></span>
+                            <div class="text-center mb-3">
+                                <span class="zone-badge">ZONE
+                                    1<small>{{ $package->category_zone ?? 'MAKTAB' }}</small></span>
                             </div>
-                            <div class="label">BEST LOCATION IN MINA</div>
-                            <div class="desc">AVG 16 PEOPLE TO A TENT<br>SOFA CUM BED SIZE 50-55 CM EACH</div>
+                            <div class="label">LOCATION</div>
+                            <div class="desc">Nearby: {{ $package->nearby ?? 'N/A' }}</div>
                         </div>
                         <div class="col-6 icon-item">
                             <div class="icon-circle">🍽️</div>
-                            <div class="label">MAKKAH &amp; MEDINAH</div>
-                            <div class="desc">HALF BOARD BASIS</div>
+                            <div class="label">MINA TYPE</div>
+                            <div class="desc">{{ $package->mina_type ?? 'Standard' }}</div>
                         </div>
                         <div class="col-6 icon-item">
-                            <div class="icon-circle">🍽️</div>
-                            <div class="label">FULL BOARD BUFFET</div>
-                            <div class="desc">MEAL IN MINA &amp; ARAFAT</div>
+                            <div class="icon-circle">🏢</div>
+                            <div class="label">AZIZIA TYPE</div>
+                            <div class="desc">{{ $package->azizia_type ?? 'N/A' }}</div>
                         </div>
-                        <div class="col-6 icon-item">
-                            <div class="icon-circle">🛁</div>
-                            <div class="label">PRIVATE BATHROOM</div>
-                            <div class="desc">IN MINA &amp; ARAFAT</div>
-                        </div>
-                        <div class="col-12 icon-item mb-0">
-                            <div class="icon-circle">🚄</div>
-                            <div class="label">BULLET TRAIN / LUXURY BUS</div>
-                            <div class="desc">MODEL 2025/2026 WITH BATHROOM</div>
+                        <div class="col-12 icon-item">
+                            <div class="icon-circle">Route</div>
+                            <div class="label">TRANSPORT ROUTE</div>
+                            <div class="desc">{{ $package->transport->transport_route ?? 'Route setup pending' }}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-lg-7 mb-2">
-                <div class="notes-title">NOTES:</div>
+            <div class="col-lg-7 mb-4">
+                <div class="notes-title">ITINERARY &amp; TERMS:</div>
                 <ul class="notes-list ps-3">
-                    @if (!empty($terms['terms_content']))
-                        <li>{!! nl2br(e($terms['terms_content'])) !!}</li>
-                    @else
-                        <li><b>Upgrade your Hajj from Platinum to Deluxe Hajj</b> with Supplement SAR 16,000 Per Person
-                            (Private Toilet, 8 People tent).</li>
-                        <li><b>Upgrade your Hajj from Platinum to Diamond Hajj</b> with Supplement SAR 6,000 Per Person
-                            (12 People tent).</li>
-                        <li>Family Rooms available in Aziziya Building during 5 days of Hajj with Supplement SAR 20,000.
-                        </li>
+                    @if ($package->itinerary && !empty($package->itinerary->itinerary_description))
+                        <li><b>Itinerary:</b><br>{!! nl2br(e($package->itinerary->itinerary_description)) !!}</li>
+                    @endif
+                    @if ($package->terms && !empty($package->terms->terms_content))
+                        <li><b>Terms &amp; Conditions:</b><br>{!! nl2br(e($package->terms->terms_content)) !!}</li>
+                    @endif
+                    @if ($package->maktabAddress)
+                        <li><b>Office Address:</b> {{ $package->maktabAddress->office_address }}</li>
+                        <li><b>Maktab Address:</b> {{ $package->maktabAddress->maktab_address }}</li>
                     @endif
                 </ul>
-                <div class="taxi-strip">FAMILY CAR SERVICES AVAILABLE SAR 600 PER PERSON FROM JEDDAH AIRPORT TO MAKKAH
-                    &amp; V.V</div>
-                <div class="taxi-strip">FAMILY CAR SERVICES AVAILABLE SAR 150 PER PERSON FROM MEDINAH AIRPORT TO MEDINAH
-                    &amp; V.V</div>
             </div>
         </div>
+
+        <div class="applicant-sign">Applicant Sign: <span class="sign-line"></span></div>
+        <div class="page-footer">PAGE 01</div>
     </div>
-
-    <!-- Script to Generate/Download PDF -->
-    <script>
-        function downloadPackagePDF() {
-            const element = document.getElementById('packageSheet');
-            const options = {
-                margin: [5, 5, 5, 5],
-                filename: '{{ $package->code ?? 'Package' }}_14_Days_Package.pdf',
-                image: {
-                    type: 'jpeg',
-                    quality: 0.98
-                },
-                html2canvas: {
-                    scale: 2,
-                    useCORS: true,
-                    letterRendering: true
-                },
-                jsPDF: {
-                    unit: 'mm',
-                    format: 'a4',
-                    orientation: 'portrait'
-                }
-            };
-
-            html2pdf().set(options).from(element).save();
-        }
-    </script>
 </body>
 
 </html>

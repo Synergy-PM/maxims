@@ -92,26 +92,26 @@ class PackageController extends Controller
         return view('package.show', compact('package'));
     }
 
-    public function pdf($id)
-    {
-        $package = Package::with([
-            'company',
-            'accommodations',
-            'itinerary',
-            'terms',
-            'maktabAddress',
-            'transport',
-            'transportFlights',
-            'transportTrains',
-            'trainingSessions',
-            'giveaways',
-        ])->findOrFail($id);
+    // public function pdf($id)
+    // {
+    //     $package = Package::with([
+    //         'company',
+    //         'accommodations',
+    //         'itinerary',
+    //         'terms',
+    //         'maktabAddress',
+    //         'transport',
+    //         'transportFlights',
+    //         'transportTrains',
+    //         'trainingSessions',
+    //         'giveaways',
+    //     ])->findOrFail($id);
 
-        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('package.pdf', compact('package'))
-            ->setPaper('a4', 'portrait');
+    //     $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('package.pdf', compact('package'))
+    //         ->setPaper('a4', 'portrait');
 
-        return $pdf->download($package->name . '.pdf');
-    }
+    //     return $pdf->download($package->name . '.pdf');
+    // }
 
     public function update(Request $request, $id)
     {
