@@ -62,66 +62,50 @@
                                     </div>
                                     <div class="col-md-3">
                                         <label class="form-label">Package #</label>
-                                        <input type="text" name="package_number" class="form-control"
+                                        <input type="text" name="package_number" class="form-control" placeholder="e.g. PKG-001"
                                             value="{{ old('package_number') }}">
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="form-label">Category Zone</label>
-                                        <input type="text" name="category_zone" class="form-control"
-                                            value="{{ old('category_zone') }}">
+                                        <label class="form-label">Category</label>
+                                        <input type="text" name="category" class="form-control" placeholder="e.g. VIP"
+                                            value="{{ old('category') }}">
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="form-label">Nearby</label>
-                                        <input type="text" name="nearby" class="form-control"
-                                            value="{{ old('nearby') }}">
+                                        <label class="form-label">Zone</label>
+                                        <input type="text" name="zone" class="form-control" placeholder="e.g. Zone A"
+                                            value="{{ old('zone') }}">
                                     </div>
 
                                     <div class="col-md-3">
-                                        <label class="form-label">Package Name *</label>
-                                        <input type="text" name="name" class="form-control" required
+                                        <label class="form-label">Package Name</label>
+                                        <input type="text" name="name" class="form-control" placeholder="e.g. Premium Hajj Package"
                                             value="{{ old('name') }}">
                                     </div>
                                     <div class="col-md-3">
                                         <label class="form-label">Package Code</label>
-                                        <input type="text" name="code" class="form-control"
+                                        <input type="text" name="code" class="form-control" placeholder="e.g. HJ-2027-01"
                                             value="{{ old('code') }}">
                                     </div>
                                     <div class="col-md-3">
                                         <label class="form-label">Days</label>
-                                        <input type="number" name="days" class="form-control"
+                                        <input type="number" min="0" name="days" class="form-control" placeholder="e.g. 21"
                                             value="{{ old('days') }}">
                                     </div>
                                     <div class="col-md-3">
                                         <label class="form-label">Year</label>
-                                        <input type="text" name="year" class="form-control"
+                                        <input type="text" name="year" class="form-control" placeholder="e.g. 2027"
                                             value="{{ old('year', date('Y') + 1) }}">
                                     </div>
 
                                     <div class="col-md-4">
-                                        <label class="form-label">Travel Route</label>
-                                        <select name="travel_route" class="form-select">
-                                            <option value="">-- Select Route --</option>
-                                            @foreach (\App\Enums\TravelRoute::options() as $val => $label)
-                                                <option value="{{ $val }}"
-                                                    {{ old('travel_route') == $val ? 'selected' : '' }}>
-                                                    {{ $label }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    {{-- <div class="col-md-4">
-                                        <label class="form-label">Color</label>
-                                        <input type="color" name="color" class="form-control form-control-color"
-                                            value="{{ old('color', '#000000') }}">
-                                    </div> --}}
-                                    <div class="col-md-4">
-                                        <label class="form-label">Maktab *</label>
-                                        <input type="text" name="maktab" class="form-control" required
+                                        <label class="form-label">Maktab</label>
+                                        <input type="text" name="maktab" class="form-control" placeholder="e.g. Maktab 5"
                                             value="{{ old('maktab') }}">
                                     </div>
 
                                     <div class="col-md-4">
-                                        <label class="form-label">Maktab Number *</label>
-                                        <input type="text" name="maktab_number" class="form-control" required
+                                        <label class="form-label">Maktab Number</label>
+                                        <input type="text" name="maktab_number" class="form-control" placeholder="e.g. 105"
                                             value="{{ old('maktab_number') }}">
                                     </div>
                                     <div class="col-md-4">
@@ -146,77 +130,78 @@
                                             </div>
                                         @endforeach
                                     </div>
-
-                                    <div class="col-md-6">
-                                        <label class="form-label">Upload Package Image</label>
-                                        <input type="file" name="image" class="form-control">
-                                    </div>
                                 </div>
 
                                 <hr class="my-4">
                                 <h5 class="mb-3">Package Category</h5>
-                                <div class="row g-3">
-                                    @foreach (['pkr_roe' => 'PKR ROE', 'usd_roe' => 'USD ROE', 'gbp_roe' => 'GBP ROE', 'euro_roe' => 'EURO ROE', 'aed_roe' => 'AED ROE'] as $field => $label)
-                                        <div class="col-md-2">
-                                            <label class="form-label">{{ $label }}</label>
-                                            <input type="number" step="0.01" name="{{ $field }}"
-                                                class="form-control" value="{{ old($field, 0) }}">
-                                        </div>
-                                    @endforeach
-                                </div>
-
                                 <div class="row g-3 mt-1">
                                     <div class="col-md-3">
                                         <label class="form-label">Room Type</label>
-                                        <input type="text" name="room_type" class="form-control"
+                                        <input type="text" name="room_type" class="form-control" placeholder="e.g. Standard"
                                             value="{{ old('room_type') }}">
                                     </div>
                                     <div class="col-md-3">
                                         <label class="form-label">Azizia Room Type</label>
-                                        <input type="text" name="azizia_room_type" class="form-control"
+                                        <input type="text" name="azizia_room_type" class="form-control" placeholder="e.g. Standard"
                                             value="{{ old('azizia_room_type') }}">
                                     </div>
                                     <div class="col-md-3">
                                         <label class="form-label">Makkah Type</label>
-                                        <input type="text" name="makkah_type" class="form-control"
-                                            value="{{ old('makkah_type') }}">
+                                        <select name="makkah_type" class="form-select">
+                                            <option value="">-- Select --</option>
+                                            @foreach ([1, 2, 3, 4, 5] as $val)
+                                                <option value="{{ $val }}"
+                                                    {{ old('makkah_type') == $val ? 'selected' : '' }}>{{ $val }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                     <div class="col-md-3">
                                         <label class="form-label">Medinah Type</label>
-                                        <input type="text" name="medinah_type" class="form-control"
-                                            value="{{ old('medinah_type') }}">
+                                        <select name="medinah_type" class="form-select">
+                                            <option value="">-- Select --</option>
+                                            @foreach ([1, 2, 3, 4, 5] as $val)
+                                                <option value="{{ $val }}"
+                                                    {{ old('medinah_type') == $val ? 'selected' : '' }}>{{ $val }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                     <div class="col-md-3">
                                         <label class="form-label">Azizia Type</label>
-                                        <input type="text" name="azizia_type" class="form-control"
-                                            value="{{ old('azizia_type') }}">
+                                        <select name="azizia_type" class="form-select">
+                                            <option value="">-- Select --</option>
+                                            @foreach ([1, 2, 3] as $val)
+                                                <option value="{{ $val }}"
+                                                    {{ old('azizia_type') == $val ? 'selected' : '' }}>{{ $val }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                     <div class="col-md-3">
                                         <label class="form-label">Mina Type</label>
-                                        <input type="text" name="mina_type" class="form-control"
+                                        <input type="text" name="mina_type" class="form-control" placeholder="e.g. Camp A"
                                             value="{{ old('mina_type') }}">
                                     </div>
                                 </div>
 
-                                @foreach (['pkr' => 'PKR', 'sar' => 'SAR', 'usd' => 'USD', 'eur' => 'EUR', 'gbp' => 'GBP', 'aed' => 'AED'] as $cur => $label)
-                                    <div class="row g-3 mt-1">
-                                        <div class="col-md-4">
-                                            <label class="form-label">Adult ({{ $label }})</label>
-                                            <input type="number" step="0.01" name="adult_{{ $cur }}"
-                                                class="form-control" value="{{ old("adult_{$cur}", 0) }}">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="form-label">Child ({{ $label }})</label>
-                                            <input type="number" step="0.01" name="child_{{ $cur }}"
-                                                class="form-control" value="{{ old("child_{$cur}", 0) }}">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="form-label">Infant ({{ $label }})</label>
-                                            <input type="number" step="0.01" name="infant_{{ $cur }}"
-                                                class="form-control" value="{{ old("infant_{$cur}", 0) }}">
-                                        </div>
-                                    </div>
-                                @endforeach
+                                <hr class="my-4">
+                                <h5 class="mb-3">Makkah / Madinah Sharing Breakdown</h5>
+                                <div class="row g-3">
+                                    @foreach ([
+                                        'makkah_a' => 'Makkah A',
+                                        'makkah_b' => 'Makkah B',
+                                        'madinah_a' => 'Madinah A',
+                                        'madinah_b' => 'Madinah B',
+                                    ] as $prefix => $heading)
+                                        <div class="col-12"><h6 class="mt-2 mb-1">{{ $heading }}</h6></div>
+                                        @foreach (['double' => 'Double', 'triple' => 'Triple', 'quad' => 'Quad', 'sharing' => 'Sharing'] as $key => $label)
+                                            <div class="col-md-3">
+                                                <label class="form-label">{{ $label }}</label>
+                                                <input type="number" min="0" name="{{ $prefix }}[{{ $key }}]"
+                                                    class="form-control" placeholder="0"
+                                                    value="{{ old("$prefix.$key") }}">
+                                            </div>
+                                        @endforeach
+                                    @endforeach
+                                </div>
                             </div>
                         </div>
 
@@ -235,7 +220,7 @@
                                             class="btn btn-sm btn-outline-danger remove-accommodation-row position-absolute top-0 end-0 m-2"><i
                                                 class="mdi mdi-delete"></i></button>
                                         <div class="row g-3">
-                                            <div class="col-md-3"><label class="form-label">Place *</label>
+                                            <div class="col-md-3"><label class="form-label">Place</label>
                                                 <select name="accommodations[0][place]" class="form-select">
                                                     <option value="">-- Select Place --</option>
                                                     @foreach (\App\Enums\Place::options() as $val => $label)
@@ -243,7 +228,7 @@
                                                     @endforeach
                                                 </select>
                                             </div>
-                                            <div class="col-md-3"><label class="form-label">Accommodation Type *</label>
+                                            <div class="col-md-3"><label class="form-label">Accommodation Type</label>
                                                 <select name="accommodations[0][accommodation_type]" class="form-select">
                                                     <option value="">-- Select Type --</option>
                                                     @foreach (\App\Enums\AccommodationType::options() as $val => $label)
@@ -251,7 +236,7 @@
                                                     @endforeach
                                                 </select>
                                             </div>
-                                            <div class="col-md-3"><label class="form-label">Saudi Star Rating *</label>
+                                            <div class="col-md-3"><label class="form-label">Saudi Star Rating</label>
                                                 <select name="accommodations[0][saudi_star_rating]" class="form-select">
                                                     <option value="">-- Select Rating --</option>
                                                     @foreach (\App\Enums\SaudiStarRating::options() as $val => $label)
@@ -259,7 +244,7 @@
                                                     @endforeach
                                                 </select>
                                             </div>
-                                            <div class="col-md-3"><label class="form-label">Hotel *</label>
+                                            <div class="col-md-3"><label class="form-label">Hotel</label>
                                                 <select name="accommodations[0][hotel]" class="form-select">
                                                     <option value="">-- Select Hotel --</option>
                                                     @foreach (\App\Enums\Hotel::options() as $val => $label)
@@ -271,13 +256,13 @@
                                             <div class="col-md-3"><label class="form-label">Distance (meter)</label><input
                                                     type="number" name="accommodations[0][distance]"
                                                     class="form-control"></div>
-                                            <div class="col-md-3"><label class="form-label">Check In *</label><input
+                                            <div class="col-md-3"><label class="form-label">Check In</label><input
                                                     type="date" name="accommodations[0][check_in]"
                                                     class="form-control"></div>
-                                            <div class="col-md-3"><label class="form-label">Check Out *</label><input
+                                            <div class="col-md-3"><label class="form-label">Check Out</label><input
                                                     type="date" name="accommodations[0][check_out]"
                                                     class="form-control"></div>
-                                            <div class="col-md-3"><label class="form-label">Food Package *</label>
+                                            <div class="col-md-3"><label class="form-label">Food Package</label>
                                                 <select name="accommodations[0][food_package]" class="form-select">
                                                     <option value="">-- Select Package --</option>
                                                     @foreach (\App\Enums\FoodPackage::options() as $val => $label)
@@ -286,14 +271,6 @@
                                                 </select>
                                             </div>
 
-                                            <div class="col-md-4"><label class="form-label">Actual Hotel</label>
-                                                <select name="accommodations[0][actual_hotel]" class="form-select">
-                                                    <option value="">-- Select Hotel --</option>
-                                                    @foreach (\App\Enums\Hotel::options() as $val => $label)
-                                                        <option value="{{ $val }}">{{ $label }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
                                             <div class="col-md-4"><label class="form-label">Actual Check In
                                                     Time</label><input type="datetime-local"
                                                     name="accommodations[0][actual_check_in_time]" class="form-control">
@@ -303,18 +280,26 @@
                                                     name="accommodations[0][actual_check_out_time]" class="form-control">
                                             </div>
 
-                                            <div class="col-md-3"><label class="form-label">Days *</label><input
+                                            <div class="col-md-3"><label class="form-label">Days</label><input
                                                     type="number" name="accommodations[0][days]" class="form-control">
                                             </div>
-                                            <div class="col-md-3"><label class="form-label">Nights *</label><input
+                                            <div class="col-md-3"><label class="form-label">Nights</label><input
                                                     type="number" name="accommodations[0][nights]" class="form-control">
                                             </div>
-                                            <div class="col-md-3"><label class="form-label">Group Ziarat</label><input
-                                                    type="text" name="accommodations[0][group_ziarat]"
-                                                    class="form-control"></div>
-                                            <div class="col-md-3"><label class="form-label">Religious
-                                                    Lectures</label><input type="text"
-                                                    name="accommodations[0][religious_lectures]" class="form-control">
+
+                                            <div class="col-md-3"><label class="form-label">Makkah Ziarat</label>
+                                                <select name="accommodations[0][makkah_ziarat]" class="form-select">
+                                                    <option value="">-- Select --</option>
+                                                    <option value="yes">Yes</option>
+                                                    <option value="no">No</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3"><label class="form-label">Madinah Ziarat</label>
+                                                <select name="accommodations[0][madinah_ziarat]" class="form-select">
+                                                    <option value="">-- Select --</option>
+                                                    <option value="yes">Yes</option>
+                                                    <option value="no">No</option>
+                                                </select>
                                             </div>
 
                                             <div class="col-md-4"><label class="form-label">Distribution</label><input
@@ -327,7 +312,7 @@
                                                     type="text" name="accommodations[0][arafat]" class="form-control">
                                             </div>
 
-                                            <div class="col-md-4"><label class="form-label">Shuttle</label><input
+                                            <div class="col-md-4"><label class="form-label"> Azizia Shuttle</label><input
                                                     type="text" name="accommodations[0][shuttle]"
                                                     class="form-control"></div>
                                             <div class="col-md-4"><label class="form-label">Bedding (Sofa
@@ -353,33 +338,41 @@
                         <div class="tab-pane fade card" id="tab-transport">
                             <div class="card-body">
 
-                                {{-- ---- General Route ---- --}}
-                                <h5 class="mb-3">Transport Details</h5>
-                                <div class="row g-3 mb-4">
-                                    <div class="col-md-3">
-                                        <label class="form-label">Route</label>
-                                        <input type="text" name="transport_route" class="form-control"
-                                            value="{{ old('transport_route') }}">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label">Arrival</label>
-                                        <input type="text" name="transport_arrival" class="form-control"
-                                            value="{{ old('transport_arrival') }}">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label">Departure</label>
-                                        <input type="text" name="transport_departure" class="form-control"
-                                            value="{{ old('transport_departure') }}">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label">Type</label>
-                                        <input type="text" name="transport_type" class="form-control"
-                                            value="{{ old('transport_type') }}">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label">Vehicle</label>
-                                        <input type="text" name="transport_vehicle" class="form-control"
-                                            value="{{ old('transport_vehicle') }}">
+                                {{-- ---- General Route (repeatable) ---- --}}
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 class="m-0">Transport Details</h5>
+                                    <button type="button" class="btn btn-outline-primary btn-sm"
+                                        id="addTransportBtn">Add <i class="mdi mdi-plus"></i></button>
+                                </div>
+
+                                <div id="transportRows">
+                                    <div class="transport-row border rounded p-3 mb-3 position-relative">
+                                        <button type="button"
+                                            class="btn btn-sm btn-outline-danger remove-transport-row position-absolute top-0 end-0 m-2"><i
+                                                class="mdi mdi-delete"></i></button>
+                                        <div class="row g-3">
+                                            <div class="col-md-3">
+                                                <label class="form-label">Route</label>
+                                                <input type="text" name="transports[0][route]" class="form-control">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label">Arrival</label>
+                                                <input type="text" name="transports[0][arrival]" class="form-control">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label">Departure</label>
+                                                <input type="text" name="transports[0][departure]"
+                                                    class="form-control">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label">Type</label>
+                                                <input type="text" name="transports[0][type]" class="form-control">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label">Vehicle</label>
+                                                <input type="text" name="transports[0][vehicle]" class="form-control">
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -527,8 +520,8 @@
 
                                 <h5 class="mb-3 mt-4">Giveaways</h5>
                                 @php $selectedGiveaways = old('giveaways', []); @endphp
-                                @foreach ($giveaways as $g)
-                                    <div class="form-check">
+                                @foreach ($giveaways->where('code', 'GW-01') as $g)
+                                    <div class="form-check mb-3">
                                         <input class="form-check-input" type="checkbox" name="giveaways[]"
                                             value="{{ $g->id }}" id="giveaway-{{ $g->id }}"
                                             {{ in_array($g->id, $selectedGiveaways) ? 'checked' : '' }}>
@@ -537,6 +530,10 @@
                                             {{ $g->name }}</label>
                                     </div>
                                 @endforeach
+
+                                <label class="form-label">Giveaway Note</label>
+                                <textarea name="giveaway_note" rows="3" class="form-control"
+                                    placeholder="Write here what giveaway you are giving...">{{ old('giveaway_note') }}</textarea>
                             </div>
                         </div>
 
@@ -558,13 +555,13 @@
                                 <h5 class="mb-3">Images</h5>
                                 <div class="row g-3">
                                     @foreach ([
-                            'mina_image' => 'MINA',
-                            'arafat_image' => 'ARAFAT',
-                            'muzdalifah_image' => 'MUZDALIFAH',
-                            'makkah_mina_rami_day_one_image' => 'MAKKAH / MINA RAMI - DAY ONE',
-                            'mina_rami_day_two_image' => 'MINA RAMI - DAY TWO',
-                            'mina_makkah_rami_day_three_image' => 'MINA / MAKKAH RAMI - DAY THREE',
-                            ] as $field => $label)
+            'mina_image' => 'MINA',
+            'arafat_image' => 'ARAFAT',
+            'muzdalifah_image' => 'MUZDALIFAH',
+            'makkah_mina_rami_day_one_image' => 'MAKKAH / MINA RAMI - DAY ONE',
+            'mina_rami_day_two_image' => 'MINA RAMI - DAY TWO',
+            'mina_makkah_rami_day_three_image' => 'MINA / MAKKAH RAMI - DAY THREE',
+        ] as $field => $label)
                                         <div class="col-md-4">
                                             <label class="form-label">{{ $label }}</label>
                                             <input type="file" name="{{ $field }}" class="form-control">
@@ -580,12 +577,12 @@
                                 <h5 class="mb-3">Maktab Address</h5>
                                 <div class="row g-3">
                                     <div class="col-md-6">
-                                        <label class="form-label">Maktab Address *</label>
+                                        <label class="form-label">Maktab Address</label>
                                         <input type="text" name="maktab_address" class="form-control"
                                             value="{{ old('maktab_address') }}">
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label">Office Address *</label>
+                                        <label class="form-label">Office Address</label>
                                         <input type="text" name="office_address" class="form-control"
                                             value="{{ old('office_address') }}">
                                     </div>
@@ -631,6 +628,36 @@
                     } else {
                         row.querySelectorAll('input, textarea').forEach(el => el.value = '');
                         row.querySelectorAll('select').forEach(el => el.selectedIndex = 0);
+                    }
+                }
+            });
+        })();
+
+        // ---- Transport repeatable rows ----
+        (function() {
+            let transportIndex = 1;
+
+            document.getElementById('addTransportBtn').addEventListener('click', function() {
+                const firstRow = document.querySelector('.transport-row');
+                const clone = firstRow.cloneNode(true);
+
+                clone.querySelectorAll('input').forEach(function(el) {
+                    el.name = el.name.replace(/transports\[\d+\]/, 'transports[' + transportIndex +
+                        ']');
+                    el.value = '';
+                });
+
+                document.getElementById('transportRows').appendChild(clone);
+                transportIndex++;
+            });
+
+            document.getElementById('transportRows').addEventListener('click', function(e) {
+                if (e.target.closest('.remove-transport-row')) {
+                    const row = e.target.closest('.transport-row');
+                    if (document.querySelectorAll('.transport-row').length > 1) {
+                        row.remove();
+                    } else {
+                        row.querySelectorAll('input').forEach(el => el.value = '');
                     }
                 }
             });

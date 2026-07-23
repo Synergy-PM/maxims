@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\DB;
 
 class PackageController extends Controller
 {
-    protected $packageImagePath = 'assets/images/packages';
     protected $itineraryImagePath = 'assets/images/packages/itinerary';
 
     public function index()
@@ -22,7 +21,6 @@ class PackageController extends Controller
 
         return view('package.index', compact('packages', 'trashCount'));
     }
-
     public function create()
     {
         $package = new Package();
@@ -32,7 +30,6 @@ class PackageController extends Controller
 
         return view('package.create', compact('package', 'giveaways', 'companies', 'trainingSessions'));
     }
-
     public function store(Request $request)
     {
         $data = $this->validated($request);
@@ -40,11 +37,6 @@ class PackageController extends Controller
         DB::transaction(function () use ($request, $data) {
             $package = new Package();
             $package->fill($data['package']);
-
-            if ($request->hasFile('image')) {
-                $package->image = $this->storeFile($request->file('image'), $this->packageImagePath);
-            }
-
             $package->save();
 
             $this->saveRelations($request, $package, $data);
@@ -52,7 +44,6 @@ class PackageController extends Controller
 
         return redirect()->route('package.index')->with('success', 'Package created successfully.');
     }
-
     public function edit($id)
     {
         $package = Package::with([
@@ -60,7 +51,7 @@ class PackageController extends Controller
             'itinerary',
             'terms',
             'maktabAddress',
-            'transport',
+            'transports',
             'transportFlights',
             'transportTrains',
             'giveaways',
@@ -73,7 +64,6 @@ class PackageController extends Controller
 
         return view('package.edit', compact('package', 'giveaways', 'companies', 'trainingSessions'));
     }
-
     public function show($id)
     {
         $package = Package::with([
@@ -82,7 +72,7 @@ class PackageController extends Controller
             'itinerary',
             'terms',
             'maktabAddress',
-            'transport',
+            'transports',
             'transportFlights',
             'transportTrains',
             'trainingSessions',
@@ -91,28 +81,6 @@ class PackageController extends Controller
 
         return view('package.show', compact('package'));
     }
-
-    // public function pdf($id)
-    // {
-    //     $package = Package::with([
-    //         'company',
-    //         'accommodations',
-    //         'itinerary',
-    //         'terms',
-    //         'maktabAddress',
-    //         'transport',
-    //         'transportFlights',
-    //         'transportTrains',
-    //         'trainingSessions',
-    //         'giveaways',
-    //     ])->findOrFail($id);
-
-    //     $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('package.pdf', compact('package'))
-    //         ->setPaper('a4', 'portrait');
-
-    //     return $pdf->download($package->name . '.pdf');
-    // }
-
     public function update(Request $request, $id)
     {
         $package = Package::findOrFail($id);
@@ -120,15 +88,10 @@ class PackageController extends Controller
 
         DB::transaction(function () use ($request, $package, $data) {
             $package->fill($data['package']);
-
-            if ($request->hasFile('image')) {
-                $this->deleteFile($package->image, $this->packageImagePath);
-                $package->image = $this->storeFile($request->file('image'), $this->packageImagePath);
-            }
-
             $package->save();
 
             $package->accommodations()->delete();
+            $package->transports()->delete();
             $package->transportFlights()->delete();
             $package->transportTrains()->delete();
 
@@ -137,29 +100,24 @@ class PackageController extends Controller
 
         return redirect()->route('package.index')->with('success', 'Package updated successfully.');
     }
-
     public function destroy($id)
     {
         Package::findOrFail($id)->delete();
 
         return back()->with('success', 'Package moved to trash.');
     }
-
     public function trash()
     {
         $packages = Package::onlyTrashed()->latest()->paginate(20);
 
         return view('package.trash', compact('packages'));
     }
-
     public function restore($id)
     {
         Package::onlyTrashed()->findOrFail($id)->restore();
 
         return redirect()->route('package.trash')->with('success', 'Package restored successfully.');
     }
-
-
     private function storeFile($file, string $folder): string
     {
         $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
@@ -167,64 +125,60 @@ class PackageController extends Controller
 
         return $filename;
     }
-
     private function deleteFile(?string $filename, string $folder): void
     {
         if ($filename && file_exists(public_path($folder . '/' . $filename))) {
             unlink(public_path($folder . '/' . $filename));
         }
     }
-
-    // ---- validation ----
-
     private function validated(Request $request): array
     {
         $package = $request->validate([
             'year' => 'nullable|string|max:20',
             'company_id' => 'nullable|integer|exists:companies,id',
             'package_number' => 'nullable|string|max:100',
-            'category_zone' => 'nullable|string|max:150',
-            'nearby' => 'nullable|string|max:150',
-            'name' => 'required|string|max:200',
+            'category' => 'nullable|string|max:150',
+            'zone' => 'nullable|string|max:150',
+            'name' => 'nullable|string|max:200',
             'code' => 'nullable|string|max:100',
             'days' => 'nullable|integer',
-            'travel_route' => 'nullable|string|max:150',
-            'color' => 'nullable|string|max:20',
-            'maktab' => 'required|string|max:150',
-            'maktab_number' => 'required|string|max:100',
-            'medina_arrival' => 'required|in:before_hajj,after_hajj',
-            'hajj_duration' => 'required|in:short,long',
+            'maktab' => 'nullable|string|max:150',
+            'maktab_number' => 'nullable|string|max:100',
+            'medina_arrival' => 'nullable|in:before_hajj,after_hajj',
+            'hajj_duration' => 'nullable|in:short,long',
 
-            'pkr_roe' => 'nullable|numeric',
-            'usd_roe' => 'nullable|numeric',
-            'gbp_roe' => 'nullable|numeric',
-            'euro_roe' => 'nullable|numeric',
-            'aed_roe' => 'nullable|numeric',
             'room_type' => 'nullable|string|max:100',
             'azizia_room_type' => 'nullable|string|max:100',
             'makkah_type' => 'nullable|string|max:100',
             'medinah_type' => 'nullable|string|max:100',
             'azizia_type' => 'nullable|string|max:100',
             'mina_type' => 'nullable|string|max:100',
+            'giveaway_note' => 'nullable|string',
 
-            'adult_pkr' => 'nullable|numeric',
-            'child_pkr' => 'nullable|numeric',
-            'infant_pkr' => 'nullable|numeric',
-            'adult_sar' => 'nullable|numeric',
-            'child_sar' => 'nullable|numeric',
-            'infant_sar' => 'nullable|numeric',
-            'adult_usd' => 'nullable|numeric',
-            'child_usd' => 'nullable|numeric',
-            'infant_usd' => 'nullable|numeric',
-            'adult_eur' => 'nullable|numeric',
-            'child_eur' => 'nullable|numeric',
-            'infant_eur' => 'nullable|numeric',
-            'adult_gbp' => 'nullable|numeric',
-            'child_gbp' => 'nullable|numeric',
-            'infant_gbp' => 'nullable|numeric',
-            'adult_aed' => 'nullable|numeric',
-            'child_aed' => 'nullable|numeric',
-            'infant_aed' => 'nullable|numeric',
+            // Makkah / Madinah Sharing Breakdown
+            'makkah_a' => 'nullable|array',
+            'makkah_a.double' => 'nullable|integer|min:0',
+            'makkah_a.triple' => 'nullable|integer|min:0',
+            'makkah_a.quad' => 'nullable|integer|min:0',
+            'makkah_a.sharing' => 'nullable|integer|min:0',
+
+            'makkah_b' => 'nullable|array',
+            'makkah_b.double' => 'nullable|integer|min:0',
+            'makkah_b.triple' => 'nullable|integer|min:0',
+            'makkah_b.quad' => 'nullable|integer|min:0',
+            'makkah_b.sharing' => 'nullable|integer|min:0',
+
+            'madinah_a' => 'nullable|array',
+            'madinah_a.double' => 'nullable|integer|min:0',
+            'madinah_a.triple' => 'nullable|integer|min:0',
+            'madinah_a.quad' => 'nullable|integer|min:0',
+            'madinah_a.sharing' => 'nullable|integer|min:0',
+
+            'madinah_b' => 'nullable|array',
+            'madinah_b.double' => 'nullable|integer|min:0',
+            'madinah_b.triple' => 'nullable|integer|min:0',
+            'madinah_b.quad' => 'nullable|integer|min:0',
+            'madinah_b.sharing' => 'nullable|integer|min:0',
         ]);
 
         $accommodations = $request->validate([
@@ -237,13 +191,12 @@ class PackageController extends Controller
             'accommodations.*.check_in' => 'nullable|date',
             'accommodations.*.check_out' => 'nullable|date',
             'accommodations.*.food_package' => 'nullable|string|max:100',
-            'accommodations.*.actual_hotel' => 'nullable|string|max:150',
             'accommodations.*.actual_check_in_time' => 'nullable|date',
             'accommodations.*.actual_check_out_time' => 'nullable|date',
             'accommodations.*.days' => 'nullable|integer',
             'accommodations.*.nights' => 'nullable|integer',
-            'accommodations.*.group_ziarat' => 'nullable|string|max:150',
-            'accommodations.*.religious_lectures' => 'nullable|string|max:150',
+            'accommodations.*.makkah_ziarat' => 'nullable|in:yes,no',
+            'accommodations.*.madinah_ziarat' => 'nullable|in:yes,no',
             'accommodations.*.distribution' => 'nullable|string|max:150',
             'accommodations.*.camp' => 'nullable|string|max:150',
             'accommodations.*.arafat' => 'nullable|string|max:150',
@@ -262,14 +215,14 @@ class PackageController extends Controller
             'terms_content' => 'nullable|string',
         ]);
 
-        // ---- Transport: general route row + repeatable flights + repeatable trains ----
-        $transport = $request->validate([
-            'transport_route' => 'nullable|string|max:150',
-            'transport_arrival' => 'nullable|string|max:100',
-            'transport_departure' => 'nullable|string|max:100',
-            'transport_type' => 'nullable|string|max:100',
-            'transport_vehicle' => 'nullable|string|max:100',
-        ]);
+        $transports = $request->validate([
+            'transports' => 'nullable|array',
+            'transports.*.route' => 'nullable|string|max:150',
+            'transports.*.arrival' => 'nullable|string|max:100',
+            'transports.*.departure' => 'nullable|string|max:100',
+            'transports.*.type' => 'nullable|string|max:100',
+            'transports.*.vehicle' => 'nullable|string|max:100',
+        ])['transports'] ?? [];
 
         $flights = $request->validate([
             'flights' => 'nullable|array',
@@ -322,7 +275,7 @@ class PackageController extends Controller
             'accommodations',
             'itinerary',
             'terms',
-            'transport',
+            'transports',
             'flights',
             'trains',
             'maktabAddress',
@@ -330,7 +283,6 @@ class PackageController extends Controller
             'trainingSessions'
         );
     }
-
     private function saveRelations(Request $request, Package $package, array $data): void
     {
         foreach ($data['accommodations'] as $row) {
@@ -366,18 +318,10 @@ class PackageController extends Controller
             ['content' => $data['terms']['terms_content'] ?? null]
         );
 
-        // ---- Transport ----
-        // General route row (Route / Arrival / Departure / Type / Vehicle)
-        $package->transport()->updateOrCreate(
-            ['package_id' => $package->id],
-            [
-                'route' => $data['transport']['transport_route'] ?? null,
-                'arrival' => $data['transport']['transport_arrival'] ?? null,
-                'departure' => $data['transport']['transport_departure'] ?? null,
-                'type' => $data['transport']['transport_type'] ?? null,
-                'vehicle' => $data['transport']['transport_vehicle'] ?? null,
-            ]
-        );
+        // Transport (repeatable)
+        foreach ($data['transports'] as $row) {
+            $package->transports()->create($row);
+        }
 
         // Flights (repeatable)
         foreach ($data['flights'] as $row) {
@@ -390,16 +334,13 @@ class PackageController extends Controller
             $package->transportTrains()->create($row);
         }
 
-        // Maktab Address
         $package->maktabAddress()->updateOrCreate(
             ['package_id' => $package->id],
             $data['maktabAddress']
         );
 
-        // Giveaways (checkboxes)
         $package->giveaways()->sync($data['giveaways']);
 
-        // Training Sessions (checkboxes)
         $package->trainingSessions()->sync($data['trainingSessions']);
     }
 }

@@ -17,10 +17,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        DB::table('giveaways')->insert([
-            ['code' => 'GW-01', 'name' => 'Suit Case', 'created_at' => now(), 'updated_at' => now()],
-            ['code' => 'GW-02', 'name' => 'Bottle', 'created_at' => now(), 'updated_at' => now()],
-        ]);
     }
 
     public function down(): void

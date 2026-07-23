@@ -22,12 +22,14 @@ return new class extends Migration
             $table->date('check_out')->nullable();
             $table->string('food_package')->nullable();
 
-            $table->string('actual_hotel')->nullable();
             $table->dateTime('actual_check_in_time')->nullable();
             $table->dateTime('actual_check_out_time')->nullable();
 
             $table->integer('days')->nullable();
             $table->integer('nights')->nullable();
+
+            $table->enum('makkah_ziarat', ['yes', 'no'])->nullable();
+            $table->enum('madinah_ziarat', ['yes', 'no'])->nullable();
 
             $table->string('group_ziarat')->nullable();
             $table->string('religious_lectures')->nullable();

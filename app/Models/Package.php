@@ -12,6 +12,13 @@ class Package extends Model
 
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'makkah_a' => 'array',
+        'makkah_b' => 'array',
+        'madinah_a' => 'array',
+        'madinah_b' => 'array',
+    ];
+
     public function accommodations()
     {
         return $this->hasMany(PackageAccommodation::class);
@@ -32,11 +39,10 @@ class Package extends Model
         return $this->hasOne(PackageMaktabAddress::class);
     }
 
-    public function transport()
+    public function transports()
     {
-        return $this->hasOne(PackageTransport::class);
+        return $this->hasMany(PackageTransport::class);
     }
-
     // Flight Details
     public function transportFlights()
     {
