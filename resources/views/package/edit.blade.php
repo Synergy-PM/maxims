@@ -291,6 +291,11 @@
                                                         name="accommodations[{{ $i }}][check_out]"
                                                         class="form-control"
                                                         value="{{ optional($acc->check_out)->format('Y-m-d') }}"></div>
+                                                <div class="col-md-3"><label class="form-label">Azizia Date</label><input
+                                                        type="date"
+                                                        name="accommodations[{{ $i }}][azizia_date]"
+                                                        class="form-control"
+                                                        value="{{ optional($acc->azizia_date)->format('Y-m-d') }}"></div>
                                                 <div class="col-md-3"><label class="form-label">Food Package</label>
                                                     <select name="accommodations[{{ $i }}][food_package]"
                                                         class="form-select">
@@ -436,6 +441,9 @@
                                                         class="form-control"></div>
                                                 <div class="col-md-3"><label class="form-label">Check Out</label><input
                                                         type="date" name="accommodations[0][check_out]"
+                                                        class="form-control"></div>
+                                                <div class="col-md-3"><label class="form-label">Azizia Date</label><input
+                                                        type="date" name="accommodations[0][azizia_date]"
                                                         class="form-control"></div>
                                                 <div class="col-md-3"><label class="form-label">Food Package</label>
                                                     <select name="accommodations[0][food_package]" class="form-select">

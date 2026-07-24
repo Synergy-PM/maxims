@@ -14,8 +14,6 @@
         $forPdf = $forPdf ?? false;
         $accentColor = $package->color ?? '#d9a441';
 
-        // Derive a darker shade of the package accent colour for gradients,
-        // since the theme needs both a base gold and a darker gold stop.
         $darken = function ($hex, $percent) {
             $hex = ltrim($hex ?: '#d9a441', '#');
             if (strlen($hex) === 3) {

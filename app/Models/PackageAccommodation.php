@@ -11,6 +11,7 @@ class PackageAccommodation extends Model
     protected $casts = [
         'check_in' => 'date',
         'check_out' => 'date',
+        'azizia_date' => 'date',
         'actual_check_in_time' => 'datetime',
         'actual_check_out_time' => 'datetime',
     ];

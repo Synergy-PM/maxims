@@ -212,35 +212,82 @@
             border-radius: 2px;
         }
 
+        .room-type-strip {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 10px 0;
+        }
+
+        .room-type-pill {
+            background: var(--peach-light);
+            border: 1px solid var(--gold);
+            color: var(--navy);
+            font-size: .72rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .room-type-pill .k {
+            font-weight: 800;
+            letter-spacing: .3px;
+        }
+
+        .room-type-pill .v {
+            background: var(--navy);
+            color: #fff;
+            padding: 1px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .room-table-wrap {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, .12);
+            margin-bottom: 8px;
+        }
+
         .room-table {
             border-collapse: collapse;
             width: 100%;
             font-size: .8rem;
-            margin-bottom: 5px;
+            margin-bottom: 0;
         }
 
         .room-table td,
         .room-table th {
-            border: 1px solid #333;
-            padding: 6px 8px;
+            border: 1px solid #ddd;
+            padding: 7px 8px;
             text-align: center;
         }
 
         .room-table .room-header {
             background: var(--navy);
-            color: #fff;
+            color: var(--gold);
             font-weight: 800;
-            width: 15%;
+            width: 18%;
+            border-color: var(--navy);
         }
 
         .room-table thead th {
-            background: var(--peach);
+            background: linear-gradient(135deg, var(--gold-dark), var(--gold));
             color: var(--navy);
-            font-weight: 700;
+            font-weight: 800;
+            letter-spacing: .5px;
+            border-color: var(--gold-dark);
         }
 
         .room-table tbody tr:nth-child(odd) td:not(.room-header) {
             background: var(--grey-row);
+        }
+
+        .room-table tbody tr:hover td:not(.room-header) {
+            background: var(--peach-light);
         }
 
         .price-caption {
@@ -370,6 +417,7 @@
                         <th>ACCOMMODATION TYPE</th>
                         <th>HOTEL</th>
                         <th>RATING</th>
+                        <th>AZIZIA DATE</th>
                         <th>FOOD PACKAGE</th>
                         <th>SHUTTLE</th>
                     </tr>
@@ -395,12 +443,22 @@
                                     -
                                 @endif
                             </td>
+                            <td>
+                                @php
+                                    $aziziaDate = $acc['azizia_date'] ?? ($acc->azizia_date ?? null);
+                                @endphp
+                                @if (!empty($aziziaDate))
+                                    {{ \Carbon\Carbon::parse($aziziaDate)->format('d M, Y') }}
+                                @else
+                                    -
+                                @endif
+                            </td>
                             <td>{{ $acc['food_package'] ?? ($acc->food_package ?? '-') }}</td>
                             <td>{{ $acc['shuttle'] ?? ($acc->shuttle ?? '-') }}</td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6">No Accommodation details provided.</td>
+                            <td colspan="7">No Accommodation details provided.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -414,39 +472,61 @@
             </div>
         </div>
 
-        <!-- Dynamic Room Type Pricing Table -->
-        <div class="table-responsive">
+        <!-- Room Type Info Strip -->
+        <div class="room-type-strip">
+            @foreach ([
+        'room_type' => 'ROOM TYPE',
+        'azizia_room_type' => 'AZIZIA ROOM TYPE',
+        'makkah_type' => 'MAKKAH TYPE',
+        'medinah_type' => 'MEDINAH TYPE',
+        'azizia_type' => 'AZIZIA TYPE',
+        'mina_type' => 'MINA TYPE',
+    ] as $field => $label)
+                @if (!empty($package->{$field}))
+                    <span class="room-type-pill">
+                        <span class="k">{{ $label }}</span>
+                        <span class="v">{{ $package->{$field} }}</span>
+                    </span>
+                @endif
+            @endforeach
+        </div>
+
+        <!-- Makkah / Madinah Sharing Breakdown Table (replaces old SAR/PKR price table) -->
+        <div class="table-responsive room-table-wrap">
             <table class="room-table">
                 <thead>
                     <tr>
-                        <th>ROOM TYPE</th>
-                        <th>SAR PRICE</th>
-                        <th>PKR PRICE</th>
+                        <th></th>
+                        <th>DOUBLE</th>
+                        <th>TRIPLE</th>
+                        <th>QUAD</th>
+                        <th>SHARING</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td class="fw-bold">QUAD Sharing</td>
-                        <td>{{ $package->adult_sar ? 'SAR ' . number_format($package->adult_sar) . '/-' : 'NA' }}</td>
-                        <td>{{ $package->adult_pkr ? 'PKR ' . number_format($package->adult_pkr) . '/-' : 'NA' }}</td>
-                    </tr>
-                    <tr>
-                        <td class="fw-bold">TRIPLE Sharing</td>
-                        <td>{{ $package->child_sar ? 'SAR ' . number_format($package->child_sar) . '/-' : 'NA' }}</td>
-                        <td>{{ $package->child_pkr ? 'PKR ' . number_format($package->child_pkr) . '/-' : 'NA' }}</td>
-                    </tr>
-                    <tr>
-                        <td class="fw-bold">DOUBLE Sharing</td>
-                        <td>{{ $package->infant_sar ? 'SAR ' . number_format($package->infant_sar) . '/-' : 'NA' }}
-                        </td>
-                        <td>{{ $package->infant_pkr ? 'PKR ' . number_format($package->infant_pkr) . '/-' : 'NA' }}
-                        </td>
-                    </tr>
+                    @foreach ([
+        'makkah_a' => 'MAKKAH A',
+        'makkah_b' => 'MAKKAH B',
+        'madinah_a' => 'MADINAH A',
+        'madinah_b' => 'MADINAH B',
+    ] as $field => $label)
+                        @php
+                            $row = $package->{$field} ?? [];
+                            if (is_string($row)) {
+                                $row = json_decode($row, true) ?? [];
+                            }
+                        @endphp
+                        <tr>
+                            <td class="room-header">{{ $label }}</td>
+                            <td>{{ $row['double'] ?? '-' }}</td>
+                            <td>{{ $row['triple'] ?? '-' }}</td>
+                            <td>{{ $row['quad'] ?? '-' }}</td>
+                            <td>{{ $row['sharing'] ?? '-' }}</td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
-
-        <div class="price-caption">"Book Early, Prices and Packages Subject to Change."</div>
 
         <div class="row">
             <div class="col-lg-5 mb-2">
