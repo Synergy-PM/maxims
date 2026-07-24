@@ -521,10 +521,10 @@
                                     @endforeach
                                 @endif
 
-                                <h5 class="mb-3 mt-4">Giveaways</h5>
+                                <h5 class="mb-3">Giveaways</h5>
                                 @php $selectedGiveaways = old('giveaways', []); @endphp
                                 @foreach ($giveaways->where('code', 'GW-01') as $g)
-                                    <div class="form-check mb-3">
+                                    <div class="form-check">
                                         <input class="form-check-input" type="checkbox" name="giveaways[]"
                                             value="{{ $g->id }}" id="giveaway-{{ $g->id }}"
                                             {{ in_array($g->id, $selectedGiveaways) ? 'checked' : '' }}>
@@ -533,8 +533,6 @@
                                             {{ $g->name }}</label>
                                     </div>
                                 @endforeach
-
-                                <label class="form-label">Giveaway Note</label>
                                 <textarea name="giveaway_note" rows="3" class="form-control"
                                     placeholder="Write here what giveaway you are giving...">{{ old('giveaway_note') }}</textarea>
                             </div>

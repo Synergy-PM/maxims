@@ -879,7 +879,7 @@
                                     @endforeach
                                 @endif
 
-                                <h5 class="mb-3 mt-4">Giveaways</h5>
+                                <h5 class="mb-3">Giveaways</h5>
                                 @php
                                     $selectedGiveaways = old('giveaways', $package->giveaways->pluck('id')->toArray());
                                 @endphp
@@ -893,8 +893,6 @@
                                             {{ $g->name }}</label>
                                     </div>
                                 @endforeach
-
-                                <label class="form-label">Giveaway Note</label>
                                 <textarea name="giveaway_note" rows="3" class="form-control"
                                     placeholder="Write here what giveaway you are giving...">{{ old('giveaway_note', $package->giveaway_note) }}</textarea>
                             </div>
