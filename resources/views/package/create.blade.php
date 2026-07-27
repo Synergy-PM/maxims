@@ -62,8 +62,8 @@
                                     </div>
                                     <div class="col-md-3">
                                         <label class="form-label">Package #</label>
-                                        <input type="text" name="package_number" class="form-control" placeholder="e.g. PKG-001"
-                                            value="{{ old('package_number') }}">
+                                        <input type="text" name="package_number" class="form-control"
+                                            placeholder="e.g. PKG-001" value="{{ old('package_number') }}">
                                     </div>
                                     <div class="col-md-3">
                                         <label class="form-label">Category</label>
@@ -78,35 +78,35 @@
 
                                     <div class="col-md-3">
                                         <label class="form-label">Package Name</label>
-                                        <input type="text" name="name" class="form-control" placeholder="e.g. Premium Hajj Package"
-                                            value="{{ old('name') }}">
+                                        <input type="text" name="name" class="form-control"
+                                            placeholder="e.g. Premium Hajj Package" value="{{ old('name') }}">
                                     </div>
                                     <div class="col-md-3">
                                         <label class="form-label">Package Code</label>
-                                        <input type="text" name="code" class="form-control" placeholder="e.g. HJ-2027-01"
-                                            value="{{ old('code') }}">
+                                        <input type="text" name="code" class="form-control"
+                                            placeholder="e.g. HJ-2027-01" value="{{ old('code') }}">
                                     </div>
                                     <div class="col-md-3">
                                         <label class="form-label">Days</label>
-                                        <input type="number" min="0" name="days" class="form-control" placeholder="e.g. 21"
-                                            value="{{ old('days') }}">
+                                        <input type="number" min="0" name="days" class="form-control"
+                                            placeholder="e.g. 21" value="{{ old('days') }}">
                                     </div>
                                     <div class="col-md-3">
                                         <label class="form-label">Year</label>
-                                        <input type="text" name="year" class="form-control" placeholder="e.g. 2027"
-                                            value="{{ old('year', date('Y') + 1) }}">
+                                        <input type="text" name="year" class="form-control"
+                                            placeholder="e.g. 2027" value="{{ old('year', date('Y') + 1) }}">
                                     </div>
 
                                     <div class="col-md-4">
                                         <label class="form-label">Maktab</label>
-                                        <input type="text" name="maktab" class="form-control" placeholder="e.g. Maktab 5"
-                                            value="{{ old('maktab') }}">
+                                        <input type="text" name="maktab" class="form-control"
+                                            placeholder="e.g. Maktab 5" value="{{ old('maktab') }}">
                                     </div>
 
                                     <div class="col-md-4">
                                         <label class="form-label">Maktab Number</label>
-                                        <input type="text" name="maktab_number" class="form-control" placeholder="e.g. 105"
-                                            value="{{ old('maktab_number') }}">
+                                        <input type="text" name="maktab_number" class="form-control"
+                                            placeholder="e.g. 105" value="{{ old('maktab_number') }}">
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label d-block">Medina Arrival</label>
@@ -137,13 +137,13 @@
                                 <div class="row g-3 mt-1">
                                     <div class="col-md-3">
                                         <label class="form-label">Room Type</label>
-                                        <input type="text" name="room_type" class="form-control" placeholder="e.g. Standard"
-                                            value="{{ old('room_type') }}">
+                                        <input type="text" name="room_type" class="form-control"
+                                            placeholder="e.g. Standard" value="{{ old('room_type') }}">
                                     </div>
                                     <div class="col-md-3">
                                         <label class="form-label">Azizia Room Type</label>
-                                        <input type="text" name="azizia_room_type" class="form-control" placeholder="e.g. Standard"
-                                            value="{{ old('azizia_room_type') }}">
+                                        <input type="text" name="azizia_room_type" class="form-control"
+                                            placeholder="e.g. Standard" value="{{ old('azizia_room_type') }}">
                                     </div>
                                     <div class="col-md-3">
                                         <label class="form-label">Makkah Type</label>
@@ -151,7 +151,8 @@
                                             <option value="">-- Select --</option>
                                             @foreach ([1, 2, 3, 4, 5] as $val)
                                                 <option value="{{ $val }}"
-                                                    {{ old('makkah_type') == $val ? 'selected' : '' }}>{{ $val }}</option>
+                                                    {{ old('makkah_type') == $val ? 'selected' : '' }}>{{ $val }}
+                                                </option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -161,7 +162,8 @@
                                             <option value="">-- Select --</option>
                                             @foreach ([1, 2, 3, 4, 5] as $val)
                                                 <option value="{{ $val }}"
-                                                    {{ old('medinah_type') == $val ? 'selected' : '' }}>{{ $val }}</option>
+                                                    {{ old('medinah_type') == $val ? 'selected' : '' }}>
+                                                    {{ $val }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -171,14 +173,15 @@
                                             <option value="">-- Select --</option>
                                             @foreach ([1, 2, 3] as $val)
                                                 <option value="{{ $val }}"
-                                                    {{ old('azizia_type') == $val ? 'selected' : '' }}>{{ $val }}</option>
+                                                    {{ old('azizia_type') == $val ? 'selected' : '' }}>{{ $val }}
+                                                </option>
                                             @endforeach
                                         </select>
                                     </div>
                                     <div class="col-md-3">
                                         <label class="form-label">Mina Type</label>
-                                        <input type="text" name="mina_type" class="form-control" placeholder="e.g. Camp A"
-                                            value="{{ old('mina_type') }}">
+                                        <input type="text" name="mina_type" class="form-control"
+                                            placeholder="e.g. Camp A" value="{{ old('mina_type') }}">
                                     </div>
                                 </div>
 
@@ -186,18 +189,20 @@
                                 <h5 class="mb-3">Makkah / Madinah Sharing Breakdown</h5>
                                 <div class="row g-3">
                                     @foreach ([
-                                        'makkah_a' => 'Makkah A',
-                                        'makkah_b' => 'Makkah B',
-                                        'madinah_a' => 'Madinah A',
-                                        'madinah_b' => 'Madinah B',
-                                    ] as $prefix => $heading)
-                                        <div class="col-12"><h6 class="mt-2 mb-1">{{ $heading }}</h6></div>
+                                            'makkah_a' => 'Makkah A',
+                                            'makkah_b' => 'Makkah B',
+                                            'madinah_a' => 'Madinah A',
+                                            'madinah_b' => 'Madinah B',
+                                        ] as $prefix => $heading)
+                                        <div class="col-12">
+                                            <h6 class="mt-2 mb-1">{{ $heading }}</h6>
+                                        </div>
                                         @foreach (['double' => 'Double', 'triple' => 'Triple', 'quad' => 'Quad', 'sharing' => 'Sharing'] as $key => $label)
                                             <div class="col-md-3">
                                                 <label class="form-label">{{ $label }}</label>
-                                                <input type="number" min="0" name="{{ $prefix }}[{{ $key }}]"
-                                                    class="form-control" placeholder="0"
-                                                    value="{{ old("$prefix.$key") }}">
+                                                <input type="number" min="0"
+                                                    name="{{ $prefix }}[{{ $key }}]" class="form-control"
+                                                    placeholder="0" value="{{ old("$prefix.$key") }}">
                                             </div>
                                         @endforeach
                                     @endforeach
@@ -630,6 +635,42 @@
                         row.querySelectorAll('input, textarea').forEach(el => el.value = '');
                         row.querySelectorAll('select').forEach(el => el.selectedIndex = 0);
                     }
+                }
+            });
+
+            // ---- Auto calculate Days & Nights from Check In / Check Out ----
+            function calculateDaysNights(row) {
+                const checkInEl = row.querySelector('input[name*="[check_in]"]');
+                const checkOutEl = row.querySelector('input[name*="[check_out]"]');
+                const daysEl = row.querySelector('input[name*="[days]"]');
+                const nightsEl = row.querySelector('input[name*="[nights]"]');
+
+                if (!checkInEl || !checkOutEl || !daysEl || !nightsEl) return;
+
+                const checkInVal = checkInEl.value;
+                const checkOutVal = checkOutEl.value;
+
+                if (!checkInVal || !checkOutVal) return;
+
+                const checkIn = new Date(checkInVal);
+                const checkOut = new Date(checkOutVal);
+
+                const diffTime = checkOut - checkIn;
+                const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+
+                if (diffDays > 0) {
+                    nightsEl.value = diffDays;
+                    daysEl.value = diffDays + 1;
+                } else {
+                    nightsEl.value = '';
+                    daysEl.value = '';
+                }
+            }
+
+            document.getElementById('accommodationRows').addEventListener('change', function(e) {
+                if (e.target.matches('input[name*="[check_in]"], input[name*="[check_out]"]')) {
+                    const row = e.target.closest('.accommodation-row');
+                    if (row) calculateDaysNights(row);
                 }
             });
         })();

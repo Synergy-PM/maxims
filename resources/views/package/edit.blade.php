@@ -999,6 +999,42 @@
                     }
                 }
             });
+
+            // ---- Auto calculate Days & Nights from Check In / Check Out ----
+            function calculateDaysNights(row) {
+                const checkInEl = row.querySelector('input[name*="[check_in]"]');
+                const checkOutEl = row.querySelector('input[name*="[check_out]"]');
+                const daysEl = row.querySelector('input[name*="[days]"]');
+                const nightsEl = row.querySelector('input[name*="[nights]"]');
+
+                if (!checkInEl || !checkOutEl || !daysEl || !nightsEl) return;
+
+                const checkInVal = checkInEl.value;
+                const checkOutVal = checkOutEl.value;
+
+                if (!checkInVal || !checkOutVal) return;
+
+                const checkIn = new Date(checkInVal);
+                const checkOut = new Date(checkOutVal);
+
+                const diffTime = checkOut - checkIn;
+                const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+
+                if (diffDays > 0) {
+                    nightsEl.value = diffDays;
+                    daysEl.value = diffDays + 1;
+                } else {
+                    nightsEl.value = '';
+                    daysEl.value = '';
+                }
+            }
+
+            document.getElementById('accommodationRows').addEventListener('change', function(e) {
+                if (e.target.matches('input[name*="[check_in]"], input[name*="[check_out]"]')) {
+                    const row = e.target.closest('.accommodation-row');
+                    if (row) calculateDaysNights(row);
+                }
+            });
         })();
 
         // ---- Transport repeatable rows ----
