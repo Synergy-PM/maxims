@@ -131,6 +131,41 @@
                                             </div>
                                         @endforeach
                                     </div>
+
+                                    <div class="col-md-3">
+                                        <label class="form-label">Hijri Start Day</label>
+                                        <input type="number" min="1" max="30" name="hijri_start_day"
+                                            class="form-control" placeholder="e.g. 4"
+                                            value="{{ old('hijri_start_day', $package->hijri_start_day) }}">
+                                        <small class="text-muted">Hijri day number matching the first Accommodation's
+                                            Check In date</small>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Hijri Start Month</label>
+                                        <select name="hijri_start_month" class="form-select">
+                                            <option value="">-- Select --</option>
+                                            @foreach ([
+            1 => 'Muharram',
+            2 => 'Safar',
+            3 => 'Rabi-ul-Awwal',
+            4 => 'Rabi-ul-Thani',
+            5 => 'Jumada-al-Awwal',
+            6 => 'Jumada-al-Thani',
+            7 => 'Rajab',
+            8 => 'Shaban',
+            9 => 'Ramadan',
+            10 => 'Shawwal',
+            11 => 'Zil Qadah',
+            12 => 'Zil Hajj',
+        ] as $val => $label)
+                                                <option value="{{ $val }}"
+                                                    {{ old('hijri_start_month', $package->hijri_start_month) == $val ? 'selected' : '' }}>
+                                                    {{ $label }}</option>
+                                            @endforeach
+                                        </select>
+                                        <small class="text-muted">Hijri month for the first day of the
+                                            itinerary</small>
+                                    </div>
                                 </div>
 
                                 <hr class="my-4">
@@ -221,9 +256,21 @@
                                     <button type="button" class="btn btn-outline-primary btn-sm"
                                         id="addAccommodationBtn">Add <i class="mdi mdi-plus"></i></button>
                                 </div>
+                                <p class="text-muted mb-3">Check In / Check Out are shared by both packages (A &amp;
+                                    B). Select a separate hotel for Package A and Package B, or tick "Same Hotel for
+                                    Package A & B" if they match.</p>
 
                                 <div id="accommodationRows">
                                     @forelse ($package->accommodations as $i => $acc)
+                                        @php
+                                            $accSameForBoth = $acc->same_for_both;
+                                            $pkgAType = $acc->package_a_accommodation_type;
+                                            $pkgAStar = $acc->package_a_saudi_star_rating;
+                                            $pkgAHotel = $acc->package_a_hotel;
+                                            $pkgBType = $acc->package_b_accommodation_type;
+                                            $pkgBStar = $acc->package_b_saudi_star_rating;
+                                            $pkgBHotel = $acc->package_b_hotel;
+                                        @endphp
                                         <div class="accommodation-row border rounded p-3 mb-3 position-relative">
                                             <button type="button"
                                                 class="btn btn-sm btn-outline-danger remove-accommodation-row position-absolute top-0 end-0 m-2"><i
@@ -240,47 +287,6 @@
                                                         @endforeach
                                                     </select>
                                                 </div>
-                                                <div class="col-md-3"><label class="form-label">Accommodation
-                                                        Type</label>
-                                                    <select name="accommodations[{{ $i }}][accommodation_type]"
-                                                        class="form-select">
-                                                        <option value="">-- Select Type --</option>
-                                                        @foreach (\App\Enums\AccommodationType::options() as $val => $label)
-                                                            <option value="{{ $val }}"
-                                                                {{ $acc->accommodation_type == $val ? 'selected' : '' }}>
-                                                                {{ $label }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-3"><label class="form-label">Saudi Star
-                                                        Rating</label>
-                                                    <select name="accommodations[{{ $i }}][saudi_star_rating]"
-                                                        class="form-select">
-                                                        <option value="">-- Select Rating --</option>
-                                                        @foreach (\App\Enums\SaudiStarRating::options() as $val => $label)
-                                                            <option value="{{ $val }}"
-                                                                {{ $acc->saudi_star_rating == $val ? 'selected' : '' }}>
-                                                                {{ $label }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-3"><label class="form-label">Hotel</label>
-                                                    <select name="accommodations[{{ $i }}][hotel]"
-                                                        class="form-select">
-                                                        <option value="">-- Select Hotel --</option>
-                                                        @foreach (\App\Enums\Hotel::options() as $val => $label)
-                                                            <option value="{{ $val }}"
-                                                                {{ $acc->hotel == $val ? 'selected' : '' }}>
-                                                                {{ $label }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-
-                                                <div class="col-md-3"><label class="form-label">Distance
-                                                        (meter)
-                                                    </label><input type="number"
-                                                        name="accommodations[{{ $i }}][distance]"
-                                                        class="form-control" value="{{ $acc->distance }}"></div>
                                                 <div class="col-md-3"><label class="form-label">Check In</label><input
                                                         type="date"
                                                         name="accommodations[{{ $i }}][check_in]"
@@ -291,6 +297,114 @@
                                                         name="accommodations[{{ $i }}][check_out]"
                                                         class="form-control"
                                                         value="{{ optional($acc->check_out)->format('Y-m-d') }}"></div>
+                                                <div class="col-md-3 d-flex align-items-end">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input same-for-both-toggle"
+                                                            type="checkbox"
+                                                            name="accommodations[{{ $i }}][same_for_both]"
+                                                            value="1" {{ $accSameForBoth ? 'checked' : '' }}>
+                                                        <label class="form-check-label">Same Hotel for Package A &
+                                                            B</label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-12">
+                                                    <hr class="my-2">
+                                                    <h6 class="text-primary mb-0">Package A</h6>
+                                                </div>
+                                                <div class="col-md-4"><label class="form-label">Accommodation
+                                                        Type (A)</label>
+                                                    <select
+                                                        name="accommodations[{{ $i }}][package_a][accommodation_type]"
+                                                        class="form-select">
+                                                        <option value="">-- Select Type --</option>
+                                                        @foreach (\App\Enums\AccommodationType::options() as $val => $label)
+                                                            <option value="{{ $val }}"
+                                                                {{ $pkgAType == $val ? 'selected' : '' }}>
+                                                                {{ $label }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-4"><label class="form-label">Saudi Star
+                                                        Rating (A)</label>
+                                                    <select
+                                                        name="accommodations[{{ $i }}][package_a][saudi_star_rating]"
+                                                        class="form-select">
+                                                        <option value="">-- Select Rating --</option>
+                                                        @foreach (\App\Enums\SaudiStarRating::options() as $val => $label)
+                                                            <option value="{{ $val }}"
+                                                                {{ $pkgAStar == $val ? 'selected' : '' }}>
+                                                                {{ $label }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-4"><label class="form-label">Hotel (A)</label>
+                                                    <select name="accommodations[{{ $i }}][package_a][hotel]"
+                                                        class="form-select">
+                                                        <option value="">-- Select Hotel --</option>
+                                                        @foreach (\App\Enums\Hotel::options() as $val => $label)
+                                                            <option value="{{ $val }}"
+                                                                {{ $pkgAHotel == $val ? 'selected' : '' }}>
+                                                                {{ $label }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+
+                                                <div class="package-b-block-wrap row g-3"
+                                                    @if ($accSameForBoth) style="display:none" @endif>
+                                                    <div class="col-12">
+                                                        <hr class="my-2">
+                                                        <h6 class="text-danger mb-0">Package B</h6>
+                                                    </div>
+                                                    <div class="col-md-4"><label class="form-label">Accommodation
+                                                            Type (B)</label>
+                                                        <select
+                                                            name="accommodations[{{ $i }}][package_b][accommodation_type]"
+                                                            class="form-select">
+                                                            <option value="">-- Select Type --</option>
+                                                            @foreach (\App\Enums\AccommodationType::options() as $val => $label)
+                                                                <option value="{{ $val }}"
+                                                                    {{ $pkgBType == $val ? 'selected' : '' }}>
+                                                                    {{ $label }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-4"><label class="form-label">Saudi Star
+                                                            Rating (B)</label>
+                                                        <select
+                                                            name="accommodations[{{ $i }}][package_b][saudi_star_rating]"
+                                                            class="form-select">
+                                                            <option value="">-- Select Rating --</option>
+                                                            @foreach (\App\Enums\SaudiStarRating::options() as $val => $label)
+                                                                <option value="{{ $val }}"
+                                                                    {{ $pkgBStar == $val ? 'selected' : '' }}>
+                                                                    {{ $label }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-4"><label class="form-label">Hotel (B)</label>
+                                                        <select
+                                                            name="accommodations[{{ $i }}][package_b][hotel]"
+                                                            class="form-select">
+                                                            <option value="">-- Select Hotel --</option>
+                                                            @foreach (\App\Enums\Hotel::options() as $val => $label)
+                                                                <option value="{{ $val }}"
+                                                                    {{ $pkgBHotel == $val ? 'selected' : '' }}>
+                                                                    {{ $label }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-12">
+                                                    <hr class="my-2">
+                                                </div>
+
+                                                <div class="col-md-3"><label class="form-label">Distance
+                                                        (meter)
+                                                    </label><input type="number"
+                                                        name="accommodations[{{ $i }}][distance]"
+                                                        class="form-control" value="{{ $acc->distance }}"></div>
                                                 <div class="col-md-3"><label class="form-label">Azizia Date</label><input
                                                         type="date"
                                                         name="accommodations[{{ $i }}][azizia_date]"
@@ -307,6 +421,9 @@
                                                         @endforeach
                                                     </select>
                                                 </div>
+                                                <div class="col-md-3"><label class="form-label">Days</label><input
+                                                        type="number" name="accommodations[{{ $i }}][days]"
+                                                        class="form-control" value="{{ $acc->days }}"></div>
 
                                                 <div class="col-md-4"><label class="form-label">Actual Check In
                                                         Time</label><input type="datetime-local"
@@ -320,11 +437,7 @@
                                                         class="form-control"
                                                         value="{{ optional($acc->actual_check_out_time)->format('Y-m-d\TH:i') }}">
                                                 </div>
-
-                                                <div class="col-md-3"><label class="form-label">Days</label><input
-                                                        type="number" name="accommodations[{{ $i }}][days]"
-                                                        class="form-control" value="{{ $acc->days }}"></div>
-                                                <div class="col-md-3"><label class="form-label">Nights</label><input
+                                                <div class="col-md-4"><label class="form-label">Nights</label><input
                                                         type="number" name="accommodations[{{ $i }}][nights]"
                                                         class="form-control" value="{{ $acc->nights }}"></div>
 
@@ -361,7 +474,8 @@
                                                         type="text" name="accommodations[{{ $i }}][camp]"
                                                         class="form-control" value="{{ $acc->camp }}"></div>
                                                 <div class="col-md-4"><label class="form-label">Arafat</label><input
-                                                        type="text" name="accommodations[{{ $i }}][arafat]"
+                                                        type="text"
+                                                        name="accommodations[{{ $i }}][arafat]"
                                                         class="form-control" value="{{ $acc->arafat }}"></div>
 
                                                 <div class="col-md-4"><label class="form-label"> Azizia
@@ -401,9 +515,29 @@
                                                         @endforeach
                                                     </select>
                                                 </div>
-                                                <div class="col-md-3"><label class="form-label">Accommodation
-                                                        Type</label>
-                                                    <select name="accommodations[0][accommodation_type]"
+                                                <div class="col-md-3"><label class="form-label">Check In</label><input
+                                                        type="date" name="accommodations[0][check_in]"
+                                                        class="form-control"></div>
+                                                <div class="col-md-3"><label class="form-label">Check Out</label><input
+                                                        type="date" name="accommodations[0][check_out]"
+                                                        class="form-control"></div>
+                                                <div class="col-md-3 d-flex align-items-end">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input same-for-both-toggle"
+                                                            type="checkbox" name="accommodations[0][same_for_both]"
+                                                            value="1">
+                                                        <label class="form-check-label">Same Hotel for Package A &
+                                                            B</label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-12">
+                                                    <hr class="my-2">
+                                                    <h6 class="text-primary mb-0">Package A</h6>
+                                                </div>
+                                                <div class="col-md-4"><label class="form-label">Accommodation
+                                                        Type (A)</label>
+                                                    <select name="accommodations[0][package_a][accommodation_type]"
                                                         class="form-select">
                                                         <option value="">-- Select Type --</option>
                                                         @foreach (\App\Enums\AccommodationType::options() as $val => $label)
@@ -412,9 +546,9 @@
                                                         @endforeach
                                                     </select>
                                                 </div>
-                                                <div class="col-md-3"><label class="form-label">Saudi Star
-                                                        Rating</label>
-                                                    <select name="accommodations[0][saudi_star_rating]"
+                                                <div class="col-md-4"><label class="form-label">Saudi Star
+                                                        Rating (A)</label>
+                                                    <select name="accommodations[0][package_a][saudi_star_rating]"
                                                         class="form-select">
                                                         <option value="">-- Select Rating --</option>
                                                         @foreach (\App\Enums\SaudiStarRating::options() as $val => $label)
@@ -423,8 +557,9 @@
                                                         @endforeach
                                                     </select>
                                                 </div>
-                                                <div class="col-md-3"><label class="form-label">Hotel</label>
-                                                    <select name="accommodations[0][hotel]" class="form-select">
+                                                <div class="col-md-4"><label class="form-label">Hotel (A)</label>
+                                                    <select name="accommodations[0][package_a][hotel]"
+                                                        class="form-select">
                                                         <option value="">-- Select Hotel --</option>
                                                         @foreach (\App\Enums\Hotel::options() as $val => $label)
                                                             <option value="{{ $val }}">{{ $label }}
@@ -433,15 +568,52 @@
                                                     </select>
                                                 </div>
 
+                                                <div class="package-b-block-wrap row g-3">
+                                                    <div class="col-12">
+                                                        <hr class="my-2">
+                                                        <h6 class="text-danger mb-0">Package B</h6>
+                                                    </div>
+                                                    <div class="col-md-4"><label class="form-label">Accommodation
+                                                            Type (B)</label>
+                                                        <select name="accommodations[0][package_b][accommodation_type]"
+                                                            class="form-select">
+                                                            <option value="">-- Select Type --</option>
+                                                            @foreach (\App\Enums\AccommodationType::options() as $val => $label)
+                                                                <option value="{{ $val }}">{{ $label }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-4"><label class="form-label">Saudi Star
+                                                            Rating (B)</label>
+                                                        <select name="accommodations[0][package_b][saudi_star_rating]"
+                                                            class="form-select">
+                                                            <option value="">-- Select Rating --</option>
+                                                            @foreach (\App\Enums\SaudiStarRating::options() as $val => $label)
+                                                                <option value="{{ $val }}">{{ $label }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-4"><label class="form-label">Hotel (B)</label>
+                                                        <select name="accommodations[0][package_b][hotel]"
+                                                            class="form-select">
+                                                            <option value="">-- Select Hotel --</option>
+                                                            @foreach (\App\Enums\Hotel::options() as $val => $label)
+                                                                <option value="{{ $val }}">{{ $label }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-12">
+                                                    <hr class="my-2">
+                                                </div>
+
                                                 <div class="col-md-3"><label class="form-label">Distance
                                                         (meter)</label><input type="number"
                                                         name="accommodations[0][distance]" class="form-control"></div>
-                                                <div class="col-md-3"><label class="form-label">Check In</label><input
-                                                        type="date" name="accommodations[0][check_in]"
-                                                        class="form-control"></div>
-                                                <div class="col-md-3"><label class="form-label">Check Out</label><input
-                                                        type="date" name="accommodations[0][check_out]"
-                                                        class="form-control"></div>
                                                 <div class="col-md-3"><label class="form-label">Azizia Date</label><input
                                                         type="date" name="accommodations[0][azizia_date]"
                                                         class="form-control"></div>
@@ -454,6 +626,9 @@
                                                         @endforeach
                                                     </select>
                                                 </div>
+                                                <div class="col-md-3"><label class="form-label">Days</label><input
+                                                        type="number" name="accommodations[0][days]"
+                                                        class="form-control"></div>
 
                                                 <div class="col-md-4"><label class="form-label">Actual Check In
                                                         Time</label><input type="datetime-local"
@@ -465,11 +640,7 @@
                                                         name="accommodations[0][actual_check_out_time]"
                                                         class="form-control">
                                                 </div>
-
-                                                <div class="col-md-3"><label class="form-label">Days</label><input
-                                                        type="number" name="accommodations[0][days]"
-                                                        class="form-control"></div>
-                                                <div class="col-md-3"><label class="form-label">Nights</label><input
+                                                <div class="col-md-4"><label class="form-label">Nights</label><input
                                                         type="number" name="accommodations[0][nights]"
                                                         class="form-control"></div>
 
@@ -854,7 +1025,8 @@
                                 @if ($trainingSessions->isEmpty())
                                     <p class="text-danger mb-3">
                                         <a href="{{ route('training-session.create') }}" target="_blank">Please create
-                                        training sessions first</a></p>
+                                            training sessions first</a>
+                                    </p>
                                 @else
                                     @php
                                         $selectedSessions = old(
@@ -970,19 +1142,28 @@
         (function() {
             let accIndex = {{ max($package->accommodations->count(), 1) }};
 
-            document.getElementById('addAccommodationBtn').addEventListener('click', function() {
-                const firstRow = document.querySelector('.accommodation-row');
-                const clone = firstRow.cloneNode(true);
-
+            function resetRowFields(clone) {
                 clone.querySelectorAll('input, textarea, select').forEach(function(el) {
-                    el.name = el.name.replace(/accommodations\[\d+\]/, 'accommodations[' + accIndex +
-                        ']');
+                    el.name = el.name.replace(/accommodations\[\d+\]/, 'accommodations[' + accIndex + ']');
                     if (el.tagName === 'SELECT') {
                         el.selectedIndex = 0;
+                    } else if (el.type === 'checkbox' || el.type === 'radio') {
+                        el.checked = false;
                     } else if (el.type !== 'button') {
                         el.value = '';
                     }
                 });
+
+                // Make sure Package B is visible again on new rows
+                const bWrap = clone.querySelector('.package-b-block-wrap');
+                if (bWrap) bWrap.style.display = '';
+            }
+
+            document.getElementById('addAccommodationBtn').addEventListener('click', function() {
+                const firstRow = document.querySelector('.accommodation-row');
+                const clone = firstRow.cloneNode(true);
+
+                resetRowFields(clone);
 
                 document.getElementById('accommodationRows').appendChild(clone);
                 accIndex++;
@@ -994,9 +1175,27 @@
                     if (document.querySelectorAll('.accommodation-row').length > 1) {
                         row.remove();
                     } else {
-                        row.querySelectorAll('input, textarea').forEach(el => el.value = '');
+                        row.querySelectorAll('input, textarea').forEach(el => {
+                            if (el.type === 'checkbox' || el.type === 'radio') {
+                                el.checked = false;
+                            } else {
+                                el.value = '';
+                            }
+                        });
                         row.querySelectorAll('select').forEach(el => el.selectedIndex = 0);
+                        const bWrap = row.querySelector('.package-b-block-wrap');
+                        if (bWrap) bWrap.style.display = '';
                     }
+                }
+            });
+
+            // ---- Same Hotel for Package A & B toggle ----
+            document.getElementById('accommodationRows').addEventListener('change', function(e) {
+                if (e.target.classList.contains('same-for-both-toggle')) {
+                    const row = e.target.closest('.accommodation-row');
+                    const bWrap = row.querySelector('.package-b-block-wrap');
+                    if (!bWrap) return;
+                    bWrap.style.display = e.target.checked ? 'none' : '';
                 }
             });
 
@@ -1035,6 +1234,33 @@
                     if (row) calculateDaysNights(row);
                 }
             });
+
+            // ---- On submit: if "same for both" is checked, copy Package A values into Package B ----
+            const formEl = document.querySelector('form');
+            if (formEl) {
+                formEl.addEventListener('submit', function() {
+                    document.querySelectorAll('.accommodation-row').forEach(function(row) {
+                        const same = row.querySelector('.same-for-both-toggle');
+                        if (!same || !same.checked) return;
+
+                        const aType = row.querySelector(
+                            'select[name*="[package_a][accommodation_type]"]');
+                        const aStar = row.querySelector(
+                            'select[name*="[package_a][saudi_star_rating]"]');
+                        const aHotel = row.querySelector('select[name*="[package_a][hotel]"]');
+
+                        const bType = row.querySelector(
+                            'select[name*="[package_b][accommodation_type]"]');
+                        const bStar = row.querySelector(
+                            'select[name*="[package_b][saudi_star_rating]"]');
+                        const bHotel = row.querySelector('select[name*="[package_b][hotel]"]');
+
+                        if (bType && aType) bType.value = aType.value;
+                        if (bStar && aStar) bStar.value = aStar.value;
+                        if (bHotel && aHotel) bHotel.value = aHotel.value;
+                    });
+                });
+            }
         })();
 
         // ---- Transport repeatable rows ----

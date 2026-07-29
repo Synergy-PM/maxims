@@ -130,6 +130,39 @@
                                             </div>
                                         @endforeach
                                     </div>
+
+                                    <div class="col-md-3">
+                                        <label class="form-label">Hijri Start Day</label>
+                                        <input type="number" min="1" max="30" name="hijri_start_day"
+                                            class="form-control" placeholder="e.g. 4"
+                                            value="{{ old('hijri_start_day') }}">
+
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Hijri Start Month</label>
+                                        <select name="hijri_start_month" class="form-select">
+                                            <option value="">-- Select --</option>
+                                            @foreach ([
+            1 => 'Muharram',
+            2 => 'Safar',
+            3 => 'Rabi-ul-Awwal',
+            4 => 'Rabi-ul-Thani',
+            5 => 'Jumada-al-Awwal',
+            6 => 'Jumada-al-Thani',
+            7 => 'Rajab',
+            8 => 'Shaban',
+            9 => 'Ramadan',
+            10 => 'Shawwal',
+            11 => 'Zil Qadah',
+            12 => 'Zil Hajj',
+        ] as $val => $label)
+                                                <option value="{{ $val }}"
+                                                    {{ old('hijri_start_month') == $val ? 'selected' : '' }}>
+                                                    {{ $label }}</option>
+                                            @endforeach
+                                        </select>
+
+                                    </div>
                                 </div>
 
                                 <hr class="my-4">
@@ -189,11 +222,11 @@
                                 <h5 class="mb-3">Makkah / Madinah Sharing Breakdown</h5>
                                 <div class="row g-3">
                                     @foreach ([
-                                            'makkah_a' => 'Makkah A',
-                                            'makkah_b' => 'Makkah B',
-                                            'madinah_a' => 'Madinah A',
-                                            'madinah_b' => 'Madinah B',
-                                        ] as $prefix => $heading)
+            'makkah_a' => 'Makkah A',
+            'makkah_b' => 'Makkah B',
+            'madinah_a' => 'Madinah A',
+            'madinah_b' => 'Madinah B',
+        ] as $prefix => $heading)
                                         <div class="col-12">
                                             <h6 class="mt-2 mb-1">{{ $heading }}</h6>
                                         </div>
@@ -218,6 +251,9 @@
                                     <button type="button" class="btn btn-outline-primary btn-sm"
                                         id="addAccommodationBtn">Add <i class="mdi mdi-plus"></i></button>
                                 </div>
+                                <p class="text-muted mb-3">Check In / Check Out dono packages (A &amp; B) ke liye same
+                                    rahenge. Sirf hotel A aur B alag select karein — agar dono packages ka hotel same
+                                    ho to "Same Hotel for Package A &amp; B" tick kar dein.</p>
 
                                 <div id="accommodationRows">
                                     <div class="accommodation-row border rounded p-3 mb-3 position-relative">
@@ -233,24 +269,47 @@
                                                     @endforeach
                                                 </select>
                                             </div>
-                                            <div class="col-md-3"><label class="form-label">Accommodation Type</label>
-                                                <select name="accommodations[0][accommodation_type]" class="form-select">
+                                            <div class="col-md-3"><label class="form-label">Check In</label><input
+                                                    type="date" name="accommodations[0][check_in]"
+                                                    class="form-control"></div>
+                                            <div class="col-md-3"><label class="form-label">Check Out</label><input
+                                                    type="date" name="accommodations[0][check_out]"
+                                                    class="form-control"></div>
+                                            <div class="col-md-3 d-flex align-items-end">
+                                                <div class="form-check">
+                                                    <input class="form-check-input same-for-both-toggle" type="checkbox"
+                                                        name="accommodations[0][same_for_both]" value="1">
+                                                    <label class="form-check-label">Same Hotel for Package A &
+                                                        B</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-12">
+                                                <hr class="my-2">
+                                                <h6 class="text-primary mb-0">Package A</h6>
+                                            </div>
+                                            <div class="col-md-4"><label class="form-label">Accommodation
+                                                    Type (A)</label>
+                                                <select name="accommodations[0][package_a][accommodation_type]"
+                                                    class="form-select">
                                                     <option value="">-- Select Type --</option>
                                                     @foreach (\App\Enums\AccommodationType::options() as $val => $label)
                                                         <option value="{{ $val }}">{{ $label }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
-                                            <div class="col-md-3"><label class="form-label">Saudi Star Rating</label>
-                                                <select name="accommodations[0][saudi_star_rating]" class="form-select">
+                                            <div class="col-md-4"><label class="form-label">Saudi Star
+                                                    Rating (A)</label>
+                                                <select name="accommodations[0][package_a][saudi_star_rating]"
+                                                    class="form-select">
                                                     <option value="">-- Select Rating --</option>
                                                     @foreach (\App\Enums\SaudiStarRating::options() as $val => $label)
                                                         <option value="{{ $val }}">{{ $label }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
-                                            <div class="col-md-3"><label class="form-label">Hotel</label>
-                                                <select name="accommodations[0][hotel]" class="form-select">
+                                            <div class="col-md-4"><label class="form-label">Hotel (A)</label>
+                                                <select name="accommodations[0][package_a][hotel]" class="form-select">
                                                     <option value="">-- Select Hotel --</option>
                                                     @foreach (\App\Enums\Hotel::options() as $val => $label)
                                                         <option value="{{ $val }}">{{ $label }}</option>
@@ -258,14 +317,51 @@
                                                 </select>
                                             </div>
 
+                                            <div class="package-b-block-wrap row g-3">
+                                                <div class="col-12">
+                                                    <hr class="my-2">
+                                                    <h6 class="text-danger mb-0">Package B</h6>
+                                                </div>
+                                                <div class="col-md-4"><label class="form-label">Accommodation
+                                                        Type (B)</label>
+                                                    <select name="accommodations[0][package_b][accommodation_type]"
+                                                        class="form-select">
+                                                        <option value="">-- Select Type --</option>
+                                                        @foreach (\App\Enums\AccommodationType::options() as $val => $label)
+                                                            <option value="{{ $val }}">{{ $label }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-4"><label class="form-label">Saudi Star
+                                                        Rating (B)</label>
+                                                    <select name="accommodations[0][package_b][saudi_star_rating]"
+                                                        class="form-select">
+                                                        <option value="">-- Select Rating --</option>
+                                                        @foreach (\App\Enums\SaudiStarRating::options() as $val => $label)
+                                                            <option value="{{ $val }}">{{ $label }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-4"><label class="form-label">Hotel (B)</label>
+                                                    <select name="accommodations[0][package_b][hotel]"
+                                                        class="form-select">
+                                                        <option value="">-- Select Hotel --</option>
+                                                        @foreach (\App\Enums\Hotel::options() as $val => $label)
+                                                            <option value="{{ $val }}">{{ $label }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-12">
+                                                <hr class="my-2">
+                                            </div>
+
                                             <div class="col-md-3"><label class="form-label">Distance (meter)</label><input
                                                     type="number" name="accommodations[0][distance]"
-                                                    class="form-control"></div>
-                                            <div class="col-md-3"><label class="form-label">Check In</label><input
-                                                    type="date" name="accommodations[0][check_in]"
-                                                    class="form-control"></div>
-                                            <div class="col-md-3"><label class="form-label">Check Out</label><input
-                                                    type="date" name="accommodations[0][check_out]"
                                                     class="form-control"></div>
                                             <div class="col-md-3"><label class="form-label">Azizia Date</label><input
                                                     type="date" name="accommodations[0][azizia_date]"
@@ -278,6 +374,9 @@
                                                     @endforeach
                                                 </select>
                                             </div>
+                                            <div class="col-md-3"><label class="form-label">Days</label><input
+                                                    type="number" name="accommodations[0][days]" class="form-control">
+                                            </div>
 
                                             <div class="col-md-4"><label class="form-label">Actual Check In
                                                     Time</label><input type="datetime-local"
@@ -287,11 +386,7 @@
                                                     Time</label><input type="datetime-local"
                                                     name="accommodations[0][actual_check_out_time]" class="form-control">
                                             </div>
-
-                                            <div class="col-md-3"><label class="form-label">Days</label><input
-                                                    type="number" name="accommodations[0][days]" class="form-control">
-                                            </div>
-                                            <div class="col-md-3"><label class="form-label">Nights</label><input
+                                            <div class="col-md-4"><label class="form-label">Nights</label><input
                                                     type="number" name="accommodations[0][nights]" class="form-control">
                                             </div>
 
@@ -608,19 +703,28 @@
         (function() {
             let accIndex = 1;
 
-            document.getElementById('addAccommodationBtn').addEventListener('click', function() {
-                const firstRow = document.querySelector('.accommodation-row');
-                const clone = firstRow.cloneNode(true);
-
+            function resetRowFields(clone) {
                 clone.querySelectorAll('input, textarea, select').forEach(function(el) {
-                    el.name = el.name.replace(/accommodations\[\d+\]/, 'accommodations[' + accIndex +
-                        ']');
+                    el.name = el.name.replace(/accommodations\[\d+\]/, 'accommodations[' + accIndex + ']');
                     if (el.tagName === 'SELECT') {
                         el.selectedIndex = 0;
+                    } else if (el.type === 'checkbox' || el.type === 'radio') {
+                        el.checked = false;
                     } else if (el.type !== 'button') {
                         el.value = '';
                     }
                 });
+
+                // Make sure Package B is visible again on new rows
+                const bWrap = clone.querySelector('.package-b-block-wrap');
+                if (bWrap) bWrap.style.display = '';
+            }
+
+            document.getElementById('addAccommodationBtn').addEventListener('click', function() {
+                const firstRow = document.querySelector('.accommodation-row');
+                const clone = firstRow.cloneNode(true);
+
+                resetRowFields(clone);
 
                 document.getElementById('accommodationRows').appendChild(clone);
                 accIndex++;
@@ -632,9 +736,27 @@
                     if (document.querySelectorAll('.accommodation-row').length > 1) {
                         row.remove();
                     } else {
-                        row.querySelectorAll('input, textarea').forEach(el => el.value = '');
+                        row.querySelectorAll('input, textarea').forEach(el => {
+                            if (el.type === 'checkbox' || el.type === 'radio') {
+                                el.checked = false;
+                            } else {
+                                el.value = '';
+                            }
+                        });
                         row.querySelectorAll('select').forEach(el => el.selectedIndex = 0);
+                        const bWrap = row.querySelector('.package-b-block-wrap');
+                        if (bWrap) bWrap.style.display = '';
                     }
+                }
+            });
+
+            // ---- Same Hotel for Package A & B toggle ----
+            document.getElementById('accommodationRows').addEventListener('change', function(e) {
+                if (e.target.classList.contains('same-for-both-toggle')) {
+                    const row = e.target.closest('.accommodation-row');
+                    const bWrap = row.querySelector('.package-b-block-wrap');
+                    if (!bWrap) return;
+                    bWrap.style.display = e.target.checked ? 'none' : '';
                 }
             });
 
@@ -673,6 +795,33 @@
                     if (row) calculateDaysNights(row);
                 }
             });
+
+            // ---- On submit: if "same for both" is checked, copy Package A values into Package B ----
+            const formEl = document.querySelector('form');
+            if (formEl) {
+                formEl.addEventListener('submit', function() {
+                    document.querySelectorAll('.accommodation-row').forEach(function(row) {
+                        const same = row.querySelector('.same-for-both-toggle');
+                        if (!same || !same.checked) return;
+
+                        const aType = row.querySelector(
+                            'select[name*="[package_a][accommodation_type]"]');
+                        const aStar = row.querySelector(
+                            'select[name*="[package_a][saudi_star_rating]"]');
+                        const aHotel = row.querySelector('select[name*="[package_a][hotel]"]');
+
+                        const bType = row.querySelector(
+                            'select[name*="[package_b][accommodation_type]"]');
+                        const bStar = row.querySelector(
+                            'select[name*="[package_b][saudi_star_rating]"]');
+                        const bHotel = row.querySelector('select[name*="[package_b][hotel]"]');
+
+                        if (bType && aType) bType.value = aType.value;
+                        if (bStar && aStar) bStar.value = aStar.value;
+                        if (bHotel && aHotel) bHotel.value = aHotel.value;
+                    });
+                });
+            }
         })();
 
         // ---- Transport repeatable rows ----

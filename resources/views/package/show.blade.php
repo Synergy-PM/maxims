@@ -414,31 +414,108 @@
         </div>
 
         @php
+            // ---- helpers: support both array & object accommodation records ----
+            $pkgAccVal = function ($acc, $key) {
+                if (is_array($acc)) {
+                    return $acc[$key] ?? null;
+                }
+                return $acc->$key ?? null;
+            };
+
+            $pkgNested = function ($acc, $group, $key) use ($pkgAccVal) {
+                $g = $pkgAccVal($acc, $group);
+                if (!$g) {
+                    return null;
+                }
+                if (is_array($g)) {
+                    return $g[$key] ?? null;
+                }
+                return $g->$key ?? null;
+            };
+
+            // ---- Hijri calendar helpers ----
+            // Standard 12 lunar month names. Zil Hajj length kept at 30 so a full Hajj
+            // itinerary is safely covered; adjust here if a particular year needs 29.
+            $islamicMonths = [
+                1 => 'Muharram',
+                2 => 'Safar',
+                3 => 'Rabi-ul-Awwal',
+                4 => 'Rabi-ul-Thani',
+                5 => 'Jumada-al-Awwal',
+                6 => 'Jumada-al-Thani',
+                7 => 'Rajab',
+                8 => 'Shaban',
+                9 => 'Ramadan',
+                10 => 'Shawwal',
+                11 => 'Zil Qadah',
+                12 => 'Zil Hajj',
+            ];
+            $islamicMonthLengths = [
+                1 => 30,
+                2 => 29,
+                3 => 30,
+                4 => 29,
+                5 => 30,
+                6 => 29,
+                7 => 30,
+                8 => 29,
+                9 => 30,
+                10 => 29,
+                11 => 30,
+                12 => 30,
+            ];
+
+            // Given a starting Hijri day/month, add N days and return the resulting [day, month].
+            $addHijriDays = function ($startDay, $startMonth, $daysToAdd) use ($islamicMonthLengths) {
+                $day = (int) $startDay;
+                $month = (int) $startMonth;
+                for ($i = 0; $i < $daysToAdd; $i++) {
+                    $day++;
+                    if ($day > ($islamicMonthLengths[$month] ?? 30)) {
+                        $day = 1;
+                        $month = $month == 12 ? 1 : $month + 1;
+                    }
+                }
+                return [$day, $month];
+            };
+
             $itineraryList = [];
             $dayCounter = 1;
+            $hijriStartDay = $package->hijri_start_day ?? null;
+            $hijriStartMonth = $package->hijri_start_month ?? null;
 
             if (!empty($package->accommodations) && count($package->accommodations) > 0) {
                 foreach ($package->accommodations as $acc) {
-                    $checkIn = isset($acc['check_in']) ? \Carbon\Carbon::parse($acc['check_in']) : null;
-                    $checkOut = isset($acc['check_out']) ? \Carbon\Carbon::parse($acc['check_out']) : null;
+                    $checkInRaw = $pkgAccVal($acc, 'check_in');
+                    $checkOutRaw = $pkgAccVal($acc, 'check_out');
+                    $checkIn = $checkInRaw ? \Carbon\Carbon::parse($checkInRaw) : null;
+                    $checkOut = $checkOutRaw ? \Carbon\Carbon::parse($checkOutRaw) : null;
 
-                    // Dynamic Star Rating Display
-                    $starRating = isset($acc['saudi_star_rating']) ? (int) $acc['saudi_star_rating'] : 0;
-                    if (!$starRating && isset($acc->saudi_star_rating)) {
-                        $starRating = (int) $acc->saudi_star_rating;
-                    }
-                    $starsHtml = str_repeat('★', $starRating);
+                    $sameForBoth = (bool) $pkgAccVal($acc, 'same_for_both');
+
+                    $starsA = (int) ($pkgNested($acc, 'package_a', 'saudi_star_rating') ?: 0);
+                    $starsB = (int) ($pkgNested($acc, 'package_b', 'saudi_star_rating') ?: 0);
 
                     if ($checkIn && $checkOut) {
                         // Subtracting 1 day so Check-out date is not counted as an extra day row
                         $period = \Carbon\CarbonPeriod::create($checkIn, $checkOut->copy()->subDay());
                         foreach ($period as $date) {
+                            $hijriDate = '-';
+                            if ($hijriStartDay && $hijriStartMonth) {
+                                [$hDay, $hMonth] = $addHijriDays($hijriStartDay, $hijriStartMonth, $dayCounter - 1);
+                                $hijriDate = sprintf('%02d %s', $hDay, $islamicMonths[$hMonth] ?? '');
+                            }
+
                             $itineraryList[] = [
                                 'day' => sprintf('%02d', $dayCounter++),
                                 'date' => $date->format('d M'),
-                                'city' => $acc['place'] ?? ($acc->place ?? 'Makkah'),
-                                'hotel' => $acc['hotel'] ?? ($acc->hotel ?? '-'),
-                                'stars' => $starsHtml,
+                                'hijri' => $hijriDate,
+                                'city' => $pkgAccVal($acc, 'place') ?? 'Makkah',
+                                'same_for_both' => $sameForBoth,
+                                'hotel_a' => $pkgNested($acc, 'package_a', 'hotel') ?? '-',
+                                'stars_a' => str_repeat('★', $starsA),
+                                'hotel_b' => $pkgNested($acc, 'package_b', 'hotel') ?? '-',
+                                'stars_b' => str_repeat('★', $starsB),
                             ];
                         }
                     }
@@ -451,10 +528,12 @@
             <table class="pkg-table">
                 <thead>
                     <tr>
-                        <th style="width: 8%;">DAY</th>
-                        <th style="width: 14%;">DATE (AD)</th>
-                        <th style="width: 18%;">CITY</th>
-                        <th style="width: 60%; text-align: center;">ACCOMMODATION</th>
+                        <th style="width: 6%;">DAY</th>
+                        <th style="width: 10%;">DATE (AD)</th>
+                        <th style="width: 12%;">DATE (HIJRI)</th>
+                        <th style="width: 14%;">CITY</th>
+                        <th style="width: 29%;">PACKAGE (A)</th>
+                        <th style="width: 29%;">PACKAGE (B)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -462,20 +541,38 @@
                         <tr>
                             <td><b>{{ $item['day'] }}</b></td>
                             <td>{{ $item['date'] }}</td>
+                            <td>{{ $item['hijri'] }}</td>
                             <td>{{ $item['city'] }}</td>
-                            <td class="text-start ps-3">
-                                {{ $item['hotel'] }}
-                                @if (!empty($item['stars']))
-                                    <span class="stars">{{ $item['stars'] }}</span>
-                                @endif
-                            </td>
+                            @if ($item['same_for_both'])
+                                <td colspan="2" class="text-start ps-3">
+                                    {{ $item['hotel_a'] }}
+                                    @if (!empty($item['stars_a']))
+                                        <span class="stars">{{ $item['stars_a'] }}</span>
+                                    @endif
+                                </td>
+                            @else
+                                <td class="text-start ps-3">
+                                    {{ $item['hotel_a'] }}
+                                    @if (!empty($item['stars_a']))
+                                        <span class="stars">{{ $item['stars_a'] }}</span>
+                                    @endif
+                                </td>
+                                <td class="text-start ps-3">
+                                    {{ $item['hotel_b'] }}
+                                    @if (!empty($item['stars_b']))
+                                        <span class="stars">{{ $item['stars_b'] }}</span>
+                                    @endif
+                                </td>
+                            @endif
                         </tr>
                     @empty
                         @for ($i = 1; $i <= ($package->days ?? 14); $i++)
                             <tr>
                                 <td><b>{{ sprintf('%02d', $i) }}</b></td>
                                 <td>-</td>
+                                <td>-</td>
                                 <td>Makkah / Medinah</td>
+                                <td class="text-start ps-3">Hotel Information Pending</td>
                                 <td class="text-start ps-3">Hotel Information Pending</td>
                             </tr>
                         @endfor

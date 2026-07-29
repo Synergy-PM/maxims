@@ -147,6 +147,10 @@ class PackageController extends Controller
             'medina_arrival' => 'nullable|in:before_hajj,after_hajj',
             'hajj_duration' => 'nullable|in:short,long',
 
+            // Hijri start info
+            'hijri_start_day' => 'nullable|integer|min:1|max:30',
+            'hijri_start_month' => 'nullable|integer|min:1|max:12',
+
             'room_type' => 'nullable|string|max:100',
             'azizia_room_type' => 'nullable|string|max:100',
             'makkah_type' => 'nullable|string|max:100',
@@ -184,12 +188,22 @@ class PackageController extends Controller
         $accommodations = $request->validate([
             'accommodations' => 'nullable|array',
             'accommodations.*.place' => 'nullable|string|max:150',
-            'accommodations.*.accommodation_type' => 'nullable|string|max:150',
-            'accommodations.*.saudi_star_rating' => 'nullable|string|max:50',
-            'accommodations.*.hotel' => 'nullable|string|max:150',
-            'accommodations.*.distance' => 'nullable|integer',
             'accommodations.*.check_in' => 'nullable|date',
             'accommodations.*.check_out' => 'nullable|date',
+            'accommodations.*.same_for_both' => 'nullable|boolean',
+            'accommodations.*.azizia_date' => 'nullable|date',
+
+            'accommodations.*.package_a' => 'nullable|array',
+            'accommodations.*.package_a.accommodation_type' => 'nullable|string|max:150',
+            'accommodations.*.package_a.saudi_star_rating' => 'nullable|string|max:50',
+            'accommodations.*.package_a.hotel' => 'nullable|string|max:150',
+
+            'accommodations.*.package_b' => 'nullable|array',
+            'accommodations.*.package_b.accommodation_type' => 'nullable|string|max:150',
+            'accommodations.*.package_b.saudi_star_rating' => 'nullable|string|max:50',
+            'accommodations.*.package_b.hotel' => 'nullable|string|max:150',
+
+            'accommodations.*.distance' => 'nullable|integer',
             'accommodations.*.food_package' => 'nullable|string|max:100',
             'accommodations.*.actual_check_in_time' => 'nullable|date',
             'accommodations.*.actual_check_out_time' => 'nullable|date',
@@ -286,7 +300,45 @@ class PackageController extends Controller
     private function saveRelations(Request $request, Package $package, array $data): void
     {
         foreach ($data['accommodations'] as $row) {
-            $package->accommodations()->create($row);
+            $sameForBoth = filter_var($row['same_for_both'] ?? false, FILTER_VALIDATE_BOOLEAN);
+
+            $packageA = $row['package_a'] ?? [];
+            $packageB = $sameForBoth ? $packageA : ($row['package_b'] ?? []);
+
+            $accommodationData = [
+                'place' => $row['place'] ?? null,
+                'check_in' => $row['check_in'] ?? null,
+                'check_out' => $row['check_out'] ?? null,
+                'same_for_both' => $sameForBoth,
+                'azizia_date' => $row['azizia_date'] ?? null,
+
+                'package_a_accommodation_type' => $packageA['accommodation_type'] ?? null,
+                'package_a_saudi_star_rating' => $packageA['saudi_star_rating'] ?? null,
+                'package_a_hotel' => $packageA['hotel'] ?? null,
+
+                'package_b_accommodation_type' => $packageB['accommodation_type'] ?? null,
+                'package_b_saudi_star_rating' => $packageB['saudi_star_rating'] ?? null,
+                'package_b_hotel' => $packageB['hotel'] ?? null,
+
+                'distance' => $row['distance'] ?? null,
+                'food_package' => $row['food_package'] ?? null,
+                'actual_check_in_time' => $row['actual_check_in_time'] ?? null,
+                'actual_check_out_time' => $row['actual_check_out_time'] ?? null,
+                'days' => $row['days'] ?? null,
+                'nights' => $row['nights'] ?? null,
+                'makkah_ziarat' => $row['makkah_ziarat'] ?? null,
+                'madinah_ziarat' => $row['madinah_ziarat'] ?? null,
+                'distribution' => $row['distribution'] ?? null,
+                'camp' => $row['camp'] ?? null,
+                'arafat' => $row['arafat'] ?? null,
+                'shuttle' => $row['shuttle'] ?? null,
+                'bedding' => $row['bedding'] ?? null,
+                'sharing' => $row['sharing'] ?? null,
+                'sharing_type' => $row['sharing_type'] ?? null,
+                'note' => $row['note'] ?? null,
+            ];
+
+            $package->accommodations()->create($accommodationData);
         }
 
         $existingItinerary = $package->itinerary;
