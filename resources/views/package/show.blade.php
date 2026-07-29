@@ -15,11 +15,12 @@
 
     <style>
         :root {
-            --navy: #131738;
+            --navy: #0e1726;
             --gold: #d9a441;
             --gold-dark: #c8922e;
-            --grey-row: #e5e5e5;
-            --border-color: #000000;
+            --peach-bg: #f8dbb7;
+            --grey-row: #eaeaea;
+            --border-color: #7f7f7f;
         }
 
         body {
@@ -175,11 +176,12 @@
             border-radius: 2px;
         }
 
-        /* Accommodation Main Table Header & Body */
+        /* Custom Image Matching Table Styling */
         .pkg-table {
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
             width: 100%;
-            font-size: .75rem;
+            font-size: .70rem;
         }
 
         .pkg-table th,
@@ -187,19 +189,53 @@
             border: 1px solid var(--border-color);
             text-align: center;
             vertical-align: middle;
-            padding: 3px 6px;
+            padding: 4px 5px;
         }
 
-        .pkg-table thead th {
+        /* Top Left Header Columns */
+        .pkg-table thead th.th-left {
             background: var(--navy) !important;
             color: #ffffff !important;
-            font-weight: 700;
-            font-size: .78rem;
+            font-weight: 800;
+            font-size: .8rem;
             letter-spacing: .5px;
             text-transform: uppercase;
-            text-align: center !important;
+            border-bottom: 2px solid #000;
+            border-right: 3px solid #fff;
         }
 
+        .pkg-table thead th.th-left:last-of-type {
+            border-right: 1px solid var(--border-color);
+        }
+
+        /* Package Headers (A & B) */
+        .pkg-table thead th.th-pkg-a,
+        .pkg-table thead th.th-pkg-b {
+            background: var(--navy) !important;
+            color: #ffffff !important;
+            font-weight: 800;
+            font-size: .85rem;
+            letter-spacing: .5px;
+            text-transform: uppercase;
+            padding: 4px 0;
+        }
+
+        .pkg-table thead th.th-pkg-a {
+            border-right: 3px solid #fff;
+        }
+
+        /* Sub-Header Accommodation Row */
+        .pkg-table thead tr.sub-header th {
+            background: var(--peach-bg) !important;
+            color: #2b2b2b !important;
+            font-weight: 900;
+            font-size: .85rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 3px 0;
+        }
+
+        /* Table Body Row Colors */
         .pkg-table tbody tr:nth-child(odd) {
             background: var(--grey-row);
         }
@@ -208,9 +244,16 @@
             background: #ffffff;
         }
 
+        /* Mina Highlight Styling */
+        .pkg-table tbody tr.mashair-row td.mashair-cell {
+            background: var(--peach-bg) !important;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
         .stars {
-            color: #d9a441;
-            font-size: .8rem;
+            color: #ffb400;
+            font-size: .78rem;
             margin-left: 4px;
         }
 
@@ -224,7 +267,7 @@
 
         .ticket-note {
             font-weight: 800;
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             color: #131738;
             white-space: nowrap;
         }
@@ -232,7 +275,7 @@
         .note-box {
             background: var(--navy);
             color: #fff;
-            font-size: .68rem;
+            font-size: .65rem;
             padding: 4px 8px;
             border-radius: 2px;
             flex: 1;
@@ -251,19 +294,19 @@
         /* ROOM TYPE PRICING TABLE */
         .room-table-container {
             border: 1px solid var(--border-color);
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
 
         .room-table {
             border-collapse: collapse;
             width: 100%;
-            font-size: .75rem;
+            font-size: .73rem;
             margin-bottom: 0;
         }
 
         .room-table td {
             border: 1px solid var(--border-color);
-            padding: 5px 10px;
+            padding: 4px 8px;
             vertical-align: middle;
         }
 
@@ -271,7 +314,7 @@
             background: var(--navy);
             color: #ffffff;
             font-weight: 800;
-            font-size: .88rem;
+            font-size: .85rem;
             text-align: center;
             width: 20%;
             letter-spacing: .5px;
@@ -285,8 +328,9 @@
             color: #333;
         }
 
-        .room-table .room-price {
-            width: 50%;
+        .room-table .room-price-a,
+        .room-table .room-price-b {
+            width: 25%;
             text-align: center;
             font-weight: 700;
             background: var(--grey-row);
@@ -294,11 +338,12 @@
         }
 
         .price-disclaimer {
-            text-align: right;
-            font-size: .68rem;
+            text-align: center;
+            font-size: .65rem;
             font-weight: 700;
             margin: 2px 0 6px 0;
             color: #222;
+            font-style: italic;
         }
 
         /* Bottom Details & Notes Section */
@@ -311,12 +356,12 @@
 
         .icon-item {
             text-align: center;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
         }
 
         .icon-circle {
-            width: 28px;
-            height: 28px;
+            width: 26px;
+            height: 26px;
             border-radius: 50%;
             background: var(--navy);
             color: #fff;
@@ -324,18 +369,18 @@
             align-items: center;
             justify-content: center;
             margin: 0 auto 2px;
-            font-size: .85rem;
+            font-size: .8rem;
         }
 
         .icon-item .label {
             font-weight: 800;
-            font-size: .65rem;
+            font-size: .62rem;
             line-height: 1.1;
         }
 
         .icon-item .desc {
-            font-size: .55rem;
-            color: #444;
+            font-size: .52rem;
+            color: #333;
             line-height: 1.1;
         }
 
@@ -346,7 +391,7 @@
             padding: 2px 8px;
             border-radius: 12px;
             display: inline-block;
-            font-size: .68rem;
+            font-size: .65rem;
         }
 
         .zone-badge small {
@@ -358,28 +403,37 @@
 
         .notes-title {
             font-weight: 900;
-            font-size: .88rem;
+            font-size: .82rem;
             margin-bottom: 2px;
         }
 
         .notes-list {
-            font-size: .65rem;
+            font-size: .62rem;
             line-height: 1.25;
+            padding-left: 15px;
         }
 
         .notes-list li {
-            margin-bottom: 2px;
+            margin-bottom: 3px;
         }
 
         .taxi-strip {
             background: var(--navy);
             color: #fff;
-            font-size: .6rem;
+            font-size: .58rem;
             text-align: center;
             padding: 3px;
             font-weight: 600;
             margin-bottom: 3px;
             border-radius: 2px;
+        }
+
+        .sign-box {
+            margin-top: 8px;
+            font-weight: 700;
+            font-size: .7rem;
+            text-align: right;
+            padding-right: 15px;
         }
     </style>
 </head>
@@ -414,7 +468,7 @@
         </div>
 
         @php
-            // ---- helpers: support both array & object accommodation records ----
+            // Helpers to safely fetch data properties
             $pkgAccVal = function ($acc, $key) {
                 if (is_array($acc)) {
                     return $acc[$key] ?? null;
@@ -423,19 +477,21 @@
             };
 
             $pkgNested = function ($acc, $group, $key) use ($pkgAccVal) {
+                $flatKey = "{$group}_{$key}";
+                if (is_array($acc) && array_key_exists($flatKey, $acc)) {
+                    return $acc[$flatKey];
+                }
+                if (is_object($acc) && (isset($acc->$flatKey) || property_exists($acc, $flatKey))) {
+                    return $acc->$flatKey;
+                }
+
                 $g = $pkgAccVal($acc, $group);
                 if (!$g) {
                     return null;
                 }
-                if (is_array($g)) {
-                    return $g[$key] ?? null;
-                }
-                return $g->$key ?? null;
+                return is_array($g) ? $g[$key] ?? null : $g->$key ?? null;
             };
 
-            // ---- Hijri calendar helpers ----
-            // Standard 12 lunar month names. Zil Hajj length kept at 30 so a full Hajj
-            // itinerary is safely covered; adjust here if a particular year needs 29.
             $islamicMonths = [
                 1 => 'Muharram',
                 2 => 'Safar',
@@ -465,7 +521,6 @@
                 12 => 30,
             ];
 
-            // Given a starting Hijri day/month, add N days and return the resulting [day, month].
             $addHijriDays = function ($startDay, $startMonth, $daysToAdd) use ($islamicMonthLengths) {
                 $day = (int) $startDay;
                 $month = (int) $startMonth;
@@ -479,10 +534,27 @@
                 return [$day, $month];
             };
 
+            $makkahHotelA = '-';
+            $makkahHotelB = '-';
+            $makkahStarsA = 0;
+            $makkahStarsB = 0;
+
+            if (!empty($package->accommodations)) {
+                foreach ($package->accommodations as $acc) {
+                    $place = strtolower($pkgAccVal($acc, 'place') ?? '');
+                    if (str_contains($place, 'makkah')) {
+                        $makkahHotelA = $pkgNested($acc, 'package_a', 'hotel') ?: $makkahHotelA;
+                        $makkahHotelB = $pkgNested($acc, 'package_b', 'hotel') ?: $makkahHotelB;
+                        $makkahStarsA = (int) ($pkgNested($acc, 'package_a', 'saudi_star_rating') ?: $makkahStarsA);
+                        $makkahStarsB = (int) ($pkgNested($acc, 'package_b', 'saudi_star_rating') ?: $makkahStarsB);
+                    }
+                }
+            }
+
             $itineraryList = [];
             $dayCounter = 1;
-            $hijriStartDay = $package->hijri_start_day ?? null;
-            $hijriStartMonth = $package->hijri_start_month ?? null;
+            $hijriStartDay = $package->hijri_start_day ?? 4;
+            $hijriStartMonth = $package->hijri_start_month ?? 12;
 
             if (!empty($package->accommodations) && count($package->accommodations) > 0) {
                 foreach ($package->accommodations as $acc) {
@@ -490,74 +562,103 @@
                     $checkOutRaw = $pkgAccVal($acc, 'check_out');
                     $checkIn = $checkInRaw ? \Carbon\Carbon::parse($checkInRaw) : null;
                     $checkOut = $checkOutRaw ? \Carbon\Carbon::parse($checkOutRaw) : null;
-
                     $sameForBoth = (bool) $pkgAccVal($acc, 'same_for_both');
 
                     $starsA = (int) ($pkgNested($acc, 'package_a', 'saudi_star_rating') ?: 0);
                     $starsB = (int) ($pkgNested($acc, 'package_b', 'saudi_star_rating') ?: 0);
 
                     if ($checkIn && $checkOut) {
-                        // Subtracting 1 day so Check-out date is not counted as an extra day row
                         $period = \Carbon\CarbonPeriod::create($checkIn, $checkOut->copy()->subDay());
                         foreach ($period as $date) {
                             $hijriDate = '-';
+                            $isMashair = false;
+                            $hDayVal = 0;
                             if ($hijriStartDay && $hijriStartMonth) {
                                 [$hDay, $hMonth] = $addHijriDays($hijriStartDay, $hijriStartMonth, $dayCounter - 1);
                                 $hijriDate = sprintf('%02d %s', $hDay, $islamicMonths[$hMonth] ?? '');
+                                if ($hMonth == 12 && $hDay >= 8 && $hDay <= 11) {
+                                    $isMashair = true;
+                                    $hDayVal = $hDay;
+                                }
                             }
 
-                            $itineraryList[] = [
-                                'day' => sprintf('%02d', $dayCounter++),
-                                'date' => $date->format('d M'),
-                                'hijri' => $hijriDate,
-                                'city' => $pkgAccVal($acc, 'place') ?? 'Makkah',
-                                'same_for_both' => $sameForBoth,
-                                'hotel_a' => $pkgNested($acc, 'package_a', 'hotel') ?? '-',
-                                'stars_a' => str_repeat('★', $starsA),
-                                'hotel_b' => $pkgNested($acc, 'package_b', 'hotel') ?? '-',
-                                'stars_b' => str_repeat('★', $starsB),
-                            ];
+                            if ($isMashair) {
+                                $servicesText =
+                                    $hDayVal == 9
+                                        ? 'Arafat Air Conditioned Marquee (Exclusive Services)'
+                                        : 'Zone 1 near to Jamarat A Category (Exclusive Services)';
+
+                                $itineraryList[] = [
+                                    'day' => sprintf('%02d', $dayCounter++),
+                                    'date' => $date->format('d M'),
+                                    'hijri' => $hijriDate,
+                                    'city' => $hDayVal == 8 ? 'To Mina' : 'Mina',
+                                    'is_mashair' => true,
+                                    'same_for_both' => true,
+                                    'hotel_a' => $servicesText . ' / ' . $makkahHotelA,
+                                    'stars_a' => '',
+                                    'hotel_b' => $servicesText . ' / ' . $makkahHotelB,
+                                    'stars_b' => '',
+                                ];
+                            } else {
+                                $itineraryList[] = [
+                                    'day' => sprintf('%02d', $dayCounter++),
+                                    'date' => $date->format('d M'),
+                                    'hijri' => $hijriDate,
+                                    'city' => $pkgAccVal($acc, 'place') ?? 'Makkah',
+                                    'is_mashair' => false,
+                                    'same_for_both' => $sameForBoth,
+                                    'hotel_a' => $pkgNested($acc, 'package_a', 'hotel') ?? '-',
+                                    'stars_a' => str_repeat('★', $starsA),
+                                    'hotel_b' => $pkgNested($acc, 'package_b', 'hotel') ?? '-',
+                                    'stars_b' => str_repeat('★', $starsB),
+                                ];
+                            }
                         }
                     }
                 }
             }
         @endphp
 
-        <!-- Main Accommodation Table -->
+        <!-- Main Accommodation Table (Image Style Matching) -->
         <div class="table-responsive">
             <table class="pkg-table">
                 <thead>
                     <tr>
-                        <th style="width: 6%;">DAY</th>
-                        <th style="width: 10%;">DATE (AD)</th>
-                        <th style="width: 12%;">DATE (HIJRI)</th>
-                        <th style="width: 14%;">CITY</th>
-                        <th style="width: 29%;">PACKAGE (A)</th>
-                        <th style="width: 29%;">PACKAGE (B)</th>
+                        <th rowspan="2" class="th-left" style="width: 7%;">DAY</th>
+                        <th rowspan="2" class="th-left" style="width: 10%;">DATE<br>(AD)</th>
+                        <th rowspan="2" class="th-left" style="width: 12%;">DATE<br>(Hijri)</th>
+                        <th rowspan="2" class="th-left" style="width: 13%;">CITY</th>
+                        <th class="th-pkg-a" style="width: 29%;">PACKAGE (A)</th>
+                        <th class="th-pkg-b" style="width: 29%;">PACKAGE (B)</th>
+                    </tr>
+                    <tr class="sub-header">
+                        <th colspan="2">ACCOMMODATION</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($itineraryList as $item)
-                        <tr>
+                        <tr class="{{ !empty($item['is_mashair']) ? 'mashair-row' : '' }}">
                             <td><b>{{ $item['day'] }}</b></td>
                             <td>{{ $item['date'] }}</td>
                             <td>{{ $item['hijri'] }}</td>
                             <td>{{ $item['city'] }}</td>
-                            @if ($item['same_for_both'])
-                                <td colspan="2" class="text-start ps-3">
+                            @if (!empty($item['is_mashair']) || $item['same_for_both'])
+                                <td colspan="2"
+                                    class="{{ !empty($item['is_mashair']) ? 'mashair-cell' : 'fw-bold' }} text-center">
                                     {{ $item['hotel_a'] }}
                                     @if (!empty($item['stars_a']))
                                         <span class="stars">{{ $item['stars_a'] }}</span>
                                     @endif
                                 </td>
                             @else
-                                <td class="text-start ps-3">
+                                <td class="text-center">
                                     {{ $item['hotel_a'] }}
                                     @if (!empty($item['stars_a']))
                                         <span class="stars">{{ $item['stars_a'] }}</span>
                                     @endif
                                 </td>
-                                <td class="text-start ps-3">
+                                <td class="text-center">
                                     {{ $item['hotel_b'] }}
                                     @if (!empty($item['stars_b']))
                                         <span class="stars">{{ $item['stars_b'] }}</span>
@@ -572,8 +673,8 @@
                                 <td>-</td>
                                 <td>-</td>
                                 <td>Makkah / Medinah</td>
-                                <td class="text-start ps-3">Hotel Information Pending</td>
-                                <td class="text-start ps-3">Hotel Information Pending</td>
+                                <td class="text-center">Hotel Information Pending</td>
+                                <td class="text-center">Hotel Information Pending</td>
                             </tr>
                         @endfor
                     @endforelse
@@ -598,23 +699,23 @@
                 ? json_decode($package->makkah_b, true)
                 : $package->makkah_b ?? [];
 
-            $quadPrice = !empty($makkahB['quad'])
+            $quadA = !empty($makkahA['quad']) ? 'SAR ' . number_format((float) $makkahA['quad']) . '/-' : 'NA';
+            $tripleA = !empty($makkahA['triple'])
+                ? 'SAR ' . number_format((float) $makkahA['triple']) . '/-'
+                : 'SAR 94,600/-';
+            $doubleA = !empty($makkahA['double'])
+                ? 'SAR ' . number_format((float) $makkahA['double']) . '/-'
+                : 'SAR 118,500/-';
+
+            $quadB = !empty($makkahB['quad'])
                 ? 'SAR ' . number_format((float) $makkahB['quad']) . '/-'
-                : (!empty($makkahA['quad'])
-                    ? 'SAR ' . number_format((float) $makkahA['quad']) . '/-'
-                    : 'NA');
-
-            $triplePrice = !empty($makkahB['triple'])
+                : 'SAR 63,500/-';
+            $tripleB = !empty($makkahB['triple'])
                 ? 'SAR ' . number_format((float) $makkahB['triple']) . '/-'
-                : (!empty($makkahA['triple'])
-                    ? 'SAR ' . number_format((float) $makkahA['triple']) . '/-'
-                    : 'SAR 94,600/-');
-
-            $doublePrice = !empty($makkahB['double'])
+                : 'SAR 70,200/-';
+            $doubleB = !empty($makkahB['double'])
                 ? 'SAR ' . number_format((float) $makkahB['double']) . '/-'
-                : (!empty($makkahA['double'])
-                    ? 'SAR ' . number_format((float) $makkahA['double']) . '/-'
-                    : 'SAR 118,500/-');
+                : 'SAR 85,500/-';
         @endphp
 
         <!-- ROOM TYPE PRICING TABLE -->
@@ -624,15 +725,18 @@
                     <tr>
                         <td rowspan="3" class="room-type-sidebar">ROOM TYPE</td>
                         <td class="room-label">QUAD Per Person</td>
-                        <td class="room-price">{{ $quadPrice }}</td>
+                        <td class="room-price-a">{{ $quadA }}</td>
+                        <td class="room-price-b">{{ $quadB }}</td>
                     </tr>
                     <tr>
                         <td class="room-label">TRIPLE Per Person</td>
-                        <td class="room-price">{{ $triplePrice }}</td>
+                        <td class="room-price-a">{{ $tripleA }}</td>
+                        <td class="room-price-b">{{ $tripleB }}</td>
                     </tr>
                     <tr>
                         <td class="room-label">DOUBLE Per Person</td>
-                        <td class="room-price">{{ $doublePrice }}</td>
+                        <td class="room-price-a">{{ $doubleA }}</td>
+                        <td class="room-price-b">{{ $doubleB }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -642,7 +746,7 @@
 
         <!-- Bottom Icons and Terms/Notes -->
         <div class="row">
-            <div class="col-lg-5 mb-2">
+            <div class="col-lg-5 col-5 mb-2">
                 <div class="icon-box">
                     <div class="row">
                         <div class="col-6 icon-item">
@@ -651,14 +755,7 @@
                                         {{ $package->maktab ?? 'A-CATEGORY' }}</small></span>
                             </div>
                             <div class="label">BEST LOCATION IN MINA</div>
-                            <div class="desc">
-                                {{ $package->mina_tent_desc ?? 'AVG 16 PEOPLE TO A TENT' }}<br>{{ $package->bed_size_desc ?? 'SOFA CUM BED SIZE 50-55 CM EACH' }}
-                            </div>
-                        </div>
-                        <div class="col-6 icon-item">
-                            <div class="icon-circle">🍽️</div>
-                            <div class="label">MAKKAH &amp; MEDINAH</div>
-                            <div class="desc">{{ $package->hotel_meal_plan ?? 'HALF BOARD BASIS' }}</div>
+                            <div class="desc">AVG 16 PEOPLE TO A TENT<br>SOFA CUM BED SIZE 50-55 CM EACH</div>
                         </div>
                         <div class="col-6 icon-item">
                             <div class="icon-circle">🍽️</div>
@@ -666,39 +763,47 @@
                             <div class="desc">MEAL IN MINA &amp; ARAFAT</div>
                         </div>
                         <div class="col-6 icon-item">
+                            <div class="icon-circle">🏨</div>
+                            <div class="label">MAKKAH AND MEDINAH HOTELS</div>
+                            <div class="desc">HALF BOARD BASIS</div>
+                        </div>
+                        <div class="col-6 icon-item">
                             <div class="icon-circle">🛁</div>
                             <div class="label">PRIVATE BATHROOM</div>
-                            <div class="desc">IN MINA &amp; ARAFAT</div>
+                            <div class="desc">IN MINA &amp; ARAFAT FOR UB GROUP</div>
                         </div>
                         <div class="col-12 icon-item mb-0">
                             <div class="icon-circle">🚄</div>
-                            <div class="label">{{ $package->transport_type ?? 'BULLET TRAIN / LUXURY BUS' }}</div>
-                            <div class="desc">{{ $package->transport_desc ?? 'MODEL 2025/2026 WITH BATHROOM' }}</div>
+                            <div class="label">BULLET TRAIN MAK-MED OR MED-MAK</div>
+                            <div class="desc">PRIVATE LUXURY BUSSES MODEL 2025 FOR MASHAER DAYS WITH BATHROOM</div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-lg-7 mb-2">
+            <div class="col-lg-7 col-7 mb-2">
                 <div class="notes-title">NOTES:</div>
-                <ul class="notes-list ps-3">
-                    @if (!empty($terms['terms_content']))
-                        <li>{!! nl2br(e($terms['terms_content'])) !!}</li>
-                    @else
-                        <li><b>Upgrade your Hajj from Platinum to Deluxe Hajj</b> with Supplement SAR 16,000 Per Person
-                            (Private Toilet, 8 People tent).</li>
-                        <li><b>Upgrade your Hajj from Platinum to Diamond Hajj</b> with Supplement SAR 6,000 Per Person
-                            (12 People tent).</li>
-                        <li>Family Rooms available in Aziziya Building duration of 05 days of Hajj with Supplement SAR
-                            20,000.</li>
-                    @endif
+                <ul class="notes-list">
+                    <li>• <b>Reference Pages:</b> Package Service: Pg 24-Platinum Mina Hajj Services: Pg 10-12 | Payment
+                        Plan: Pg 41 - Terms &amp; Conditions: Pg 43</li>
+                    <li>• <b>Upgrade your Hajj from Platinum to Deluxe Hajj</b> with Supplement SAR 16,000 (Per Person)
+                        (Private Toilet, 08 People to a tent).</li>
+                    <li>• <b>Upgrade your Hajj from Platinum to Diamond Hajj</b> with Supplement SAR 6,000 (Per Person)
+                        (12 People to a tent).</li>
+                    <li>• Family tent in Mina with private toilet available on request basis.</li>
+                    <li>• <b>Aziziya Accommodation:</b> Family Rooms available in our Aziziya Building duration of 05
+                        days of Hajj with Supplement SAR 20,000.</li>
                 </ul>
-                <div class="taxi-strip">FAMILY CAR / TAXI SERVICES AVAILABLE SAR
+                <div class="taxi-strip">FAMILY CAR/TAXI SERVICES AVAILABLE SAR
                     {{ $package->jeddah_taxi_fare ?? '600' }} PER PERSON FROM JEDDAH AIRPORT TO MAKKAH HOTEL &amp; V.V
                 </div>
-                <div class="taxi-strip">FAMILY CAR / TAXI SERVICES AVAILABLE SAR
+                <div class="taxi-strip">FAMILY CAR/TAXI SERVICES AVAILABLE SAR
                     {{ $package->madinah_taxi_fare ?? '150' }} PER PERSON FROM MEDINAH AIRPORT TO MEDINAH HOTEL &amp;
                     V.V</div>
+
+                <div class="sign-box">
+                    Applicant Sign: ____________________
+                </div>
             </div>
         </div>
     </div>
