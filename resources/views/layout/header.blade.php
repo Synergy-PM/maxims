@@ -178,6 +178,30 @@
                            <span>Training Sessions</span>
                        </a>
                    </li>
+                   @can('hotel_view')
+                       <li>
+                           <a href="{{ route('hotel.index') }}">
+                               <i data-feather="home"></i>
+                               <span>Hotels</span>
+                           </a>
+                       </li>
+                   @endcan
+                   @can('vehicle_view')
+                       <li>
+                           <a href="{{ route('vehicle.index') }}">
+                               <i data-feather="truck"></i>
+                               <span>Vehicles</span>
+                           </a>
+                       </li>
+                   @endcan
+                   @can('airline_view')
+                       <li>
+                           <a href="{{ route('airline.index') }}">
+                               <i data-feather="navigation"></i>
+                               <span>Airlines</span>
+                           </a>
+                       </li>
+                   @endcan
                    @can('booking_view')
                        <li>
                            <a href="{{ route('booking.index') }}">

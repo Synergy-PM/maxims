@@ -16,6 +16,9 @@ use App\Http\Controllers\FollowUpController;
 use App\Http\Controllers\LeadController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\TrainingSessionController;
+use App\Http\Controllers\HotelController;
+use App\Http\Controllers\VehicleController;
+use App\Http\Controllers\AirlineController;
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -203,5 +206,41 @@ Route::middleware('auth')->group(function () {
 
         Route::post('/leads/{lead}/follow-ups', [FollowUpController::class, 'store'])->name('followUp.store');
         Route::post('/follow-ups/{followUp}/take', [FollowUpController::class, 'take'])->name('followUp.take');
+
+        Route::controller(HotelController::class)
+            ->prefix('hotel')->group(function () {
+                Route::get('/', 'index')->name('hotel.index');
+                Route::get('create', 'create')->name('hotel.create');
+                Route::post('store', 'store')->name('hotel.store');
+                Route::get('edit/{id}', 'edit')->name('hotel.edit');
+                Route::put('update/{id}', 'update')->name('hotel.update');
+                Route::delete('delete/{id}', 'destroy')->name('hotel.delete');
+                Route::get('trash', 'trash')->name('hotel.trash');
+                Route::get('restore/{id}', 'restore')->name('hotel.restore');
+            });
+
+        Route::controller(VehicleController::class)
+            ->prefix('vehicle')->group(function () {
+                Route::get('/', 'index')->name('vehicle.index');
+                Route::get('create', 'create')->name('vehicle.create');
+                Route::post('store', 'store')->name('vehicle.store');
+                Route::get('edit/{id}', 'edit')->name('vehicle.edit');
+                Route::put('update/{id}', 'update')->name('vehicle.update');
+                Route::delete('delete/{id}', 'destroy')->name('vehicle.delete');
+                Route::get('trash', 'trash')->name('vehicle.trash');
+                Route::get('restore/{id}', 'restore')->name('vehicle.restore');
+            });
+
+        Route::controller(AirlineController::class)
+            ->prefix('airline')->group(function () {
+                Route::get('/', 'index')->name('airline.index');
+                Route::get('create', 'create')->name('airline.create');
+                Route::post('store', 'store')->name('airline.store');
+                Route::get('edit/{id}', 'edit')->name('airline.edit');
+                Route::put('update/{id}', 'update')->name('airline.update');
+                Route::delete('delete/{id}', 'destroy')->name('airline.delete');
+                Route::get('trash', 'trash')->name('airline.trash');
+                Route::get('restore/{id}', 'restore')->name('airline.restore');
+            });
     });
 });

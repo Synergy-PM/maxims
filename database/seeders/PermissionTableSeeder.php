@@ -13,7 +13,7 @@ class PermissionTableSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('permissions')->insert([
+        $permissions = [
             ['name' => 'user_view', 'guard_name' => 'web', 'group_name' => 'User'],
             ['name' => 'user_create', 'guard_name' => 'web', 'group_name' => 'User'],
             ['name' => 'user_edit', 'guard_name' => 'web', 'group_name' => 'User'],
@@ -29,7 +29,6 @@ class PermissionTableSeeder extends Seeder
             ['name' => 'role_restore', 'guard_name' => 'web', 'group_name' => 'Role'],
 
             ['name' => 'user_activity_view', 'guard_name' => 'web', 'group_name' => 'User Activity'],
-
 
             ['name' => 'client_view', 'guard_name' => 'web', 'group_name' => 'Client'],
             ['name' => 'client_create', 'guard_name' => 'web', 'group_name' => 'Client'],
@@ -84,6 +83,33 @@ class PermissionTableSeeder extends Seeder
 
             ['name' => 'Ledger_Filter_view', 'guard_name' => 'web', 'group_name' => 'Ledger Filter'],
 
-        ]);
+            ['name' => 'hotel_view', 'guard_name' => 'web', 'group_name' => 'Hotel'],
+            ['name' => 'hotel_create', 'guard_name' => 'web', 'group_name' => 'Hotel'],
+            ['name' => 'hotel_edit', 'guard_name' => 'web', 'group_name' => 'Hotel'],
+            ['name' => 'hotel_trash', 'guard_name' => 'web', 'group_name' => 'Hotel'],
+            ['name' => 'hotel_trash_view', 'guard_name' => 'web', 'group_name' => 'Hotel'],
+            ['name' => 'hotel_restore', 'guard_name' => 'web', 'group_name' => 'Hotel'],
+
+            ['name' => 'vehicle_view', 'guard_name' => 'web', 'group_name' => 'Vehicle'],
+            ['name' => 'vehicle_create', 'guard_name' => 'web', 'group_name' => 'Vehicle'],
+            ['name' => 'vehicle_edit', 'guard_name' => 'web', 'group_name' => 'Vehicle'],
+            ['name' => 'vehicle_trash', 'guard_name' => 'web', 'group_name' => 'Vehicle'],
+            ['name' => 'vehicle_trash_view', 'guard_name' => 'web', 'group_name' => 'Vehicle'],
+            ['name' => 'vehicle_restore', 'guard_name' => 'web', 'group_name' => 'Vehicle'],
+
+            ['name' => 'airline_view', 'guard_name' => 'web', 'group_name' => 'Airline'],
+            ['name' => 'airline_create', 'guard_name' => 'web', 'group_name' => 'Airline'],
+            ['name' => 'airline_edit', 'guard_name' => 'web', 'group_name' => 'Airline'],
+            ['name' => 'airline_trash', 'guard_name' => 'web', 'group_name' => 'Airline'],
+            ['name' => 'airline_trash_view', 'guard_name' => 'web', 'group_name' => 'Airline'],
+            ['name' => 'airline_restore', 'guard_name' => 'web', 'group_name' => 'Airline'],
+        ];
+
+        foreach ($permissions as $permission) {
+            \Spatie\Permission\Models\Permission::firstOrCreate(
+                ['name' => $permission['name'], 'guard_name' => $permission['guard_name']],
+                ['group_name' => $permission['group_name']]
+            );
+        }
     }
 }
