@@ -288,7 +288,7 @@
                                                 <hr class="my-2">
                                                 <h6 class="text-primary mb-0">Package A</h6>
                                             </div>
-                                            <div class="col-md-4"><label class="form-label">Accommodation
+                                            <div class="col-md-3"><label class="form-label">Accommodation
                                                     Type (A)</label>
                                                 <select name="accommodations[0][package_a][accommodation_type]"
                                                     class="form-select">
@@ -298,7 +298,7 @@
                                                     @endforeach
                                                 </select>
                                             </div>
-                                            <div class="col-md-4"><label class="form-label">Saudi Star
+                                            <div class="col-md-3"><label class="form-label">Saudi Star
                                                     Rating (A)</label>
                                                 <select name="accommodations[0][package_a][saudi_star_rating]"
                                                     class="form-select">
@@ -308,10 +308,18 @@
                                                     @endforeach
                                                 </select>
                                             </div>
-                                            <div class="col-md-4"><label class="form-label">Hotel (A)</label>
+                                            <div class="col-md-3"><label class="form-label">Hotel (A)</label>
                                                 <select name="accommodations[0][package_a][hotel]" class="form-select">
                                                     <option value="">-- Select Hotel --</option>
-                                                    @foreach (\App\Enums\Hotel::options() as $val => $label)
+                                                    @foreach ($hotels as $hotelItem)
+                                                        <option value="{{ $hotelItem->name }}">{{ $hotelItem->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3"><label class="form-label">Food Package (A)</label>
+                                                <select name="accommodations[0][package_a][food_package]" class="form-select">
+                                                    <option value="">-- Select Food --</option>
+                                                    @foreach (\App\Enums\FoodPackage::options() as $val => $label)
                                                         <option value="{{ $val }}">{{ $label }}</option>
                                                     @endforeach
                                                 </select>
@@ -322,7 +330,7 @@
                                                     <hr class="my-2">
                                                     <h6 class="text-danger mb-0">Package B</h6>
                                                 </div>
-                                                <div class="col-md-4"><label class="form-label">Accommodation
+                                                <div class="col-md-3"><label class="form-label">Accommodation
                                                         Type (B)</label>
                                                     <select name="accommodations[0][package_b][accommodation_type]"
                                                         class="form-select">
@@ -333,7 +341,7 @@
                                                         @endforeach
                                                     </select>
                                                 </div>
-                                                <div class="col-md-4"><label class="form-label">Saudi Star
+                                                <div class="col-md-3"><label class="form-label">Saudi Star
                                                         Rating (B)</label>
                                                     <select name="accommodations[0][package_b][saudi_star_rating]"
                                                         class="form-select">
@@ -344,13 +352,21 @@
                                                         @endforeach
                                                     </select>
                                                 </div>
-                                                <div class="col-md-4"><label class="form-label">Hotel (B)</label>
+                                                <div class="col-md-3"><label class="form-label">Hotel (B)</label>
                                                     <select name="accommodations[0][package_b][hotel]"
                                                         class="form-select">
                                                         <option value="">-- Select Hotel --</option>
-                                                        @foreach (\App\Enums\Hotel::options() as $val => $label)
-                                                            <option value="{{ $val }}">{{ $label }}
-                                                            </option>
+                                                        @foreach ($hotels as $hotelItem)
+                                                            <option value="{{ $hotelItem->name }}">{{ $hotelItem->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-3"><label class="form-label">Food Package (B)</label>
+                                                    <select name="accommodations[0][package_b][food_package]"
+                                                        class="form-select">
+                                                        <option value="">-- Select Food --</option>
+                                                        @foreach (\App\Enums\FoodPackage::options() as $val => $label)
+                                                            <option value="{{ $val }}">{{ $label }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -494,8 +510,15 @@
                                             class="btn btn-sm btn-outline-danger remove-flight-row position-absolute top-0 end-0 m-2"><i
                                                 class="mdi mdi-delete"></i></button>
                                         <div class="row g-3">
-                                            <div class="col-md-3"><label class="form-label">Airline</label><input
-                                                    type="text" name="flights[0][airline]" class="form-control"></div>
+                                            <div class="col-md-3">
+                                                <label class="form-label">Airline</label>
+                                                <select name="flights[0][airline]" class="form-select">
+                                                    <option value="">-- Select Airline --</option>
+                                                    @foreach ($airlines as $airlineItem)
+                                                        <option value="{{ $airlineItem->name }}">{{ $airlineItem->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                             <div class="col-md-3"><label class="form-label">Flight No.</label><input
                                                     type="text" name="flights[0][flight_no]" class="form-control">
                                             </div>
@@ -556,8 +579,15 @@
                                             class="btn btn-sm btn-outline-danger remove-train-row position-absolute top-0 end-0 m-2"><i
                                                 class="mdi mdi-delete"></i></button>
                                         <div class="row g-3">
-                                            <div class="col-md-3"><label class="form-label">Railway</label><input
-                                                    type="text" name="trains[0][railway]" class="form-control"></div>
+                                            <div class="col-md-3">
+                                                <label class="form-label">Railway</label>
+                                                <select name="trains[0][railway]" class="form-select">
+                                                    <option value="">-- Select Train / Railway --</option>
+                                                    @foreach ($trains as $trainItem)
+                                                        <option value="{{ $trainItem->train_name }}">{{ $trainItem->train_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                             <div class="col-md-3"><label class="form-label">Train No.</label><input
                                                     type="text" name="trains[0][train_no]" class="form-control"></div>
                                             <div class="col-md-3"><label class="form-label">Train Class</label><input
@@ -862,9 +892,11 @@
                 const firstRow = document.querySelector('.flight-row');
                 const clone = firstRow.cloneNode(true);
 
-                clone.querySelectorAll('input').forEach(function(el) {
+                clone.querySelectorAll('input, select').forEach(function(el) {
                     el.name = el.name.replace(/flights\[\d+\]/, 'flights[' + flightIndex + ']');
-                    if (el.type === 'radio') {
+                    if (el.tagName.toLowerCase() === 'select') {
+                        el.selectedIndex = 0;
+                    } else if (el.type === 'radio') {
                         el.checked = el.value === '0';
                     } else {
                         el.value = '';
@@ -880,11 +912,16 @@
                     const row = e.target.closest('.flight-row');
                     if (document.querySelectorAll('.flight-row').length > 1) {
                         row.remove();
-                    } else {
                         row.querySelectorAll(
-                                'input[type="text"], input[type="date"], input[type="time"], input[type="number"]'
+                                'input[type="text"], input[type="date"], input[type="time"], input[type="number"], select'
                             )
-                            .forEach(el => el.value = '');
+                            .forEach(el => {
+                                if (el.tagName.toLowerCase() === 'select') {
+                                    el.selectedIndex = 0;
+                                } else {
+                                    el.value = '';
+                                }
+                            });
                         row.querySelectorAll('input[type="radio"]').forEach(el => el.checked = el.value ===
                             '0');
                     }
@@ -900,9 +937,13 @@
                 const firstRow = document.querySelector('.train-row');
                 const clone = firstRow.cloneNode(true);
 
-                clone.querySelectorAll('input').forEach(function(el) {
+                clone.querySelectorAll('input, select').forEach(function(el) {
                     el.name = el.name.replace(/trains\[\d+\]/, 'trains[' + trainIndex + ']');
-                    el.value = '';
+                    if (el.tagName.toLowerCase() === 'select') {
+                        el.selectedIndex = 0;
+                    } else {
+                        el.value = '';
+                    }
                 });
 
                 document.getElementById('trainRows').appendChild(clone);

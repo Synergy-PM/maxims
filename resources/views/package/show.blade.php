@@ -338,7 +338,7 @@
         }
 
         .price-disclaimer {
-            text-align: center;
+            text-align: right;
             font-size: .65rem;
             font-weight: 700;
             margin: 2px 0 6px 0;
@@ -451,7 +451,7 @@
         <div class="header-banner">
             <div class="header-left">
                 <h1>{{ $package->name ?? 'EXECUTIVE PLATINUM' }}</h1>
-                <div class="subtitle">{{ $package->travel_route ?? 'INTERCON / FAIRMONT - MAKKAH FIRST' }}</div>
+                {{-- <div class="subtitle">{{ $package->travel_route ?? 'N/a'}}</div> --}}
             </div>
             <div class="header-right">
                 <div class="pkg-code-box">
@@ -594,11 +594,14 @@
                                     'hijri' => $hijriDate,
                                     'city' => $hDayVal == 8 ? 'To Mina' : 'Mina',
                                     'is_mashair' => true,
-                                    'same_for_both' => true,
+                                    'same_for_both' => false,
                                     'hotel_a' => $servicesText . ' / ' . $makkahHotelA,
                                     'stars_a' => '',
                                     'hotel_b' => $servicesText . ' / ' . $makkahHotelB,
                                     'stars_b' => '',
+                                    'food_a' => $pkgNested($acc, 'package_a', 'food_package') ?: $pkgAccVal($acc, 'food_package'),
+                                    'food_b' => $pkgNested($acc, 'package_b', 'food_package') ?: $pkgAccVal($acc, 'food_package'),
+                                    'azizia_date' => $pkgAccVal($acc, 'azizia_date') ? \Carbon\Carbon::parse($pkgAccVal($acc, 'azizia_date'))->format('d M') : null,
                                 ];
                             } else {
                                 $itineraryList[] = [
@@ -612,6 +615,9 @@
                                     'stars_a' => str_repeat('★', $starsA),
                                     'hotel_b' => $pkgNested($acc, 'package_b', 'hotel') ?? '-',
                                     'stars_b' => str_repeat('★', $starsB),
+                                    'food_a' => $pkgNested($acc, 'package_a', 'food_package') ?: $pkgAccVal($acc, 'food_package'),
+                                    'food_b' => $pkgNested($acc, 'package_b', 'food_package') ?: $pkgAccVal($acc, 'food_package'),
+                                    'azizia_date' => $pkgAccVal($acc, 'azizia_date') ? \Carbon\Carbon::parse($pkgAccVal($acc, 'azizia_date'))->format('d M') : null,
                                 ];
                             }
                         }
@@ -643,12 +649,18 @@
                             <td>{{ $item['date'] }}</td>
                             <td>{{ $item['hijri'] }}</td>
                             <td>{{ $item['city'] }}</td>
-                            @if (!empty($item['is_mashair']) || $item['same_for_both'])
+                            @if ($item['same_for_both'])
                                 <td colspan="2"
-                                    class="{{ !empty($item['is_mashair']) ? 'mashair-cell' : 'fw-bold' }} text-center">
+                                    class="fw-bold text-center">
                                     {{ $item['hotel_a'] }}
                                     @if (!empty($item['stars_a']))
                                         <span class="stars">{{ $item['stars_a'] }}</span>
+                                    @endif
+                                    @if (!empty($item['food_a']))
+                                        <div style="font-size: 0.72rem; color: #555; font-weight: 500; margin-top: 1px;">({{ $item['food_a'] }})</div>
+                                    @endif
+                                    @if (!empty($item['azizia_date']))
+                                        <div style="font-size: 0.72rem; color: #d9534f; font-weight: 600; margin-top: 1px;">Azizia: {{ $item['azizia_date'] }}</div>
                                     @endif
                                 </td>
                             @else
@@ -657,11 +669,23 @@
                                     @if (!empty($item['stars_a']))
                                         <span class="stars">{{ $item['stars_a'] }}</span>
                                     @endif
+                                    @if (!empty($item['food_a']))
+                                        <div style="font-size: 0.72rem; color: #555; font-weight: 500; margin-top: 1px;">({{ $item['food_a'] }})</div>
+                                    @endif
+                                    @if (!empty($item['azizia_date']))
+                                        <div style="font-size: 0.72rem; color: #d9534f; font-weight: 600; margin-top: 1px;">Azizia: {{ $item['azizia_date'] }}</div>
+                                    @endif
                                 </td>
                                 <td class="text-center">
                                     {{ $item['hotel_b'] }}
                                     @if (!empty($item['stars_b']))
                                         <span class="stars">{{ $item['stars_b'] }}</span>
+                                    @endif
+                                    @if (!empty($item['food_b']))
+                                        <div style="font-size: 0.72rem; color: #555; font-weight: 500; margin-top: 1px;">({{ $item['food_b'] }})</div>
+                                    @endif
+                                    @if (!empty($item['azizia_date']))
+                                        <div style="font-size: 0.72rem; color: #d9534f; font-weight: 600; margin-top: 1px;">Azizia: {{ $item['azizia_date'] }}</div>
                                     @endif
                                 </td>
                             @endif
@@ -758,24 +782,39 @@
                             <div class="desc">AVG 16 PEOPLE TO A TENT<br>SOFA CUM BED SIZE 50-55 CM EACH</div>
                         </div>
                         <div class="col-6 icon-item">
-                            <div class="icon-circle">🍽️</div>
+                            <div class="icon-circle">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.55 3.89 3.56 4.16L6.5 22h3l-.06-8.84C11.45 12.89 13 11.12 13 9V2h-2v7zm9-7h-3c-1.1 0-2 .9-2 2v8h2v10h3V2z"/></svg>
+                            </div>
                             <div class="label">FULL BOARD BUFFET</div>
                             <div class="desc">MEAL IN MINA &amp; ARAFAT</div>
                         </div>
                         <div class="col-6 icon-item">
-                            <div class="icon-circle">🏨</div>
+                            <div class="icon-circle">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M7 13c1.66 0 3-1.34 3-3S8.66 7 7 7s-3 1.34-3 3 1.34 3 3 3zm12-6h-8v7H3V5H1v15h2v-3h18v3h2v-9c0-2.21-1.79-4-4-4z"/></svg>
+                            </div>
                             <div class="label">MAKKAH AND MEDINAH HOTELS</div>
                             <div class="desc">HALF BOARD BASIS</div>
                         </div>
                         <div class="col-6 icon-item">
-                            <div class="icon-circle">🛁</div>
+                            <div class="icon-circle">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20 13V4.83C20 3.27 18.73 2 17.17 2c-.75 0-1.47.3-2 0l-2.83 2.83C11.8 5.37 11.29 6 10.5 6H7c-1.1 0-2 .9-2 2v5H2v2c0 3.31 2.69 6 6 6h8c3.31 0 6-2.69 6-6v-2h-2zm-6-7.17l1.41-1.41c.2-.2.45-.3.76-.3.64 0 1.17.53 1.17 1.17V13h-3.34l.05-.05V5.83zM7 8h3v5H7V8zm13 7c0 2.21-1.79-4-4-4H8c-2.21 0-4-1.79-4-4v-1h16v1z"/></svg>
+                            </div>
                             <div class="label">PRIVATE BATHROOM</div>
                             <div class="desc">IN MINA &amp; ARAFAT FOR UB GROUP</div>
                         </div>
-                        <div class="col-12 icon-item mb-0">
-                            <div class="icon-circle">🚄</div>
-                            <div class="label">BULLET TRAIN MAK-MED OR MED-MAK</div>
-                            <div class="desc">PRIVATE LUXURY BUSSES MODEL 2025 FOR MASHAER DAYS WITH BATHROOM</div>
+                        <div class="col-6 icon-item">
+                            <div class="icon-circle">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c-4 0-8 .5-8 4v9.5C4 17.43 5.57 19 7.5 19L6 20.5v.5h12v-.5L16.5 19c1.93 0 3.5-1.57 3.5-3.5V6c0-3.5-4-4-8-4zm0 2c3.51 0 4.96.48 5.5 1H6.5c.54-.52 1.99-1 5.5-1zm6 11.5c0 .83-.67 1.5-1.5 1.5h-9c-.83 0-1.5-.67-1.5-1.5V11h12v4.5zm0-6H6V7h12v2.5z"/><circle cx="8.5" cy="13.5" r="1.5"/><circle cx="15.5" cy="13.5" r="1.5"/></svg>
+                            </div>
+                            <div class="label">BULLET TRAIN</div>
+                            <div class="desc">MAK-MED OR MED-MAK</div>
+                        </div>
+                        <div class="col-6 icon-item">
+                            <div class="icon-circle">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M4 16c0 1.1.9 2 2 2h1v2c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-2h8v2c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-2h1c1.1 0 2-.9 2-2V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 0c-.83 0-1.5-.67-1.5-1.5S6.67 13 7.5 13s1.5.67 1.5 1.5S8.33 16 7.5 16zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v4z"/></svg>
+                            </div>
+                            <div class="label">PRIVATE LUXURY BUSSES</div>
+                            <div class="desc">MODEL 2025 FOR MASHAER DAYS WITH BATHROOM</div>
                         </div>
                     </div>
                 </div>

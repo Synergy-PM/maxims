@@ -20,7 +20,12 @@ class DatabaseSeeder extends Seeder
 
         try {
 
-            $this->call(PermissionTableSeeder::class);
+            $this->call([
+                PermissionTableSeeder::class,
+                HotelSeeder::class,
+                AirlineSeeder::class,
+                TrainSeeder::class,
+            ]);
 
             $adminRole = Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'web']);
 
