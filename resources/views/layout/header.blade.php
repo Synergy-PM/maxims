@@ -202,6 +202,14 @@
                            </a>
                        </li>
                    @endcan
+                   @can('train_view')
+                       <li>
+                           <a href="{{ route('train.index') }}">
+                               <i data-feather="layers"></i>
+                               <span>Trains</span>
+                           </a>
+                       </li>
+                   @endcan
                    @can('booking_view')
                        <li>
                            <a href="{{ route('booking.index') }}">

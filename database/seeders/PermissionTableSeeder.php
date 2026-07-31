@@ -103,6 +103,13 @@ class PermissionTableSeeder extends Seeder
             ['name' => 'airline_trash', 'guard_name' => 'web', 'group_name' => 'Airline'],
             ['name' => 'airline_trash_view', 'guard_name' => 'web', 'group_name' => 'Airline'],
             ['name' => 'airline_restore', 'guard_name' => 'web', 'group_name' => 'Airline'],
+
+            ['name' => 'train_view', 'guard_name' => 'web', 'group_name' => 'Train'],
+            ['name' => 'train_create', 'guard_name' => 'web', 'group_name' => 'Train'],
+            ['name' => 'train_edit', 'guard_name' => 'web', 'group_name' => 'Train'],
+            ['name' => 'train_trash', 'guard_name' => 'web', 'group_name' => 'Train'],
+            ['name' => 'train_trash_view', 'guard_name' => 'web', 'group_name' => 'Train'],
+            ['name' => 'train_restore', 'guard_name' => 'web', 'group_name' => 'Train'],
         ];
 
         foreach ($permissions as $permission) {

@@ -19,6 +19,7 @@ use App\Http\Controllers\TrainingSessionController;
 use App\Http\Controllers\HotelController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\AirlineController;
+use App\Http\Controllers\TrainController;
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -241,6 +242,18 @@ Route::middleware('auth')->group(function () {
                 Route::delete('delete/{id}', 'destroy')->name('airline.delete');
                 Route::get('trash', 'trash')->name('airline.trash');
                 Route::get('restore/{id}', 'restore')->name('airline.restore');
+            });
+
+        Route::controller(TrainController::class)
+            ->prefix('train')->group(function () {
+                Route::get('/', 'index')->name('train.index');
+                Route::get('create', 'create')->name('train.create');
+                Route::post('store', 'store')->name('train.store');
+                Route::get('edit/{id}', 'edit')->name('train.edit');
+                Route::put('update/{id}', 'update')->name('train.update');
+                Route::delete('delete/{id}', 'destroy')->name('train.delete');
+                Route::get('trash', 'trash')->name('train.trash');
+                Route::get('restore/{id}', 'restore')->name('train.restore');
             });
     });
 });
