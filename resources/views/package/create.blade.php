@@ -131,7 +131,7 @@
                                         @endforeach
                                     </div>
 
-                                    <div class="col-md-3">
+                                    {{-- <div class="col-md-3">
                                         <label class="form-label">Hijri Start Day</label>
                                         <input type="number" min="1" max="30" name="hijri_start_day"
                                             class="form-control" placeholder="e.g. 4"
@@ -143,32 +143,32 @@
                                         <select name="hijri_start_month" class="form-select">
                                             <option value="">-- Select --</option>
                                             @foreach ([
-            1 => 'Muharram',
-            2 => 'Safar',
-            3 => 'Rabi-ul-Awwal',
-            4 => 'Rabi-ul-Thani',
-            5 => 'Jumada-al-Awwal',
-            6 => 'Jumada-al-Thani',
-            7 => 'Rajab',
-            8 => 'Shaban',
-            9 => 'Ramadan',
-            10 => 'Shawwal',
-            11 => 'Zil Qadah',
-            12 => 'Zil Hajj',
-        ] as $val => $label)
+        1 => 'Muharram',
+        2 => 'Safar',
+        3 => 'Rabi-ul-Awwal',
+        4 => 'Rabi-ul-Thani',
+        5 => 'Jumada-al-Awwal',
+        6 => 'Jumada-al-Thani',
+        7 => 'Rajab',
+        8 => 'Shaban',
+        9 => 'Ramadan',
+        10 => 'Shawwal',
+        11 => 'Zil Qadah',
+        12 => 'Zil Hajj',
+    ] as $val => $label)
                                                 <option value="{{ $val }}"
                                                     {{ old('hijri_start_month') == $val ? 'selected' : '' }}>
                                                     {{ $label }}</option>
                                             @endforeach
                                         </select>
 
-                                    </div>
+                                    </div> --}}
                                 </div>
 
                                 <hr class="my-4">
                                 <h5 class="mb-3">Package Category</h5>
                                 <div class="row g-3 mt-1">
-                                    <div class="col-md-3">
+                                    {{-- <div class="col-md-3">
                                         <label class="form-label">Room Type</label>
                                         <input type="text" name="room_type" class="form-control"
                                             placeholder="e.g. Standard" value="{{ old('room_type') }}">
@@ -177,7 +177,7 @@
                                         <label class="form-label">Azizia Room Type</label>
                                         <input type="text" name="azizia_room_type" class="form-control"
                                             placeholder="e.g. Standard" value="{{ old('azizia_room_type') }}">
-                                    </div>
+                                    </div> --}}
                                     <div class="col-md-3">
                                         <label class="form-label">Makkah Type</label>
                                         <select name="makkah_type" class="form-select">
@@ -275,6 +275,12 @@
                                             <div class="col-md-3"><label class="form-label">Check Out</label><input
                                                     type="date" name="accommodations[0][check_out]"
                                                     class="form-control"></div>
+                                            <div class="col-md-3"><label class="form-label">Days</label><input
+                                                    type="number" name="accommodations[0][days]" class="form-control">
+                                            </div>
+                                            <div class="col-md-3"><label class="form-label">Nights</label><input
+                                                    type="number" name="accommodations[0][nights]" class="form-control">
+                                            </div>
                                             <div class="col-md-3 d-flex align-items-end">
                                                 <div class="form-check">
                                                     <input class="form-check-input same-for-both-toggle" type="checkbox"
@@ -374,9 +380,6 @@
                                                     @endforeach
                                                 </select>
                                             </div>
-                                            <div class="col-md-3"><label class="form-label">Days</label><input
-                                                    type="number" name="accommodations[0][days]" class="form-control">
-                                            </div>
 
                                             <div class="col-md-4"><label class="form-label">Actual Check In
                                                     Time</label><input type="datetime-local"
@@ -385,9 +388,6 @@
                                             <div class="col-md-4"><label class="form-label">Actual Check Out
                                                     Time</label><input type="datetime-local"
                                                     name="accommodations[0][actual_check_out_time]" class="form-control">
-                                            </div>
-                                            <div class="col-md-4"><label class="form-label">Nights</label><input
-                                                    type="number" name="accommodations[0][nights]" class="form-control">
                                             </div>
 
                                             <div class="col-md-3"><label class="form-label">Makkah Ziarat</label>
@@ -691,7 +691,7 @@
                             </div>
                         </div>
                         <div class="text-end" style="margin: 20px">
-                            <button type="submit" class="btn btn-success">Create</button>
+                            <button type="submit" class="btn btn-success">Save</button>
                         </div>
                     </div>
                 </form>
