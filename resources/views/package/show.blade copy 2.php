@@ -136,7 +136,7 @@
         }
 
         .pkg-code-box .lbl {
-            font-size: 15px;
+            font-size: .58rem;
             letter-spacing: 0.5px;
             color: #131738;
         }
@@ -157,14 +157,12 @@
             font-size: 1.6rem;
             color: var(--navy);
             line-height: 1;
-            margin-bottom: 20px;
         }
 
         .tags-container {
-            margin-top: 10px;
             position: absolute;
             bottom: 4px;
-            right: 40px;
+            right: 10px;
             display: flex;
             gap: 4px;
         }
@@ -191,7 +189,7 @@
             border: 1px solid var(--border-color);
             text-align: center;
             vertical-align: middle;
-            padding: 3px 3px;
+            padding: 4px 5px;
         }
 
         /* Top Left Header Columns */
@@ -255,8 +253,8 @@
 
         .stars {
             color: #ffb400;
-            font-size: .68rem;
-            margin-left: 2px;
+            font-size: .78rem;
+            margin-left: 4px;
         }
 
         /* Middle Note Strip */
@@ -431,10 +429,10 @@
         }
 
         .sign-box {
-            margin-top: 20px;
+            margin-top: 8px;
             font-weight: 700;
             font-size: .7rem;
-            text-align: left;
+            text-align: right;
             padding-right: 15px;
         }
     </style>
@@ -452,8 +450,8 @@
         <!-- Header Banner -->
         <div class="header-banner">
             <div class="header-left">
-                <h1>EXECUTIVE PLATINUM </h1>
-                <div class="subtitle">INTERCON / FAIRMONT - MEDINAH FIRST</div>
+                <h1>{{ $package->name ?? 'EXECUTIVE PLATINUM' }}</h1>
+                {{-- <div class="subtitle">{{ $package->travel_route ?? 'N/a'}}</div> --}}
             </div>
             <div class="header-right">
                 <div class="pkg-code-box">
@@ -463,8 +461,8 @@
                 <div class="days">{{ $package->days ?? '14' }} Days Package</div>
                 <div class="tags-container">
                     <span
-                        class="tag-badge">NON SHIFTING</span>
-                    <span class="tag-badge">NON AZIZIYA</span>
+                        class="tag-badge">{{ strtoupper(str_replace('_', ' ', $package->medina_arrival ?? 'NON SHIFTING')) }}</span>
+                    <span class="tag-badge">{{ strtoupper($package->hajj_duration ?? 'NON AZIZIYA') }}</span>
                 </div>
             </div>
         </div>
@@ -646,12 +644,12 @@
             <table class="pkg-table">
                 <thead>
                     <tr>
-                        <th rowspan="2" class="th-left" style="width: 5%;">DAY</th>
-                        <th rowspan="2" class="th-left" style="width: 9%;">DATE<br>(AD)</th>
-                        <th rowspan="2" class="th-left" style="width: 10%;">DATE<br>(Hijri)</th>
-                        <th rowspan="2" class="th-left" style="width: 10%;">CITY</th>
-                        <th class="th-pkg-a" style="width: 33%;">PACKAGE (A)</th>
-                        <th class="th-pkg-b" style="width: 33%;">PACKAGE (B)</th>
+                        <th rowspan="2" class="th-left" style="width: 7%;">DAY</th>
+                        <th rowspan="2" class="th-left" style="width: 10%;">DATE<br>(AD)</th>
+                        <th rowspan="2" class="th-left" style="width: 12%;">DATE<br>(Hijri)</th>
+                        <th rowspan="2" class="th-left" style="width: 13%;">CITY</th>
+                        <th class="th-pkg-a" style="width: 29%;">PACKAGE (A)</th>
+                        <th class="th-pkg-b" style="width: 29%;">PACKAGE (B)</th>
                     </tr>
                     <tr class="sub-header">
                         <th colspan="2">ACCOMMODATION</th>
@@ -666,7 +664,7 @@
                             <td>{{ $item['city'] }}</td>
                             @if ($item['same_for_both'])
                                 <td colspan="2"
-                                    class="fw-bold text-center {{ !empty($item['is_mashair']) ? 'mashair-cell' : '' }}">
+                                    class="fw-bold text-center">
                                     {{ $item['hotel_a'] }}
                                     @if (!empty($item['stars_a']))
                                         <span class="stars">{{ $item['stars_a'] }}</span>
@@ -679,7 +677,7 @@
                                     @endif --}}
                                 </td>
                             @else
-                                <td class="text-center {{ !empty($item['is_mashair']) ? 'mashair-cell' : '' }}">
+                                <td class="text-center">
                                     {{ $item['hotel_a'] }}
                                     @if (!empty($item['stars_a']))
                                         <span class="stars">{{ $item['stars_a'] }}</span>
@@ -691,7 +689,7 @@
                                         <div style="font-size: 0.72rem; color: #d9534f; font-weight: 600; margin-top: 1px;">Azizia: {{ $item['azizia_date'] }}</div>
                                     @endif --}}
                                 </td>
-                                <td class="text-center {{ !empty($item['is_mashair']) ? 'mashair-cell' : '' }}">
+                                <td class="text-center">
                                     {{ $item['hotel_b'] }}
                                     @if (!empty($item['stars_b']))
                                         <span class="stars">{{ $item['stars_b'] }}</span>
@@ -855,10 +853,10 @@
                     {{ $package->madinah_taxi_fare ?? '150' }} PER PERSON FROM MEDINAH AIRPORT TO MEDINAH HOTEL &amp;
                     V.V</div>
 
-                </div>
                 <div class="sign-box">
                     Applicant Sign: ____________________
                 </div>
+            </div>
         </div>
     </div>
 

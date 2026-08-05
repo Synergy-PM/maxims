@@ -82,11 +82,6 @@
                                             </td>
                                         </tr>
                                     @empty
-                                        <tr>
-                                            <td colspan="7" class="text-center text-muted py-4">
-                                                No packages found.
-                                            </td>
-                                        </tr>
                                     @endforelse
                                 </tbody>
                             </table>

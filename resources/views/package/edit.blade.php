@@ -132,7 +132,7 @@
                                         @endforeach
                                     </div>
 
-                                    <div class="col-md-3">
+                                    {{-- <div class="col-md-3">
                                         <label class="form-label">Hijri Start Day</label>
                                         <input type="number" min="1" max="30" name="hijri_start_day"
                                             class="form-control" placeholder="e.g. 4"
@@ -165,14 +165,14 @@
                                         </select>
                                         <small class="text-muted">Hijri month for the first day of the
                                             itinerary</small>
-                                    </div>
+                                    </div> --}}
                                 </div>
 
                                 <hr class="my-4">
                                 <h5 class="mb-3">Package Category</h5>
 
                                 <div class="row g-3 mt-1">
-                                    <div class="col-md-3">
+                                    {{-- <div class="col-md-3">
                                         <label class="form-label">Room Type</label>
                                         <input type="text" name="room_type" class="form-control"
                                             value="{{ old('room_type', $package->room_type) }}">
@@ -181,7 +181,7 @@
                                         <label class="form-label">Azizia Room Type</label>
                                         <input type="text" name="azizia_room_type" class="form-control"
                                             value="{{ old('azizia_room_type', $package->azizia_room_type) }}">
-                                    </div>
+                                    </div> --}}
                                     <div class="col-md-3">
                                         <label class="form-label">Makkah Type</label>
                                         <select name="makkah_type" class="form-select">
@@ -431,7 +431,7 @@
                                                     </label><input type="number"
                                                         name="accommodations[{{ $i }}][distance]"
                                                         class="form-control" value="{{ $acc->distance }}"></div>
-                                                <div class="col-md-3"><label class="form-label">Azizia Date</label><input
+                                                {{-- <div class="col-md-3"><label class="form-label">Azizia Date</label><input
                                                         type="date"
                                                         name="accommodations[{{ $i }}][azizia_date]"
                                                         class="form-control"
@@ -446,7 +446,7 @@
                                                                 {{ $label }}</option>
                                                         @endforeach
                                                     </select>
-                                                </div>
+                                                </div> --}}
                                                 <div class="col-md-3"><label class="form-label">Days</label><input
                                                         type="number" name="accommodations[{{ $i }}][days]"
                                                         class="form-control" value="{{ $acc->days }}"></div>
@@ -656,7 +656,7 @@
                                                 <div class="col-md-3"><label class="form-label">Distance
                                                         (meter)</label><input type="number"
                                                         name="accommodations[0][distance]" class="form-control"></div>
-                                                <div class="col-md-3"><label class="form-label">Azizia Date</label><input
+                                                {{-- <div class="col-md-3"><label class="form-label">Azizia Date</label><input
                                                         type="date" name="accommodations[0][azizia_date]"
                                                         class="form-control"></div>
                                                 <div class="col-md-3"><label class="form-label">Food Package</label>
@@ -667,7 +667,7 @@
                                                             </option>
                                                         @endforeach
                                                     </select>
-                                                </div>
+                                                </div> --}}
                                                 <div class="col-md-3"><label class="form-label">Days</label><input
                                                         type="number" name="accommodations[0][days]"
                                                         class="form-control"></div>
@@ -1200,7 +1200,7 @@
                             </div>
                         </div>
                         <div class="text-end" style="margin: 20px">
-                            <button type="submit" class="btn btn-success">Update</button>
+                            <button type="submit" class="btn btn-success">Save</button>
                         </div>
                     </div>
                 </form>

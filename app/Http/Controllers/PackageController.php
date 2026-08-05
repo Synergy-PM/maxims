@@ -37,15 +37,16 @@ class PackageController extends Controller
     {
         $data = $this->validated($request);
 
-        DB::transaction(function () use ($request, $data) {
+        $package = DB::transaction(function () use ($request, $data) {
             $package = new Package();
             $package->fill($data['package']);
             $package->save();
 
             $this->saveRelations($request, $package, $data);
+            return $package;
         });
 
-        return redirect()->route('package.index')->with('success', 'Package created successfully.');
+        return redirect()->route('package.show', $package->id)->with('success', 'Package created successfully.');
     }
     public function edit($id)
     {

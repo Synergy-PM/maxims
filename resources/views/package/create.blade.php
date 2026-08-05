@@ -385,7 +385,7 @@
                                             <div class="col-md-3"><label class="form-label">Distance (meter)</label><input
                                                     type="number" name="accommodations[0][distance]"
                                                     class="form-control"></div>
-                                            <div class="col-md-3"><label class="form-label">Azizia Date</label><input
+                                            {{-- <div class="col-md-3"><label class="form-label">Azizia Date</label><input
                                                     type="date" name="accommodations[0][azizia_date]"
                                                     class="form-control"></div>
                                             <div class="col-md-3"><label class="form-label">Food Package</label>
@@ -395,7 +395,7 @@
                                                         <option value="{{ $val }}">{{ $label }}</option>
                                                     @endforeach
                                                 </select>
-                                            </div>
+                                            </div> --}}
 
                                             <div class="col-md-4"><label class="form-label">Actual Check In
                                                     Time</label><input type="datetime-local"
