@@ -27,8 +27,11 @@ class PackageController extends Controller
         $giveaways = Giveaway::all();
         $companies = Company::all();
         $trainingSessions = TrainingSession::all();
+        $hotels = \App\Models\Hotel::all();
+        $airlines = \App\Models\Airline::all();
+        $trains = \App\Models\Train::all();
 
-        return view('package.create', compact('package', 'giveaways', 'companies', 'trainingSessions'));
+        return view('package.create', compact('package', 'giveaways', 'companies', 'trainingSessions', 'hotels', 'airlines', 'trains'));
     }
     public function store(Request $request)
     {
@@ -61,8 +64,11 @@ class PackageController extends Controller
         $giveaways = Giveaway::all();
         $companies = Company::all();
         $trainingSessions = TrainingSession::all();
+        $hotels = \App\Models\Hotel::all();
+        $airlines = \App\Models\Airline::all();
+        $trains = \App\Models\Train::all();
 
-        return view('package.edit', compact('package', 'giveaways', 'companies', 'trainingSessions'));
+        return view('package.edit', compact('package', 'giveaways', 'companies', 'trainingSessions', 'hotels', 'airlines', 'trains'));
     }
     public function show($id)
     {
@@ -197,11 +203,13 @@ class PackageController extends Controller
             'accommodations.*.package_a.accommodation_type' => 'nullable|string|max:150',
             'accommodations.*.package_a.saudi_star_rating' => 'nullable|string|max:50',
             'accommodations.*.package_a.hotel' => 'nullable|string|max:150',
+            'accommodations.*.package_a.food_package' => 'nullable|string|max:100',
 
             'accommodations.*.package_b' => 'nullable|array',
             'accommodations.*.package_b.accommodation_type' => 'nullable|string|max:150',
             'accommodations.*.package_b.saudi_star_rating' => 'nullable|string|max:50',
             'accommodations.*.package_b.hotel' => 'nullable|string|max:150',
+            'accommodations.*.package_b.food_package' => 'nullable|string|max:100',
 
             'accommodations.*.distance' => 'nullable|integer',
             'accommodations.*.food_package' => 'nullable|string|max:100',
@@ -315,10 +323,12 @@ class PackageController extends Controller
                 'package_a_accommodation_type' => $packageA['accommodation_type'] ?? null,
                 'package_a_saudi_star_rating' => $packageA['saudi_star_rating'] ?? null,
                 'package_a_hotel' => $packageA['hotel'] ?? null,
+                'package_a_food_package' => $packageA['food_package'] ?? ($row['food_package'] ?? null),
 
                 'package_b_accommodation_type' => $packageB['accommodation_type'] ?? null,
                 'package_b_saudi_star_rating' => $packageB['saudi_star_rating'] ?? null,
                 'package_b_hotel' => $packageB['hotel'] ?? null,
+                'package_b_food_package' => $packageB['food_package'] ?? ($row['food_package'] ?? null),
 
                 'distance' => $row['distance'] ?? null,
                 'food_package' => $row['food_package'] ?? null,
