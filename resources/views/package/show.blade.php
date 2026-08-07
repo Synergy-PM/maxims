@@ -277,12 +277,6 @@
         /* Mina Highlight Styling */
         .pkg-table tbody td.mashair-cell {
             background: var(--peach-bg) !important;
-            font-weight: 700;
-            color: #1a1a1a;
-        }
-        .pkg-table tbody tr.mashair-row td {
-            font-weight: 700;
-            color: #1a1a1a;
         }
 
         .stars {
@@ -768,7 +762,7 @@
                 </thead>
                 <tbody>
                     @forelse($itineraryList as $item)
-                        <tr class="{{ !empty($item['is_mashair']) ? 'mashair-row' : '' }}">
+                        <tr>
                             <td><b>{{ $item['day'] }}</b></td>
                             <td>{{ $item['date'] }}</td>
                             <td>{{ $item['hijri'] }}</td>
