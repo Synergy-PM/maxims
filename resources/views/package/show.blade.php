@@ -508,19 +508,8 @@
         <!-- Header Banner -->
         <div class="header-banner">
             <div class="header-left">
-                @php
-                    $categoryText = $package->category;
-                    if (empty($categoryText) || strlen($categoryText) <= 2) {
-                        $categoryText = 'EXECUTIVE PLATINUM';
-                    }
-                    
-                    $subTitleText = $package->subtitle;
-                    if (empty($subTitleText)) {
-                        $subTitleText = ($package->name ?? 'Comfort 14') . ' - ' . $firstCityFirst;
-                    }
-                @endphp
-                <h1>{{ strtoupper($categoryText) }}</h1>
-                <div class="subtitle">{{ strtoupper($subTitleText) }}</div>
+                <h1>EXECUTIVE PLATINUM</h1>
+                <div class="subtitle">INTERCON / FAIRMONT - {{ ($package->medina_arrival ?? 'before_hajj') == 'before_hajj' ? 'MEDINAH' : 'MAKKAH' }} FIRST</div>
             </div>
             <div class="header-right">
                 <div class="pkg-code-box">
@@ -530,7 +519,7 @@
                 <div class="vertical-divider"></div>
                 <div class="pkg-details-box">
                     @php
-                        $displayName = $package->name ?? 'Comfort 14';
+                        $displayName = $package->days ?? 'Package';
                         if (str_contains(strtolower($displayName), 'executive') || strlen($displayName) > 25) {
                             $displayName = 'Comfort ' . ($package->days ?? '14');
                         }
