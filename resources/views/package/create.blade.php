@@ -131,38 +131,36 @@
                                         @endforeach
                                     </div>
 
-                                    {{-- <div class="col-md-3">
+                                    <div class="col-md-3">
                                         <label class="form-label">Hijri Start Day</label>
                                         <input type="number" min="1" max="30" name="hijri_start_day"
-                                            class="form-control" placeholder="e.g. 4"
+                                            class="form-control" placeholder="e.g. 1"
                                             value="{{ old('hijri_start_day') }}">
-
                                     </div>
                                     <div class="col-md-3">
                                         <label class="form-label">Hijri Start Month</label>
                                         <select name="hijri_start_month" class="form-select">
                                             <option value="">-- Select --</option>
                                             @foreach ([
-        1 => 'Muharram',
-        2 => 'Safar',
-        3 => 'Rabi-ul-Awwal',
-        4 => 'Rabi-ul-Thani',
-        5 => 'Jumada-al-Awwal',
-        6 => 'Jumada-al-Thani',
-        7 => 'Rajab',
-        8 => 'Shaban',
-        9 => 'Ramadan',
-        10 => 'Shawwal',
-        11 => 'Zil Qadah',
-        12 => 'Zil Hajj',
-    ] as $val => $label)
+                                                1 => 'Muharram',
+                                                2 => 'Safar',
+                                                3 => 'Rabi-ul-Awwal',
+                                                4 => 'Rabi-ul-Thani',
+                                                5 => 'Jumada-al-Awwal',
+                                                6 => 'Jumada-al-Thani',
+                                                7 => 'Rajab',
+                                                8 => 'Shaban',
+                                                9 => 'Ramadan',
+                                                10 => 'Shawwal',
+                                                11 => 'Zil Qadah',
+                                                12 => 'Zil Hajj',
+                                            ] as $val => $label)
                                                 <option value="{{ $val }}"
-                                                    {{ old('hijri_start_month') == $val ? 'selected' : '' }}>
+                                                    {{ old('hijri_start_month', 12) == $val ? 'selected' : '' }}>
                                                     {{ $label }}</option>
                                             @endforeach
                                         </select>
-
-                                    </div> --}}
+                                    </div>
                                 </div>
 
                                 <hr class="my-4">

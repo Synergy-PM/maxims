@@ -143,10 +143,7 @@
 
         .pkg-code-box .code {
             font-size: 1rem;
-            background: var(--navy);
-            color: #fff;
-            padding: 1px 7px;
-            border-radius: 2px;
+            color: #131738;
             font-weight: 800;
         }
 
@@ -170,12 +167,13 @@
         }
 
         .tag-badge {
-            background: var(--navy);
-            color: #fff;
+            background: transparent;
+            color: #131738;
             font-size: .58rem;
             font-weight: 700;
             padding: 1px 5px;
             border-radius: 2px;
+            border: 1.5px solid #ffffff;
         }
 
         /* Custom Image Matching Table Styling */
@@ -247,7 +245,7 @@
         }
 
         /* Mina Highlight Styling */
-        .pkg-table tbody tr.mashair-row td.mashair-cell {
+        .pkg-table tbody tr.mashair-row td {
             background: var(--peach-bg) !important;
             font-weight: 700;
             color: #1a1a1a;
@@ -318,12 +316,12 @@
             font-weight: 800;
             font-size: .85rem;
             text-align: center;
-            width: 20%;
+            width: 17%;
             letter-spacing: .5px;
         }
 
         .room-table .room-label {
-            width: 30%;
+            width: 17%;
             text-align: center;
             font-weight: 600;
             background: #fdfdfd;
@@ -332,7 +330,7 @@
 
         .room-table .room-price-a,
         .room-table .room-price-b {
-            width: 25%;
+            width: 33%;
             text-align: center;
             font-weight: 700;
             background: var(--grey-row);
@@ -449,34 +447,50 @@
     </div>
 
     <div class="sheet" id="packageSheet">
-        <!-- Header Banner -->
-        <div class="header-banner">
-            <div class="header-left">
-                <h1>EXECUTIVE PLATINUM </h1>
-                <div class="subtitle">INTERCON / FAIRMONT - MEDINAH FIRST</div>
-            </div>
-            <div class="header-right">
-                <div class="pkg-code-box">
-                    <div class="lbl">PKG CODE</div>
-                    <div class="code">{{ $package->code ?? 'UB 002' }}</div>
-                </div>
-                <div class="days">{{ $package->days ?? '14' }} Days Package</div>
-                <div class="tags-container">
-                    <span
-                        class="tag-badge">NON SHIFTING</span>
-                    <span class="tag-badge">NON AZIZIYA</span>
-                </div>
-            </div>
-        </div>
-
         @php
-            // Helpers to safely fetch data properties
             $pkgAccVal = function ($acc, $key) {
                 if (is_array($acc)) {
                     return $acc[$key] ?? null;
                 }
                 return $acc->$key ?? null;
             };
+
+            $hasAzizia = false;
+            if (!empty($package->accommodations)) {
+                foreach ($package->accommodations as $acc) {
+                    $placeVal = $pkgAccVal($acc, 'place') ?? '';
+                    if (str_contains(strtolower($placeVal), 'azizia')) {
+                        $hasAzizia = true;
+                        break;
+                    }
+                }
+            }
+            $shiftingText = $hasAzizia ? 'SHIFTING' : 'NON SHIFTING';
+            $aziziaText = $hasAzizia ? 'WITH AZIZIYA' : 'NON AZIZIYA';
+            $firstCity = ($package->medina_arrival ?? 'before_hajj') == 'before_hajj' ? 'MEDINAH' : 'MAKKAH';
+            $firstCityFirst = $firstCity . ' FIRST';
+        @endphp
+
+        <!-- Header Banner -->
+        <div class="header-banner">
+            <div class="header-left">
+                <h1>{{ strtoupper($package->category ?? 'EXECUTIVE PLATINUM') }}</h1>
+                <div class="subtitle">{{ strtoupper($package->subtitle ?? (($package->name ?? 'Comfort 14') . ' - ' . $firstCityFirst)) }}</div>
+            </div>
+            <div class="header-right">
+                <div class="pkg-code-box">
+                    <div class="lbl">PKG CODE</div>
+                    <div class="code">{{ $package->code ?? 'UB 002' }}</div>
+                </div>
+                <div class="days">{{ $package->name ?? (($package->days ?? '14') . ' Days Package') }}</div>
+                <div class="tags-container">
+                    <span class="tag-badge">{{ $shiftingText }}</span>
+                    <span class="tag-badge">{{ $aziziaText }}</span>
+                </div>
+            </div>
+        </div>
+
+        @php
 
             $pkgNested = function ($acc, $group, $key) use ($pkgAccVal) {
                 $flatKey = "{$group}_{$key}";
@@ -544,7 +558,7 @@
             if (!empty($package->accommodations)) {
                 foreach ($package->accommodations as $acc) {
                     $place = strtolower($pkgAccVal($acc, 'place') ?? '');
-                    if (str_contains($place, 'makkah')) {
+                    if (str_contains($place, 'makkah') && !str_contains($place, 'azizia')) {
                         $makkahHotelA = $pkgNested($acc, 'package_a', 'hotel') ?: $makkahHotelA;
                         $makkahHotelB = $pkgNested($acc, 'package_b', 'hotel') ?: $makkahHotelB;
                         $makkahStarsA = (int) ($pkgNested($acc, 'package_a', 'saudi_star_rating') ?: $makkahStarsA);
@@ -564,7 +578,12 @@
                     $checkOutRaw = $pkgAccVal($acc, 'check_out');
                     $checkIn = $checkInRaw ? \Carbon\Carbon::parse($checkInRaw) : null;
                     $checkOut = $checkOutRaw ? \Carbon\Carbon::parse($checkOutRaw) : null;
+                    $hotelA = $pkgNested($acc, 'package_a', 'hotel') ?? '-';
+                    $hotelB = $pkgNested($acc, 'package_b', 'hotel') ?? '-';
                     $sameForBoth = (bool) $pkgAccVal($acc, 'same_for_both');
+                    if (trim($hotelA) === trim($hotelB) || empty($hotelB) || trim($hotelB) === '-') {
+                        $sameForBoth = true;
+                    }
 
                     $starsA = (int) ($pkgNested($acc, 'package_a', 'saudi_star_rating') ?: 0);
                     $starsB = (int) ($pkgNested($acc, 'package_b', 'saudi_star_rating') ?: 0);
@@ -596,29 +615,29 @@
                                     'hijri' => $hijriDate,
                                     'city' => $hDayVal == 8 ? 'To Mina' : 'Mina',
                                     'is_mashair' => true,
-                                    'same_for_both' => false,
-                                    'hotel_a' => $servicesText . ' / ' . $makkahHotelA,
+                                    'same_for_both' => true,
+                                    'hotel_a' => $servicesText . ' / ' . $hotelA,
                                     'stars_a' => '',
-                                    'hotel_b' => $servicesText . ' / ' . $makkahHotelB,
+                                    'hotel_b' => $servicesText . ' / ' . $hotelB,
                                     'stars_b' => '',
-                                    // 'food_a' => $pkgNested($acc, 'package_a', 'food_package') ?: $pkgAccVal($acc, 'food_package'),
-                                    // // 'food_b' => $pkgNested($acc, 'package_b', 'food_package') ?: $pkgAccVal($acc, 'food_package'),
                                     'azizia_date' => $pkgAccVal($acc, 'azizia_date') ? \Carbon\Carbon::parse($pkgAccVal($acc, 'azizia_date'))->format('d M') : null,
                                 ];
                             } else {
+                                $placeVal = $pkgAccVal($acc, 'place') ?? 'Makkah';
+                                if (str_contains(strtolower($placeVal), 'azizia')) {
+                                    $placeVal = 'Makkah';
+                                }
                                 $itineraryList[] = [
                                     'day' => sprintf('%02d', $dayCounter++),
                                     'date' => $date->format('d M'),
                                     'hijri' => $hijriDate,
-                                    'city' => $pkgAccVal($acc, 'place') ?? 'Makkah',
+                                    'city' => $placeVal,
                                     'is_mashair' => false,
                                     'same_for_both' => $sameForBoth,
                                     'hotel_a' => $pkgNested($acc, 'package_a', 'hotel') ?? '-',
                                     'stars_a' => str_repeat('★', $starsA),
                                     'hotel_b' => $pkgNested($acc, 'package_b', 'hotel') ?? '-',
                                     'stars_b' => str_repeat('★', $starsB),
-                                    // // 'food_a' => $pkgNested($acc, 'package_a', 'food_package') ?: $pkgAccVal($acc, 'food_package'),
-                                    // // 'food_b' => $pkgNested($acc, 'package_b', 'food_package') ?: $pkgAccVal($acc, 'food_package'),
                                     'azizia_date' => $pkgAccVal($acc, 'azizia_date') ? \Carbon\Carbon::parse($pkgAccVal($acc, 'azizia_date'))->format('d M') : null,
                                 ];
                             }
@@ -627,9 +646,52 @@
                 }
             }
 
+            $finalCheckOutDate = null;
+            if (!empty($package->accommodations) && count($package->accommodations) > 0) {
+                $lastAcc = $package->accommodations->last();
+                $checkOutRaw = $pkgAccVal($lastAcc, 'check_out');
+                if ($checkOutRaw) {
+                    $finalCheckOutDate = \Carbon\Carbon::parse($checkOutRaw);
+                }
+            }
+
+            if ($finalCheckOutDate) {
+                $hijriDate = '-';
+                if ($hijriStartDay && $hijriStartMonth) {
+                    [$hDay, $hMonth] = $addHijriDays($hijriStartDay, $hijriStartMonth, $dayCounter - 1);
+                    $hijriDate = sprintf('%02d %s', $hDay, $islamicMonths[$hMonth] ?? '');
+                } elseif (class_exists('\IntlDateFormatter')) {
+                    try {
+                        $fmtD = new \IntlDateFormatter('en_US@calendar=islamic-umalqura', \IntlDateFormatter::FULL, \IntlDateFormatter::NONE, 'UTC', \IntlDateFormatter::TRADITIONAL, 'd');
+                        $fmtM = new \IntlDateFormatter('en_US@calendar=islamic-umalqura', \IntlDateFormatter::FULL, \IntlDateFormatter::NONE, 'UTC', \IntlDateFormatter::TRADITIONAL, 'M');
+                        $hDayVal = (int) $fmtD->format($finalCheckOutDate->toDateString());
+                        $hMonthVal = (int) $fmtM->format($finalCheckOutDate->toDateString());
+                        $hMonthName = $islamicMonths[$hMonthVal] ?? 'Zil Hajj';
+                        $hijriDate = sprintf('%02d %s', $hDayVal, $hMonthName);
+                    } catch (\Throwable $e) {}
+                }
+
+                $itineraryList[] = [
+                    'day' => sprintf('%02d', $dayCounter++),
+                    'date' => $finalCheckOutDate->format('d M'),
+                    'hijri' => $hijriDate,
+                    'city' => '',
+                    'is_mashair' => true,
+                    'same_for_both' => true,
+                    'hotel_a' => 'DEPARTURE TO AIRPORT',
+                    'stars_a' => '',
+                    'hotel_b' => 'DEPARTURE TO AIRPORT',
+                    'stars_b' => '',
+                    'azizia_date' => null,
+                ];
+            }
+
             $prevCity = null;
             foreach ($itineraryList as &$item) {
                 $city = trim($item['city']);
+                if (empty($city)) {
+                    continue;
+                }
                 $cleanedCity = preg_replace('/^to\s+/i', '', $city);
                 if (strtolower($cleanedCity) !== strtolower($prevCity)) {
                     $item['city'] = 'To ' . $cleanedCity;
@@ -737,24 +799,28 @@
             $makkahB = is_string($package->makkah_b ?? null)
                 ? json_decode($package->makkah_b, true)
                 : $package->makkah_b ?? [];
+            $madinahA = is_string($package->madinah_a ?? null)
+                ? json_decode($package->madinah_a, true)
+                : $package->madinah_a ?? [];
+            $madinahB = is_string($package->madinah_b ?? null)
+                ? json_decode($package->madinah_b, true)
+                : $package->madinah_b ?? [];
 
-            $quadA = !empty($makkahA['quad']) ? 'SAR ' . number_format((float) $makkahA['quad']) . '/-' : 'NA';
-            $tripleA = !empty($makkahA['triple'])
-                ? 'SAR ' . number_format((float) $makkahA['triple']) . '/-'
-                : 'SAR 94,600/-';
-            $doubleA = !empty($makkahA['double'])
-                ? 'SAR ' . number_format((float) $makkahA['double']) . '/-'
-                : 'SAR 118,500/-';
+            $quadAVal = !empty($makkahA['quad']) ? $makkahA['quad'] : (!empty($madinahA['quad']) ? $madinahA['quad'] : null);
+            $tripleAVal = !empty($makkahA['triple']) ? $makkahA['triple'] : (!empty($madinahA['triple']) ? $madinahA['triple'] : null);
+            $doubleAVal = !empty($makkahA['double']) ? $makkahA['double'] : (!empty($madinahA['double']) ? $madinahA['double'] : null);
 
-            $quadB = !empty($makkahB['quad'])
-                ? 'SAR ' . number_format((float) $makkahB['quad']) . '/-'
-                : 'SAR 63,500/-';
-            $tripleB = !empty($makkahB['triple'])
-                ? 'SAR ' . number_format((float) $makkahB['triple']) . '/-'
-                : 'SAR 70,200/-';
-            $doubleB = !empty($makkahB['double'])
-                ? 'SAR ' . number_format((float) $makkahB['double']) . '/-'
-                : 'SAR 85,500/-';
+            $quadBVal = !empty($makkahB['quad']) ? $makkahB['quad'] : (!empty($madinahB['quad']) ? $madinahB['quad'] : null);
+            $tripleBVal = !empty($makkahB['triple']) ? $makkahB['triple'] : (!empty($madinahB['triple']) ? $madinahB['triple'] : null);
+            $doubleBVal = !empty($makkahB['double']) ? $makkahB['double'] : (!empty($madinahB['double']) ? $madinahB['double'] : null);
+
+            $quadA = !empty($quadAVal) ? 'SAR ' . number_format((float) $quadAVal) . '/-' : 'NA';
+            $tripleA = !empty($tripleAVal) ? 'SAR ' . number_format((float) $tripleAVal) . '/-' : 'NA';
+            $doubleA = !empty($doubleAVal) ? 'SAR ' . number_format((float) $doubleAVal) . '/-' : 'NA';
+
+            $quadB = !empty($quadBVal) ? 'SAR ' . number_format((float) $quadBVal) . '/-' : 'NA';
+            $tripleB = !empty($tripleBVal) ? 'SAR ' . number_format((float) $tripleBVal) . '/-' : 'NA';
+            $doubleB = !empty($doubleBVal) ? 'SAR ' . number_format((float) $doubleBVal) . '/-' : 'NA';
         @endphp
 
         <!-- ROOM TYPE PRICING TABLE -->
