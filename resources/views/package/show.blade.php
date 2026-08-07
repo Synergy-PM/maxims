@@ -89,11 +89,10 @@
             align-items: stretch;
             margin-bottom: 8px;
         }
-
         .header-left {
             background: var(--navy);
             color: var(--gold);
-            padding: 8px 15px;
+            padding: 10px 20px;
             flex: 2.2;
             display: flex;
             flex-direction: column;
@@ -103,7 +102,7 @@
         .header-left h1 {
             font-family: 'Poppins', sans-serif;
             font-weight: 900;
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             margin: 0;
             line-height: 1.1;
             letter-spacing: 0.5px;
@@ -113,70 +112,101 @@
         .header-left .subtitle {
             color: #ffffff;
             font-weight: 700;
-            font-size: .75rem;
+            font-size: .8rem;
             letter-spacing: .5px;
-            margin-top: 2px;
+            margin-top: 4px;
             text-transform: uppercase;
         }
 
         .header-right {
             background: linear-gradient(135deg, var(--gold-dark), var(--gold) 50%, #b9812a);
             color: var(--navy);
-            flex: 1.4;
+            flex: 1.8;
             display: flex;
             align-items: center;
-            justify-content: space-around;
-            padding: 4px 10px;
-            position: relative;
+            padding: 8px 15px;
+            box-sizing: border-box;
         }
 
         .pkg-code-box {
             text-align: center;
-            font-weight: 800;
+            font-weight: 900;
+            line-height: 1.1;
+            padding-right: 15px;
         }
 
         .pkg-code-box .lbl {
-            font-size: 15px;
+            font-size: 0.6rem;
             letter-spacing: 0.5px;
-            color: #131738;
-        }
-
-        .pkg-code-box .code {
-            font-size: 1rem;
-            color: #131738;
+            color: var(--navy);
+            text-transform: uppercase;
             font-weight: 800;
         }
 
-        .header-right .days {
+        .pkg-code-box .code {
+            font-size: 0.95rem;
+            color: var(--navy);
+            font-weight: 900;
+        }
+
+        .vertical-divider {
+            width: 1px;
+            background-color: rgba(14, 23, 38, 0.3);
+            height: 70%;
+            margin: 0 15px;
+        }
+
+        .pkg-details-box {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pkg-details-box .days {
             font-family: 'Playfair Display', serif;
             font-style: italic;
             font-weight: 700;
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             color: var(--navy);
             line-height: 1;
-            margin-bottom: 20px;
+            margin-bottom: 2px;
+            text-align: center;
+            white-space: nowrap;
         }
 
-        .tags-container {
-            margin-top: 10px;
-            position: absolute;
-            bottom: 4px;
-            right: 40px;
+        .pkg-details-box .city-indicator {
+            font-size: 0.6rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: var(--navy);
+            text-transform: uppercase;
+            margin-bottom: 3px;
+            border-bottom: 1.5px solid var(--navy);
+            padding-bottom: 1px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .tags-container-inline {
             display: flex;
-            gap: 4px;
+            gap: 6px;
+            justify-content: center;
+            margin-top: 3px;
         }
 
-        .tag-badge {
+        .tags-container-inline .tag-badge {
             background: transparent;
-            color: #131738;
-            font-size: .58rem;
-            font-weight: 700;
-            padding: 1px 5px;
+            color: var(--navy);
+            font-size: 0.52rem;
+            font-weight: 800;
+            padding: 1px 6px;
             border-radius: 2px;
-            border: 1.5px solid #ffffff;
-        }
-
-        /* Custom Image Matching Table Styling */
+            border: 1px solid var(--navy);
+            text-transform: uppercase;
+            line-height: 1;
+        }        /* Custom Image Matching Table Styling */
         .pkg-table {
             border-collapse: separate;
             border-spacing: 0;
@@ -245,8 +275,12 @@
         }
 
         /* Mina Highlight Styling */
-        .pkg-table tbody tr.mashair-row td {
+        .pkg-table tbody td.mashair-cell {
             background: var(--peach-bg) !important;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+        .pkg-table tbody tr.mashair-row td {
             font-weight: 700;
             color: #1a1a1a;
         }
@@ -474,18 +508,42 @@
         <!-- Header Banner -->
         <div class="header-banner">
             <div class="header-left">
-                <h1>{{ strtoupper($package->category ?? 'EXECUTIVE PLATINUM') }}</h1>
-                <div class="subtitle">{{ strtoupper($package->subtitle ?? (($package->name ?? 'Comfort 14') . ' - ' . $firstCityFirst)) }}</div>
+                @php
+                    $categoryText = $package->category;
+                    if (empty($categoryText) || strlen($categoryText) <= 2) {
+                        $categoryText = 'EXECUTIVE PLATINUM';
+                    }
+                    
+                    $subTitleText = $package->subtitle;
+                    if (empty($subTitleText)) {
+                        $subTitleText = ($package->name ?? 'Comfort 14') . ' - ' . $firstCityFirst;
+                    }
+                @endphp
+                <h1>{{ strtoupper($categoryText) }}</h1>
+                <div class="subtitle">{{ strtoupper($subTitleText) }}</div>
             </div>
             <div class="header-right">
                 <div class="pkg-code-box">
                     <div class="lbl">PKG CODE</div>
                     <div class="code">{{ $package->code ?? 'UB 002' }}</div>
                 </div>
-                <div class="days">{{ $package->name ?? (($package->days ?? '14') . ' Days Package') }}</div>
-                <div class="tags-container">
-                    <span class="tag-badge">{{ $shiftingText }}</span>
-                    <span class="tag-badge">{{ $aziziaText }}</span>
+                <div class="vertical-divider"></div>
+                <div class="pkg-details-box">
+                    @php
+                        $displayName = $package->name ?? 'Comfort 14';
+                        if (str_contains(strtolower($displayName), 'executive') || strlen($displayName) > 25) {
+                            $displayName = 'Comfort ' . ($package->days ?? '14');
+                        }
+                        if (!str_contains(strtolower($displayName), 'days') && !str_contains(strtolower($displayName), 'day')) {
+                            $displayName .= ' Days';
+                        }
+                    @endphp
+                    <div class="days">{{ $displayName }}</div>
+                    <div class="city-indicator">— {{ $firstCity }} —</div>
+                    <div class="tags-container-inline">
+                        <span class="tag-badge">{{ $shiftingText }}</span>
+                        <span class="tag-badge">{{ $aziziaText }}</span>
+                    </div>
                 </div>
             </div>
         </div>
