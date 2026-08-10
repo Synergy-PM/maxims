@@ -3,6 +3,29 @@
 @section('title', 'Create Package')
 
 @section('content')
+    <style>
+        .accommodation-row {
+            position: relative;
+        }
+        .accommodation-row:not(:first-child) {
+            margin-top: 35px !important;
+        }
+        .accommodation-row-divider {
+            border: none;
+            border-top: 4px solid #000 !important;
+            opacity: 1 !important;
+            position: absolute;
+            top: -20px;
+            left: 0;
+            right: 0;
+            margin: 0 !important;
+        }
+        .accommodation-row:first-child .accommodation-row-divider {
+            display: none;
+        }
+    </style>
+    <!-- Summernote Lite CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
     <div class="content-page">
         <div class="content">
             <div class="container-fluid">
@@ -39,6 +62,8 @@
                                 type="button">ITINERARY</button></li>
                         <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-maktab"
                                 type="button">MAKTAB ADDRESS</button></li>
+                        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-notes"
+                                type="button">Notes</button></li>
                     </ul>
 
                     <div class="tab-content card">
@@ -142,19 +167,19 @@
                                         <select name="hijri_start_month" class="form-select">
                                             <option value="">-- Select --</option>
                                             @foreach ([
-                                                1 => 'Muharram',
-                                                2 => 'Safar',
-                                                3 => 'Rabi-ul-Awwal',
-                                                4 => 'Rabi-ul-Thani',
-                                                5 => 'Jumada-al-Awwal',
-                                                6 => 'Jumada-al-Thani',
-                                                7 => 'Rajab',
-                                                8 => 'Shaban',
-                                                9 => 'Ramadan',
-                                                10 => 'Shawwal',
-                                                11 => 'Zil Qadah',
-                                                12 => 'Zil Hajj',
-                                            ] as $val => $label)
+            1 => 'Muharram',
+            2 => 'Safar',
+            3 => 'Rabi-ul-Awwal',
+            4 => 'Rabi-ul-Thani',
+            5 => 'Jumada-al-Awwal',
+            6 => 'Jumada-al-Thani',
+            7 => 'Rajab',
+            8 => 'Shaban',
+            9 => 'Ramadan',
+            10 => 'Shawwal',
+            11 => 'Zil Qadah',
+            12 => 'Zil Hajj',
+        ] as $val => $label)
                                                 <option value="{{ $val }}"
                                                     {{ old('hijri_start_month', 12) == $val ? 'selected' : '' }}>
                                                     {{ $label }}</option>
@@ -255,6 +280,7 @@
 
                                 <div id="accommodationRows">
                                     <div class="accommodation-row border rounded p-3 mb-3 position-relative">
+                                         <hr class="accommodation-row-divider" style="border-top: 3px solid #000; opacity: 1; margin-top: 0; margin-bottom: 15px;">
                                         <button type="button"
                                             class="btn btn-sm btn-outline-danger remove-accommodation-row position-absolute top-0 end-0 m-2"><i
                                                 class="mdi mdi-delete"></i></button>
@@ -288,7 +314,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-12">
+                                             <div class="col-12">
                                                 <hr class="my-2">
                                                 <h6 class="text-primary mb-0">Package A</h6>
                                             </div>
@@ -316,12 +342,14 @@
                                                 <select name="accommodations[0][package_a][hotel]" class="form-select">
                                                     <option value="">-- Select Hotel --</option>
                                                     @foreach ($hotels as $hotelItem)
-                                                        <option value="{{ $hotelItem->name }}">{{ $hotelItem->name }}</option>
+                                                        <option value="{{ $hotelItem->name }}">{{ $hotelItem->name }}
+                                                        </option>
                                                     @endforeach
                                                 </select>
                                             </div>
                                             <div class="col-md-3"><label class="form-label">Food Package (A)</label>
-                                                <select name="accommodations[0][package_a][food_package]" class="form-select">
+                                                <select name="accommodations[0][package_a][food_package]"
+                                                    class="form-select">
                                                     <option value="">-- Select Food --</option>
                                                     @foreach (\App\Enums\FoodPackage::options() as $val => $label)
                                                         <option value="{{ $val }}">{{ $label }}</option>
@@ -361,7 +389,8 @@
                                                         class="form-select">
                                                         <option value="">-- Select Hotel --</option>
                                                         @foreach ($hotels as $hotelItem)
-                                                            <option value="{{ $hotelItem->name }}">{{ $hotelItem->name }}</option>
+                                                            <option value="{{ $hotelItem->name }}">{{ $hotelItem->name }}
+                                                            </option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -370,7 +399,8 @@
                                                         class="form-select">
                                                         <option value="">-- Select Food --</option>
                                                         @foreach (\App\Enums\FoodPackage::options() as $val => $label)
-                                                            <option value="{{ $val }}">{{ $label }}</option>
+                                                            <option value="{{ $val }}">{{ $label }}
+                                                            </option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -513,7 +543,8 @@
                                                 <select name="flights[0][airline]" class="form-select">
                                                     <option value="">-- Select Airline --</option>
                                                     @foreach ($airlines as $airlineItem)
-                                                        <option value="{{ $airlineItem->name }}">{{ $airlineItem->name }}</option>
+                                                        <option value="{{ $airlineItem->name }}">{{ $airlineItem->name }}
+                                                        </option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -582,7 +613,8 @@
                                                 <select name="trains[0][railway]" class="form-select">
                                                     <option value="">-- Select Train / Railway --</option>
                                                     @foreach ($trains as $trainItem)
-                                                        <option value="{{ $trainItem->train_name }}">{{ $trainItem->train_name }}</option>
+                                                        <option value="{{ $trainItem->train_name }}">
+                                                            {{ $trainItem->train_name }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -714,6 +746,20 @@
                                         <label class="form-label">Office Address</label>
                                         <input type="text" name="office_address" class="form-control"
                                             value="{{ old('office_address') }}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Notes --}}
+
+                        <div class="tab-pane fade card" id="tab-notes">
+                            <div class="card-body">
+                                <h5 class="mb-3">Notes</h5>
+                                <div class="row g-3">
+                                    <div class="col-md-12">
+                                        <label class="form-label">Notes</label>
+                                        <textarea name="notes" id="notes-editor" class="form-control">{{ old('notes') }}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -959,5 +1005,30 @@
                 }
             });
         })();
+
+        // Initialize Summernote Lite
+        window.addEventListener('DOMContentLoaded', function() {
+            var checkjQuery = setInterval(function () {
+                if (typeof jQuery !== 'undefined') {
+                    clearInterval(checkjQuery);
+                    jQuery.getScript('https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js', function() {
+                        jQuery('#notes-editor').summernote({
+                            placeholder: 'Write package notes here...',
+                            tabsize: 2,
+                            height: 200,
+                            toolbar: [
+                                ['style', ['style']],
+                                ['font', ['bold', 'underline', 'clear']],
+                                ['color', ['color']],
+                                ['para', ['ul', 'ol', 'paragraph']],
+                                ['table', ['table']],
+                                ['insert', ['link', 'picture', 'video']],
+                                ['view', ['fullscreen', 'codeview', 'help']]
+                            ]
+                        });
+                    });
+                }
+            }, 100);
+        });
     </script>
 @endsection
