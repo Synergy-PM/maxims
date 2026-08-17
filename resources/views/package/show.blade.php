@@ -508,17 +508,16 @@
             <div class="header-right">
                 <div class="pkg-code-box">
                     <div class="lbl">PKG CODE</div>
-                    <div class="code">{{ $package->code ?? 'UB 002' }}</div>
+                    <div class="code">{{ $package->code }}</div>
                 </div>
                 <div class="vertical-divider"></div>
                 <div class="pkg-details-box">
                     @php
-                        $displayName = $package->days ?? 'Package';
-                        if (str_contains(strtolower($displayName), 'executive') || strlen($displayName) > 25) {
-                            $displayName = 'Comfort ' . ($package->days ?? '14');
-                        }
-                        if (!str_contains(strtolower($displayName), 'days') && !str_contains(strtolower($displayName), 'day')) {
-                            $displayName .= ' Days';
+                        $daysCount = (int) ($package->days ?? 14);
+                        if ($daysCount <= 10) {
+                            $displayName = 'Short Package';
+                        } else {
+                            $displayName = $daysCount . ' Days Package';
                         }
                     @endphp
                     <div class="days">{{ $displayName }}</div>
