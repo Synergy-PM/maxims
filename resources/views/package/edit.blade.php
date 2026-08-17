@@ -3,6 +3,29 @@
 @section('title', 'Edit Package')
 
 @section('content')
+    <style>
+        .accommodation-row {
+            position: relative;
+        }
+        .accommodation-row:not(:first-child) {
+            margin-top: 35px !important;
+        }
+        .accommodation-row-divider {
+            border: none;
+            border-top: 4px solid #000 !important;
+            opacity: 1 !important;
+            position: absolute;
+            top: -20px;
+            left: 0;
+            right: 0;
+            margin: 0 !important;
+        }
+        .accommodation-row:first-child .accommodation-row-divider {
+            display: none;
+        }
+    </style>
+    <!-- Summernote Lite CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
     <div class="content-page">
         <div class="content">
             <div class="container-fluid">
@@ -40,6 +63,8 @@
                                 type="button">ITINERARY</button></li>
                         <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-maktab"
                                 type="button">MAKTAB ADDRESS</button></li>
+                        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-notes"
+                                type="button">Notes</button></li>
                     </ul>
 
                     <div class="tab-content card">
@@ -273,6 +298,7 @@
                                             $pkgBFood = $acc->package_b_food_package ?? $acc->food_package;
                                         @endphp
                                         <div class="accommodation-row border rounded p-3 mb-3 position-relative">
+                                            <hr class="accommodation-row-divider" style="border-top: 3px solid #000; opacity: 1; margin-top: 0; margin-bottom: 15px;">
                                             <button type="button"
                                                 class="btn btn-sm btn-outline-danger remove-accommodation-row position-absolute top-0 end-0 m-2"><i
                                                     class="mdi mdi-delete"></i></button>
@@ -526,6 +552,7 @@
                                         </div>
                                     @empty
                                         <div class="accommodation-row border rounded p-3 mb-3 position-relative">
+                                            <hr class="accommodation-row-divider" style="border-top: 3px solid #000; opacity: 1; margin-top: 0; margin-bottom: 15px;">
                                             <button type="button"
                                                 class="btn btn-sm btn-outline-danger remove-accommodation-row position-absolute top-0 end-0 m-2"><i
                                                     class="mdi mdi-delete"></i></button>
@@ -1197,6 +1224,19 @@
                                 </div>
                             </div>
                         </div>
+
+                        {{-- Notes --}}
+                        <div class="tab-pane fade card" id="tab-notes">
+                            <div class="card-body">
+                                <h5 class="mb-3">Notes</h5>
+                                <div class="row g-3">
+                                    <div class="col-md-12">
+                                        <label class="form-label">Notes</label>
+                                        <textarea name="notes" id="notes-editor" class="form-control">{{ old('notes', $package->notes) }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="text-end" style="margin: 20px">
                             <button type="submit" class="btn btn-success">Save</button>
                         </div>
@@ -1445,5 +1485,30 @@
                 }
             });
         })();
+
+        // Initialize Summernote Lite
+        window.addEventListener('DOMContentLoaded', function() {
+            var checkjQuery = setInterval(function () {
+                if (typeof jQuery !== 'undefined') {
+                    clearInterval(checkjQuery);
+                    jQuery.getScript('https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js', function() {
+                        jQuery('#notes-editor').summernote({
+                            placeholder: 'Write package notes here...',
+                            tabsize: 2,
+                            height: 200,
+                            toolbar: [
+                                ['style', ['style']],
+                                ['font', ['bold', 'underline', 'clear']],
+                                ['color', ['color']],
+                                ['para', ['ul', 'ol', 'paragraph']],
+                                ['table', ['table']],
+                                ['insert', ['link', 'picture', 'video']],
+                                ['view', ['fullscreen', 'codeview', 'help']]
+                            ]
+                        });
+                    });
+                }
+            }, 100);
+        });
     </script>
 @endsection

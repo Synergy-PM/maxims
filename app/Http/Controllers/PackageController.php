@@ -190,6 +190,7 @@ class PackageController extends Controller
             'madinah_b.triple' => 'nullable|integer|min:0',
             'madinah_b.quad' => 'nullable|integer|min:0',
             'madinah_b.sharing' => 'nullable|integer|min:0',
+            'notes' => 'nullable|string',
         ]);
 
         $accommodations = $request->validate([
