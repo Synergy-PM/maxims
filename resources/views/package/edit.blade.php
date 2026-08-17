@@ -104,7 +104,14 @@
 
                                     <div class="col-md-3">
                                         <label class="form-label">Package Name</label>
+                                        <input type="text" name="package_title" class="form-control"
+                                            placeholder="e.g. Executive Platinum"
+                                            value="{{ old('package_title', $package->package_title) }}">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Package Name</label>
                                         <input type="text" name="name" class="form-control"
+                                            placeholder="e.g. INTERCON / FAIRMONT"
                                             value="{{ old('name', $package->name) }}">
                                     </div>
                                     <div class="col-md-3">

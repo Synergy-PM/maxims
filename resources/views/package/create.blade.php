@@ -103,8 +103,13 @@
 
                                     <div class="col-md-3">
                                         <label class="form-label">Package Name</label>
+                                        <input type="text" name="package_title" class="form-control"
+                                            placeholder="e.g. Executive Platinum" value="{{ old('package_title') }}">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Package Name</label>
                                         <input type="text" name="name" class="form-control"
-                                            placeholder="e.g. Premium Hajj Package" value="{{ old('name') }}">
+                                            placeholder="e.g. INTERCON / FAIRMONT" value="{{ old('name') }}">
                                     </div>
                                     <div class="col-md-3">
                                         <label class="form-label">Package Code</label>

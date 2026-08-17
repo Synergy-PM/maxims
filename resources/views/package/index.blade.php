@@ -49,7 +49,9 @@
                                     @forelse ($packages as $package)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td><strong>{{ $package->name }}</strong></td>
+                                            <td>
+                                                <strong>{{ $package->package_title ? $package->package_title . ($package->name ? ' - ' . $package->name : '') : $package->name }}</strong>
+                                            </td>
                                             <td>{{ $package->code }}</td>
                                             <td>{{ $package->maktab }}</td>
                                             <td>{{ $package->days }}</td>

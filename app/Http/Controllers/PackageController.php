@@ -146,6 +146,7 @@ class PackageController extends Controller
             'package_number' => 'nullable|string|max:100',
             'category' => 'nullable|string|max:150',
             'zone' => 'nullable|string|max:150',
+            'package_title' => 'nullable|string|max:200',
             'name' => 'nullable|string|max:200',
             'code' => 'nullable|string|max:100',
             'days' => 'nullable|integer',
