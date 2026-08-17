@@ -951,7 +951,7 @@
             </table>
         </div>
 
-        <div class="price-disclaimer">"Book Early, Prices and Packages Subject to Change."</div>
+        <div class="price-disclaimer">{!! $package->price_disclaimer ?? '"Book Early, Prices and Packages Subject to Change."' !!}</div>
 
         <!-- Bottom Icons and Terms/Notes -->
         <div class="row">

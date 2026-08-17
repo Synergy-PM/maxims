@@ -760,11 +760,28 @@
 
                         <div class="tab-pane fade card" id="tab-notes">
                             <div class="card-body">
-                                <h5 class="mb-3">Notes</h5>
+                                <h5 class="mb-3">Notes & Price Disclaimer</h5>
                                 <div class="row g-3">
                                     <div class="col-md-12">
-                                        <label class="form-label">Notes</label>
+                                        <label class="form-label fw-semibold">Notes</label>
                                         <textarea name="notes" id="notes-editor" class="form-control">{{ old('notes') }}</textarea>
+                                    </div>
+
+                                    <div class="col-md-12 mt-4">
+                                        <label class="form-label fw-semibold">Price Disclaimer</label>
+                                        <textarea name="price_disclaimer" id="disclaimer-editor" class="form-control">{{ old('price_disclaimer', '"Book Early, Prices and Packages Subject to Change."') }}</textarea>
+                                    </div>
+
+                                    <div class="col-md-6 mt-4">
+                                        <label class="form-label fw-semibold">Jeddah Airport Taxi Fare (SAR / Person)</label>
+                                        <input type="text" name="jeddah_taxi_fare" class="form-control"
+                                            placeholder="e.g. 600" value="{{ old('jeddah_taxi_fare', '600') }}">
+                                    </div>
+
+                                    <div class="col-md-6 mt-4">
+                                        <label class="form-label fw-semibold">Madinah Airport Taxi Fare (SAR / Person)</label>
+                                        <input type="text" name="madinah_taxi_fare" class="form-control"
+                                            placeholder="e.g. 150" value="{{ old('madinah_taxi_fare', '150') }}">
                                     </div>
                                 </div>
                             </div>
@@ -1029,6 +1046,18 @@
                                 ['table', ['table']],
                                 ['insert', ['link', 'picture', 'video']],
                                 ['view', ['fullscreen', 'codeview', 'help']]
+                            ]
+                        });
+                        jQuery('#disclaimer-editor').summernote({
+                            placeholder: 'Write price disclaimer here...',
+                            tabsize: 2,
+                            height: 100,
+                            toolbar: [
+                                ['style', ['style']],
+                                ['font', ['bold', 'underline', 'clear']],
+                                ['color', ['color']],
+                                ['para', ['ul', 'ol', 'paragraph']],
+                                ['view', ['codeview']]
                             ]
                         });
                     });
