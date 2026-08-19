@@ -450,7 +450,7 @@
         <!-- Header Banner -->
         <div class="header-banner">
             <div class="header-left">
-                <h1>{{ $package->name ?? 'EXECUTIVE PLATINUM' }}</h1>
+                <h1>{{ $package->package_title ?? $package->name ?? 'EXECUTIVE PLATINUM' }}</h1>
                 {{-- <div class="subtitle">{{ $package->travel_route ?? 'N/a'}}</div> --}}
             </div>
             <div class="header-right">
@@ -779,7 +779,7 @@
             </table>
         </div>
 
-        <div class="price-disclaimer">"Book Early, Prices and Packages Subject to Change."</div>
+        <div class="price-disclaimer">{!! $package->price_disclaimer ?? '"Book Early, Prices and Packages Subject to Change."' !!}</div>
 
         <!-- Bottom Icons and Terms/Notes -->
         <div class="row">

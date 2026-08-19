@@ -146,6 +146,7 @@ class PackageController extends Controller
             'package_number' => 'nullable|string|max:100',
             'category' => 'nullable|string|max:150',
             'zone' => 'nullable|string|max:150',
+            'package_title' => 'nullable|string|max:200',
             'name' => 'nullable|string|max:200',
             'code' => 'nullable|string|max:100',
             'days' => 'nullable|integer',
@@ -191,6 +192,9 @@ class PackageController extends Controller
             'madinah_b.quad' => 'nullable|integer|min:0',
             'madinah_b.sharing' => 'nullable|integer|min:0',
             'notes' => 'nullable|string',
+            'price_disclaimer' => 'nullable|string',
+            'jeddah_taxi_fare' => 'nullable|string|max:100',
+            'madinah_taxi_fare' => 'nullable|string|max:100',
         ]);
 
         $accommodations = $request->validate([
