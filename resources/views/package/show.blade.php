@@ -383,7 +383,8 @@
             border: 2px solid var(--gold);
             border-radius: 6px;
             padding: 6px;
-            height: 100%;
+            height: auto !important;
+            align-self: flex-start;
         }
 
         .icon-item {
@@ -954,8 +955,8 @@
         <div class="price-disclaimer">{!! $package->price_disclaimer ?? '"Book Early, Prices and Packages Subject to Change."' !!}</div>
 
         <!-- Bottom Icons and Terms/Notes -->
-        <div class="row">
-            <div class="col-lg-5 col-5 mb-2">
+        <div class="row align-items-start">
+            <div class="col-lg-5 col-5 mb-2 align-self-start">
                 <div class="icon-box">
                     <div class="row">
                         <div class="col-6 icon-item">
@@ -1014,16 +1015,16 @@
             </div>
 
             <div class="col-lg-7 col-7 mb-2">
-                <div class="notes-title">NOTES:</div>
+                {{-- <div class="notes-title">NOTES:</div> --}}
                 <div class="notes-content">
                     {!! $package->notes !!}
                 </div>
-                <div class="taxi-strip">FAMILY CAR/TAXI SERVICES AVAILABLE SAR
+                {{-- <div class="taxi-strip">FAMILY CAR/TAXI SERVICES AVAILABLE SAR
                     {{ $package->jeddah_taxi_fare ?? '600' }} PER PERSON FROM JEDDAH AIRPORT TO MAKKAH HOTEL &amp; V.V
                 </div>
                 <div class="taxi-strip">FAMILY CAR/TAXI SERVICES AVAILABLE SAR
                     {{ $package->madinah_taxi_fare ?? '150' }} PER PERSON FROM MEDINAH AIRPORT TO MEDINAH HOTEL &amp;
-                    V.V</div>
+                    V.V</div> --}}
 
             </div>
             <div class="sign-box">
