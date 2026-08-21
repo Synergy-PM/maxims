@@ -11,7 +11,9 @@
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Poppins:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet">
 
-    <!-- html2pdf.js Library -->
+    <!-- html2pdf.js, html2canvas & jsPDF Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
@@ -79,7 +81,7 @@
             max-width: 1000px;
             margin: 0 auto;
             background: #fff;
-            padding: 15px 20px;
+            padding: 8px 12px;
             box-shadow: 0 0 15px rgba(0, 0, 0, .15);
             box-sizing: border-box;
         }
@@ -215,7 +217,7 @@
             border-collapse: separate;
             border-spacing: 0;
             width: 100%;
-            font-size: .70rem;
+            font-size: .65rem;
         }
 
         .pkg-table th,
@@ -223,7 +225,7 @@
             border: 1px solid var(--border-color);
             text-align: center;
             vertical-align: middle;
-            padding: 3px 3px;
+            padding: 1.5px 2px;
         }
 
         /* Top Left Header Columns */
@@ -451,12 +453,12 @@
         }
 
         .notes-content {
-            font-size: .62rem;
-            line-height: 1.25;
+            font-size: .56rem;
+            line-height: 1.15;
         }
 
         .notes-content p {
-            margin-bottom: 3px;
+            margin-bottom: 2px;
         }
 
         .taxi-strip {
@@ -471,9 +473,9 @@
         }
 
         .sign-box {
-            margin-top: 20px;
+            margin-top: 6px;
             font-weight: 700;
-            font-size: .7rem;
+            font-size: .65rem;
             text-align: left;
             padding-right: 15px;
         }
@@ -549,18 +551,23 @@
 
             $pkgNested = function ($acc, $group, $key) use ($pkgAccVal) {
                 $flatKey = "{$group}_{$key}";
-                if (is_array($acc) && array_key_exists($flatKey, $acc)) {
-                    return $acc[$flatKey];
+                if (is_array($acc)) {
+                    if (isset($acc[$flatKey]) && $acc[$flatKey] !== null) {
+                        return $acc[$flatKey];
+                    }
+                    $g = $acc[$group] ?? null;
+                    return is_array($g) ? ($g[$key] ?? null) : null;
                 }
-                if (is_object($acc) && (isset($acc->$flatKey) || property_exists($acc, $flatKey))) {
-                    return $acc->$flatKey;
+                if (is_object($acc)) {
+                    if (isset($acc->$flatKey) && $acc->$flatKey !== null && $acc->$flatKey !== '') {
+                        return $acc->$flatKey;
+                    }
+                    $g = $pkgAccVal($acc, $group);
+                    if ($g) {
+                        return is_array($g) ? ($g[$key] ?? null) : ($g->$key ?? null);
+                    }
                 }
-
-                $g = $pkgAccVal($acc, $group);
-                if (!$g) {
-                    return null;
-                }
-                return is_array($g) ? $g[$key] ?? null : $g->$key ?? null;
+                return null;
             };
 
             $islamicMonths = [
@@ -577,55 +584,45 @@
                 11 => 'Zil Qadah',
                 12 => 'Zil Hajj',
             ];
-            $islamicMonthLengths = [
-                1 => 30,
-                2 => 29,
-                3 => 30,
-                4 => 29,
-                5 => 30,
-                6 => 29,
-                7 => 30,
-                8 => 29,
-                9 => 30,
-                10 => 29,
-                11 => 30,
-                12 => 30,
-            ];
-
-            $addHijriDays = function ($startDay, $startMonth, $daysToAdd) use ($islamicMonthLengths) {
-                $day = (int) $startDay;
-                $month = (int) $startMonth;
-                for ($i = 0; $i < $daysToAdd; $i++) {
-                    $day++;
-                    if ($day > ($islamicMonthLengths[$month] ?? 30)) {
-                        $day = 1;
-                        $month = $month == 12 ? 1 : $month + 1;
+            $getHijriDate = function ($date) use ($islamicMonths) {
+                if (!$date) {
+                    return ['day' => 0, 'month' => 0, 'formatted' => '-'];
+                }
+                if (class_exists('\IntlDateFormatter')) {
+                    try {
+                        $fmtD = new \IntlDateFormatter(
+                            'en_US@calendar=islamic-umalqura',
+                            \IntlDateFormatter::FULL,
+                            \IntlDateFormatter::NONE,
+                            'UTC',
+                            \IntlDateFormatter::TRADITIONAL,
+                            'd',
+                        );
+                        $fmtM = new \IntlDateFormatter(
+                            'en_US@calendar=islamic-umalqura',
+                            \IntlDateFormatter::FULL,
+                            \IntlDateFormatter::NONE,
+                            'UTC',
+                            \IntlDateFormatter::TRADITIONAL,
+                            'M',
+                        );
+                        $targetDate = $date instanceof \DateTimeInterface ? $date : new \DateTime($date);
+                        $d = (int) $fmtD->format($targetDate);
+                        $m = (int) $fmtM->format($targetDate);
+                        $mName = $islamicMonths[$m] ?? 'Zil Hajj';
+                        return [
+                            'day' => $d,
+                            'month' => $m,
+                            'formatted' => sprintf('%02d %s', $d, $mName),
+                        ];
+                    } catch (\Throwable $e) {
                     }
                 }
-                return [$day, $month];
+                return ['day' => 0, 'month' => 0, 'formatted' => '-'];
             };
-
-            $makkahHotelA = '-';
-            $makkahHotelB = '-';
-            $makkahStarsA = 0;
-            $makkahStarsB = 0;
-
-            if (!empty($package->accommodations)) {
-                foreach ($package->accommodations as $acc) {
-                    $place = strtolower($pkgAccVal($acc, 'place') ?? '');
-                    if (str_contains($place, 'makkah') && !str_contains($place, 'azizia')) {
-                        $makkahHotelA = $pkgNested($acc, 'package_a', 'hotel') ?: $makkahHotelA;
-                        $makkahHotelB = $pkgNested($acc, 'package_b', 'hotel') ?: $makkahHotelB;
-                        $makkahStarsA = (int) ($pkgNested($acc, 'package_a', 'saudi_star_rating') ?: $makkahStarsA);
-                        $makkahStarsB = (int) ($pkgNested($acc, 'package_b', 'saudi_star_rating') ?: $makkahStarsB);
-                    }
-                }
-            }
 
             $itineraryList = [];
             $dayCounter = 1;
-            $hijriStartDay = $package->hijri_start_day ?? 4;
-            $hijriStartMonth = $package->hijri_start_month ?? 12;
 
             if (!empty($package->accommodations) && count($package->accommodations) > 0) {
                 foreach ($package->accommodations as $acc) {
@@ -635,6 +632,9 @@
                     $checkOut = $checkOutRaw ? \Carbon\Carbon::parse($checkOutRaw) : null;
                     $hotelA = $pkgNested($acc, 'package_a', 'hotel') ?? '-';
                     $hotelB = $pkgNested($acc, 'package_b', 'hotel') ?? '-';
+                    $foodA = $pkgNested($acc, 'package_a', 'food_package');
+                    $foodB = $pkgNested($acc, 'package_b', 'food_package');
+
                     $sameForBoth = (bool) $pkgAccVal($acc, 'same_for_both');
                     if (trim($hotelA) === trim($hotelB) || empty($hotelB) || trim($hotelB) === '-') {
                         $sameForBoth = true;
@@ -646,35 +646,33 @@
                     if ($checkIn && $checkOut) {
                         $period = \Carbon\CarbonPeriod::create($checkIn, $checkOut->copy()->subDay());
                         foreach ($period as $date) {
-                            $hijriDate = '-';
-                            $isMashair = false;
-                            $hDayVal = 0;
-                            if ($hijriStartDay && $hijriStartMonth) {
-                                [$hDay, $hMonth] = $addHijriDays($hijriStartDay, $hijriStartMonth, $dayCounter - 1);
-                                $hijriDate = sprintf('%02d %s', $hDay, $islamicMonths[$hMonth] ?? '');
-                                if ($hMonth == 12 && $hDay >= 8 && $hDay <= 11) {
-                                    $isMashair = true;
-                                    $hDayVal = $hDay;
-                                }
-                            }
+                            $hijri = $getHijriDate($date);
+                            $hDay = $hijri['day'];
+                            $hMonth = $hijri['month'];
+                            $isMashair = ($hMonth == 12 && $hDay >= 8 && $hDay <= 11);
 
                             if ($isMashair) {
                                 $servicesText =
-                                    $hDayVal == 9
+                                    $hDay == 9
                                         ? 'Arafat Air Conditioned Marquee (Exclusive Services)'
                                         : 'Zone 1 near to Jamarat A Category (Exclusive Services)';
+
+                                $hotelAFull = $servicesText . ' / ' . $hotelA;
+                                $hotelBFull = $sameForBoth ? $hotelAFull : ($servicesText . ' / ' . $hotelB);
 
                                 $itineraryList[] = [
                                     'day' => sprintf('%02d', $dayCounter++),
                                     'date' => $date->format('d M'),
-                                    'hijri' => $hijriDate,
-                                    'city' => $hDayVal == 8 ? 'To Mina' : 'Mina',
+                                    'hijri' => $hijri['formatted'],
+                                    'city' => $hDay == 8 ? 'To Mina' : 'Mina',
                                     'is_mashair' => true,
-                                    'same_for_both' => true,
-                                    'hotel_a' => $servicesText . ' / ' . $hotelA,
+                                    'same_for_both' => $sameForBoth,
+                                    'hotel_a' => $hotelAFull,
                                     'stars_a' => '',
-                                    'hotel_b' => $servicesText . ' / ' . $hotelB,
+                                    'hotel_b' => $hotelBFull,
                                     'stars_b' => '',
+                                    'food_a' => null,
+                                    'food_b' => null,
                                     'azizia_date' => $pkgAccVal($acc, 'azizia_date')
                                         ? \Carbon\Carbon::parse($pkgAccVal($acc, 'azizia_date'))->format('d M')
                                         : null,
@@ -684,14 +682,16 @@
                                 $itineraryList[] = [
                                     'day' => sprintf('%02d', $dayCounter++),
                                     'date' => $date->format('d M'),
-                                    'hijri' => $hijriDate,
+                                    'hijri' => $hijri['formatted'],
                                     'city' => $placeVal,
                                     'is_mashair' => false,
                                     'same_for_both' => $sameForBoth,
-                                    'hotel_a' => $pkgNested($acc, 'package_a', 'hotel') ?? '-',
+                                    'hotel_a' => $hotelA,
                                     'stars_a' => str_repeat('★', $starsA),
-                                    'hotel_b' => $pkgNested($acc, 'package_b', 'hotel') ?? '-',
+                                    'hotel_b' => $hotelB,
                                     'stars_b' => str_repeat('★', $starsB),
+                                    'food_a' => $foodA,
+                                    'food_b' => $foodB,
                                     'azizia_date' => $pkgAccVal($acc, 'azizia_date')
                                         ? \Carbon\Carbon::parse($pkgAccVal($acc, 'azizia_date'))->format('d M')
                                         : null,
@@ -712,40 +712,12 @@
             }
 
             if ($finalCheckOutDate) {
-                $hijriDate = '-';
-                if ($hijriStartDay && $hijriStartMonth) {
-                    [$hDay, $hMonth] = $addHijriDays($hijriStartDay, $hijriStartMonth, $dayCounter - 1);
-                    $hijriDate = sprintf('%02d %s', $hDay, $islamicMonths[$hMonth] ?? '');
-                } elseif (class_exists('\IntlDateFormatter')) {
-                    try {
-                        $fmtD = new \IntlDateFormatter(
-                            'en_US@calendar=islamic-umalqura',
-                            \IntlDateFormatter::FULL,
-                            \IntlDateFormatter::NONE,
-                            'UTC',
-                            \IntlDateFormatter::TRADITIONAL,
-                            'd',
-                        );
-                        $fmtM = new \IntlDateFormatter(
-                            'en_US@calendar=islamic-umalqura',
-                            \IntlDateFormatter::FULL,
-                            \IntlDateFormatter::NONE,
-                            'UTC',
-                            \IntlDateFormatter::TRADITIONAL,
-                            'M',
-                        );
-                        $hDayVal = (int) $fmtD->format($finalCheckOutDate->toDateString());
-                        $hMonthVal = (int) $fmtM->format($finalCheckOutDate->toDateString());
-                        $hMonthName = $islamicMonths[$hMonthVal] ?? 'Zil Hajj';
-                        $hijriDate = sprintf('%02d %s', $hDayVal, $hMonthName);
-                    } catch (\Throwable $e) {
-                    }
-                }
+                $hijri = $getHijriDate($finalCheckOutDate);
 
                 $itineraryList[] = [
                     'day' => sprintf('%02d', $dayCounter++),
                     'date' => $finalCheckOutDate->format('d M'),
-                    'hijri' => $hijriDate,
+                    'hijri' => $hijri['formatted'],
                     'city' => '',
                     'is_mashair' => true,
                     'same_for_both' => true,
@@ -753,6 +725,8 @@
                     'stars_a' => '',
                     'hotel_b' => 'DEPARTURE TO AIRPORT',
                     'stars_b' => '',
+                    'food_a' => null,
+                    'food_b' => null,
                     'azizia_date' => null,
                 ];
             }
@@ -954,7 +928,7 @@
                         <div class="col-6 icon-item">
                             <div>
                                 <img src="{{ asset('assets/images/package_images/1.png') }}" alt="Food"
-                                    width="40" height="40" style="object-fit: contain;">
+                                    width="26" height="26" style="object-fit: contain;">
                             </div>
                             {{-- <div class="label">MAKKAH AND <br> MEDINAH HOTELS</div> --}}
                             <div class="desc">MAKKAH AND <br> MEDINAH HOTELS <br> HALF BOARD BASIS</div>
@@ -962,7 +936,7 @@
                         <div class="col-6 icon-item">
                             <div>
                                 <img src="{{ asset('assets/images/package_images/2.png') }}" alt="Food"
-                                    width="40" height="40" style="object-fit: contain;">
+                                    width="26" height="26" style="object-fit: contain;">
                             </div>
                             <div class="desc">
                                 FULL BOARD BUFFET <br>
@@ -973,21 +947,21 @@
                         <div class="col-6 icon-item">
                             <div>
                                 <img src="{{ asset('assets/images/package_images/2.png') }}" alt="Food"
-                                    width="40" height="40" style="object-fit: contain;">
+                                    width="26" height="26" style="object-fit: contain;">
                             </div>
                             <div class="desc">AZIZIYA ACCOMMODATION <br>QUAD SHARING, FULL <br>BOARD BUFFET <br> <small>DETAILS ON PAGE 25</small></div>
                         </div>
                         <div class="col-6 icon-item">
                             <div>
                                 <img src="{{ asset('assets/images/package_images/3.png') }}" alt="Food"
-                                    width="40" height="40" style="object-fit: contain;">
+                                    width="26" height="26" style="object-fit: contain;">
                             </div>
                             <div class="desc">PRIVATE BATHROOM <br> IN MINA & ARAFAT FOR <br> UB GROUP</div>
                         </div>
                         <div class="col-6 icon-item">
                             <div>
                                 <img src="{{ asset('assets/images/package_images/4.png') }}" alt="Food"
-                                    width="40" height="40" style="object-fit: contain;">
+                                    width="26" height="26" style="object-fit: contain;">
                             </div>
                             <div class="desc"><small>BULLET TRAIN MAK-MED OR MED-MAK</small><br> PRIVATE LUXURY BUSSES <br> MODEL 2025 FOR MASHAER <br> DAYS WITH BATHROOM</div>
                         </div>
@@ -1017,27 +991,80 @@
     <script>
         function downloadPackagePDF() {
             const element = document.getElementById('packageSheet');
-            const options = {
-                margin: [4, 4, 4, 4],
-                filename: '{{ $package->code ?? 'Package' }}_{{ $package->days ?? '14' }}_Days_Package.pdf',
-                image: {
-                    type: 'jpeg',
-                    quality: 0.98
-                },
-                html2canvas: {
+            if (!element) return;
+
+            const filename = '{{ $package->code ?? 'Package' }}_{{ $package->days ?? '14' }}_Days_Package.pdf';
+
+            if (typeof html2canvas !== 'undefined') {
+                html2canvas(element, {
                     scale: 2,
                     useCORS: true,
-                    letterRendering: true
-                },
-                jsPDF: {
-                    unit: 'mm',
-                    format: 'a4',
-                    orientation: 'portrait'
-                }
-            };
+                    logging: false,
+                    scrollY: 0
+                }).then(function(canvas) {
+                    const imgData = canvas.toDataURL('image/jpeg', 0.98);
+                    const jsPDFClass = (window.jspdf && window.jspdf.jsPDF) ? window.jspdf.jsPDF : (window.jsPDF || null);
+                    if (jsPDFClass) {
+                        const pdf = new jsPDFClass('p', 'mm', 'a4');
+                        const pdfWidth = 210;
+                        const pdfHeight = 297;
+                        const margin = 2; // 2mm margin
+                        const printableWidth = pdfWidth - (margin * 2);
+                        const printableHeight = pdfHeight - (margin * 2);
 
-            html2pdf().set(options).from(element).save();
+                        let renderWidth = printableWidth;
+                        let renderHeight = (canvas.height * renderWidth) / canvas.width;
+                        let posX = margin;
+                        let posY = margin;
+
+                        if (renderHeight > printableHeight) {
+                            const ratio = printableHeight / renderHeight;
+                            renderHeight = printableHeight;
+                            renderWidth = renderWidth * ratio;
+                            posX = margin + ((printableWidth - renderWidth) / 2);
+                        }
+
+                        pdf.addImage(imgData, 'JPEG', posX, posY, renderWidth, renderHeight);
+                        pdf.save(filename);
+                        return;
+                    }
+
+                    // Fallback to standard html2pdf
+                    html2pdf().set({
+                        margin: [2, 2, 2, 2],
+                        filename: filename,
+                        image: { type: 'jpeg', quality: 0.98 },
+                        html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
+                        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                    }).from(element).save();
+                }).catch(function(err) {
+                    console.error('Error generating PDF:', err);
+                    html2pdf().set({
+                        margin: [2, 2, 2, 2],
+                        filename: filename,
+                        image: { type: 'jpeg', quality: 0.98 },
+                        html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
+                        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                    }).from(element).save();
+                });
+            } else {
+                html2pdf().set({
+                    margin: [2, 2, 2, 2],
+                    filename: filename,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                }).from(element).save();
+            }
         }
+
+        @if (!empty($auto_download))
+            document.addEventListener('DOMContentLoaded', function() {
+                setTimeout(function() {
+                    downloadPackagePDF();
+                }, 1000);
+            });
+        @endif
     </script>
 </body>
 
