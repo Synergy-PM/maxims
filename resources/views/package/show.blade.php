@@ -501,7 +501,7 @@
             if (!empty($package->accommodations)) {
                 foreach ($package->accommodations as $acc) {
                     $placeVal = $pkgAccVal($acc, 'place') ?? '';
-                    if (str_contains(strtolower($placeVal), 'azizia')) {
+                    if (str_contains(strtolower($placeVal), 'aziz')) {
                         $hasAzizia = true;
                         break;
                     }
@@ -681,9 +681,6 @@
                                 ];
                             } else {
                                 $placeVal = $pkgAccVal($acc, 'place') ?? 'Makkah';
-                                if (str_contains(strtolower($placeVal), 'azizia')) {
-                                    $placeVal = 'Makkah';
-                                }
                                 $itineraryList[] = [
                                     'day' => sprintf('%02d', $dayCounter++),
                                     'date' => $date->format('d M'),
@@ -807,12 +804,6 @@
                                     @if (!empty($item['stars_a']))
                                         <span class="stars">{{ $item['stars_a'] }}</span>
                                     @endif
-                                    @if (!empty($item['food_a']))
-                                        <div
-                                            style="font-size: 0.72rem; color: #555; font-weight: 500; margin-top: 1px;">
-                                            ({{ $item['food_a'] }})
-                                        </div>
-                                    @endif
                                     {{-- @if (!empty($item['azizia_date']))
                                         <div style="font-size: 0.72rem; color: #d9534f; font-weight: 600; margin-top: 1px;">Azizia: {{ $item['azizia_date'] }}</div>
                                     @endif --}}
@@ -823,11 +814,6 @@
                                     @if (!empty($item['stars_a']))
                                         <span class="stars">{{ $item['stars_a'] }}</span>
                                     @endif
-                                    @if (!empty($item['food_a']))
-                                        <div
-                                            style="font-size: 0.72rem; color: #555; font-weight: 500; margin-top: 1px;">
-                                            ({{ $item['food_a'] }})</div>
-                                    @endif
                                     {{-- @if (!empty($item['azizia_date']))
                                         <div style="font-size: 0.72rem; color: #d9534f; font-weight: 600; margin-top: 1px;">Azizia: {{ $item['azizia_date'] }}</div>
                                     @endif --}}
@@ -836,11 +822,6 @@
                                     {{ $item['hotel_b'] }}
                                     @if (!empty($item['stars_b']))
                                         <span class="stars">{{ $item['stars_b'] }}</span>
-                                    @endif
-                                    @if (!empty($item['food_b']))
-                                        <div
-                                            style="font-size: 0.72rem; color: #555; font-weight: 500; margin-top: 1px;">
-                                            ({{ $item['food_b'] }})</div>
                                     @endif
                                     {{-- @if (!empty($item['azizia_date']))
                                         <div style="font-size: 0.72rem; color: #d9534f; font-weight: 600; margin-top: 1px;">Azizia: {{ $item['azizia_date'] }}</div>
