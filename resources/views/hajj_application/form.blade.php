@@ -151,16 +151,6 @@
             left: 0;
         }
 
-        .page-badge {
-            background: #444;
-            color: #fff;
-            font-weight: 800;
-            font-size: .68rem;
-            padding: 3px 12px;
-            border-radius: 2px;
-            display: inline-block;
-        }
-
         .btn-submit-app {
             background: var(--navy);
             color: #fff;
@@ -451,13 +441,12 @@
 
             <!-- Bottom Declaration and Submit Row -->
             <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
-                <div class="page-badge">
-                    PAGE 41
-                </div>
                 <div>
-                    <label class="me-3 fw-semibold" style="font-size: 0.8rem;">
+                    <label class="fw-semibold" style="font-size: 0.8rem;">
                         <input type="checkbox" required> I confirm the above information is accurate &amp; agree to terms.
                     </label>
+                </div>
+                <div>
                     <button type="submit" class="btn-submit-app">Submit Application ➔</button>
                 </div>
             </div>

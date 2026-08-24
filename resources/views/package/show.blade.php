@@ -79,11 +79,20 @@
         /* Sheet Document Container */
         .sheet {
             max-width: 1000px;
-            margin: 0 auto;
+            width: 1000px;
+            min-height: 1414px;
+            margin: 0 auto 30px auto;
             background: #fff;
-            padding: 8px 12px;
+            padding: 10px 14px 20px 14px;
             box-shadow: 0 0 15px rgba(0, 0, 0, .15);
             box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .sheet-content {
+            flex: 1 0 auto;
         }
 
         /* Top Header Banner */
@@ -473,39 +482,29 @@
         }
 
         .sign-box {
-            margin-top: 6px;
             font-weight: 700;
-            font-size: .65rem;
+            font-size: .8rem;
             text-align: left;
-            padding-right: 15px;
-        }
-
-        /* Page Badge */
-        .page-badge {
-            background: #444;
-            color: #fff;
-            font-weight: 800;
-            font-size: .65rem;
-            padding: 2px 12px;
-            border-radius: 2px;
-            letter-spacing: 0.5px;
-            display: inline-block;
+            margin-top: auto;
+            padding-top: 15px;
+            padding-bottom: 5px;
+            width: 100%;
         }
 
         /* Services Sheet 2 Styling */
         .services-header-banner {
             background: #3e3e3e;
             color: #ffffff;
-            padding: 8px 15px;
-            margin-bottom: 12px;
+            padding: 9px 15px;
+            margin-bottom: 15px;
             text-align: center;
-            border-radius: 3px;
+            border-radius: 2px;
         }
 
         .services-header-banner h2 {
             font-family: 'Poppins', sans-serif;
             font-weight: 800;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             margin: 0;
             letter-spacing: 0.5px;
             text-transform: uppercase;
@@ -513,31 +512,31 @@
         }
 
         .services-sheet-body {
-            font-size: 0.65rem;
-            color: #222;
-            line-height: 1.35;
+            font-size: 0.72rem;
+            color: #1a1a1a;
+            line-height: 1.45;
         }
 
         .services-sheet-body ul {
-            padding-left: 16px;
-            margin-bottom: 8px;
+            padding-left: 18px;
+            margin-bottom: 10px;
         }
 
         .services-sheet-body li {
-            margin-bottom: 2.5px;
+            margin-bottom: 3.5px;
         }
 
         .services-sheet-body p {
-            margin-bottom: 6px;
-        }
-
-        .services-sheet-body ol {
-            padding-left: 16px;
             margin-bottom: 8px;
         }
 
+        .services-sheet-body ol {
+            padding-left: 18px;
+            margin-bottom: 10px;
+        }
+
         .services-sheet-body ol li {
-            margin-bottom: 2.5px;
+            margin-bottom: 3.5px;
         }
 
         .services-sheet-body strong {
@@ -579,8 +578,9 @@
             $firstCityFirst = $firstCity . ' FIRST';
         @endphp
 
-        <!-- Header Banner -->
-        <div class="header-banner">
+        <div class="sheet-content">
+            <!-- Header Banner -->
+            <div class="header-banner">
             <div class="header-left">
                 <h1>{{ $package->package_title ?? 'EXECUTIVE PLATINUM' }}</h1>
                 <div class="subtitle"> {{ $package->name ?? '-' }} </div>
@@ -1013,7 +1013,7 @@
                                 <img src="{{ asset('assets/images/package_images/2.png') }}" alt="Food"
                                     width="26" height="26" style="object-fit: contain;">
                             </div>
-                            <div class="desc">AZIZIYA ACCOMMODATION <br>QUAD SHARING, FULL <br>BOARD BUFFET <br> <small>DETAILS ON PAGE 25</small></div>
+                            <div class="desc">AZIZIYA ACCOMMODATION <br>QUAD SHARING, FULL <br>BOARD BUFFET <br> </div>
                         </div>
                         <div class="col-6 icon-item">
                             <div>
@@ -1046,14 +1046,11 @@
                     V.V</div> --}}
 
             </div>
-            <div class="col-12 d-flex justify-content-between align-items-center mt-2 pt-1">
-                <div class="sign-box" style="margin-top: 0;">
-                    Applicant Sign: ____________________
-                </div>
-                <div class="page-badge">
-                    PAGE 32
-                </div>
-            </div>
+        </div>
+        </div>
+
+        <div class="sign-box">
+            Applicant Sign: ____________________
         </div>
     </div>
 
@@ -1103,21 +1100,18 @@
     @endphp
 
     <div class="sheet mb-4" id="packageSheet2">
-        <div class="services-header-banner">
-            <h2>{{ $package->services_title ?? 'PLATINUM PACKAGES SERVICES (WITH AZIZIYA)' }}</h2>
+        <div class="sheet-content">
+            <div class="services-header-banner">
+                <h2>{{ $package->services_title ?? 'PLATINUM PACKAGES SERVICES (WITH AZIZIYA)' }}</h2>
+            </div>
+
+            <div class="services-sheet-body">
+                {!! $package->services_content ?? $defaultServicesContent !!}
+            </div>
         </div>
 
-        <div class="services-sheet-body">
-            {!! $package->services_content ?? $defaultServicesContent !!}
-        </div>
-
-        <div class="d-flex justify-content-between align-items-center mt-3 pt-2" style="border-top: 1px solid #ccc;">
-            <div class="sign-box" style="margin-top: 0; font-size: 0.75rem;">
-                Applicant Sign: ____________________
-            </div>
-            <div class="page-badge">
-                PAGE 34
-            </div>
+        <div class="sign-box">
+            Applicant Sign: ____________________
         </div>
     </div>
 

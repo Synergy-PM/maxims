@@ -138,16 +138,6 @@
             object-fit: cover;
         }
 
-        .page-badge {
-            background: #444;
-            color: #fff;
-            font-weight: 800;
-            font-size: .68rem;
-            padding: 2px 12px;
-            border-radius: 2px;
-            display: inline-block;
-        }
-
         @media print {
             body {
                 background: #fff;
@@ -413,11 +403,8 @@
             </div>
         </div>
 
-        <!-- Bottom Footer with Sign & Page Badge -->
-        <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
-            <div class="page-badge">
-                PAGE 41
-            </div>
+        <!-- Bottom Footer with Sign -->
+        <div class="d-flex justify-content-end align-items-center mt-3 pt-2 border-top">
             <div class="fw-bold" style="font-size: 0.78rem;">
                 Applicant Sign: ________________________________
             </div>
