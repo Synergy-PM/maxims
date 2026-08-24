@@ -20,6 +20,7 @@ use App\Http\Controllers\HotelController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\AirlineController;
 use App\Http\Controllers\TrainController;
+use App\Http\Controllers\HajjApplicationController;
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -28,6 +29,12 @@ Route::middleware('guest')->group(function () {
     Route::get('/', function () {
         return redirect()->route('login');
     });
+});
+
+Route::controller(HajjApplicationController::class)->group(function () {
+    Route::get('/hajj-application/{package_id?}', 'form')->name('hajj-application.form');
+    Route::post('/hajj-application/submit', 'submit')->name('hajj-application.submit');
+    Route::get('/hajj-application/success/{id}', 'success')->name('hajj-application.success');
 });
 
 Route::get('/booking/{booking}/hajj-agreement', [BookingController::class, 'agreement'])->middleware('signed')->name('booking.agreement');
@@ -181,6 +188,14 @@ Route::middleware('auth')->group(function () {
                 Route::delete('delete/{id}', 'destroy')->name('package.delete');
                 Route::get('trash', 'trash')->name('package.trash');
                 Route::get('restore/{id}', 'restore')->name('package.restore');
+            });
+
+        Route::controller(HajjApplicationController::class)
+            ->prefix('hajj-application')->group(function () {
+                Route::get('/', 'index')->name('hajj-application.index');
+                Route::get('show/{id}', 'show')->name('hajj-application.show');
+                Route::patch('status/{id}', 'updateStatus')->name('hajj-application.updateStatus');
+                Route::delete('delete/{id}', 'destroy')->name('hajj-application.delete');
             });
 
         Route::controller(TrainingSessionController::class)

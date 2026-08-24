@@ -195,6 +195,8 @@ class PackageController extends Controller
             'price_disclaimer' => 'nullable|string',
             'jeddah_taxi_fare' => 'nullable|string|max:100',
             'madinah_taxi_fare' => 'nullable|string|max:100',
+            'services_title' => 'nullable|string|max:255',
+            'services_content' => 'nullable|string',
         ]);
 
         $accommodations = $request->validate([

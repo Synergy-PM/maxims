@@ -69,4 +69,9 @@ class Package extends Model
     {
         return $this->belongsToMany(TrainingSession::class, 'package_training_session');
     }
+
+    public function hajjApplications()
+    {
+        return $this->hasMany(HajjApplication::class);
+    }
 }

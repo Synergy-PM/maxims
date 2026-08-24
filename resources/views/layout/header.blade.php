@@ -166,12 +166,18 @@
                            <span>Companies</span>
                        </a>
                    </li>
-                   <li>
-                       <a href="{{ route('package.index') }}">
-                           <i data-feather="package"></i>
-                           <span>Packages</span>
-                       </a>
-                   </li>
+                    <li>
+                        <a href="{{ route('package.index') }}">
+                            <i data-feather="package"></i>
+                            <span>Packages</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('hajj-application.index') }}">
+                            <i data-feather="file-text"></i>
+                            <span>Hajj Applications</span>
+                        </a>
+                    </li>
                    <li>
                        <a href="{{ route('training-session.index') }}">
                            <i data-feather="book-open"></i>

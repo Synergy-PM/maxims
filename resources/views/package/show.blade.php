@@ -479,6 +479,70 @@
             text-align: left;
             padding-right: 15px;
         }
+
+        /* Page Badge */
+        .page-badge {
+            background: #444;
+            color: #fff;
+            font-weight: 800;
+            font-size: .65rem;
+            padding: 2px 12px;
+            border-radius: 2px;
+            letter-spacing: 0.5px;
+            display: inline-block;
+        }
+
+        /* Services Sheet 2 Styling */
+        .services-header-banner {
+            background: #3e3e3e;
+            color: #ffffff;
+            padding: 8px 15px;
+            margin-bottom: 12px;
+            text-align: center;
+            border-radius: 3px;
+        }
+
+        .services-header-banner h2 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 1.1rem;
+            margin: 0;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: #ffffff;
+        }
+
+        .services-sheet-body {
+            font-size: 0.65rem;
+            color: #222;
+            line-height: 1.35;
+        }
+
+        .services-sheet-body ul {
+            padding-left: 16px;
+            margin-bottom: 8px;
+        }
+
+        .services-sheet-body li {
+            margin-bottom: 2.5px;
+        }
+
+        .services-sheet-body p {
+            margin-bottom: 6px;
+        }
+
+        .services-sheet-body ol {
+            padding-left: 16px;
+            margin-bottom: 8px;
+        }
+
+        .services-sheet-body ol li {
+            margin-bottom: 2.5px;
+        }
+
+        .services-sheet-body strong {
+            color: #000;
+        }
     </style>
 </head>
 
@@ -490,7 +554,7 @@
         <button class="btn-download" onclick="downloadPackagePDF()">📥 Download PDF</button>
     </div>
 
-    <div class="sheet" id="packageSheet">
+    <div class="sheet mb-4" id="packageSheet1">
         @php
             $pkgAccVal = function ($acc, $key) {
                 if (is_array($acc)) {
@@ -982,70 +1046,154 @@
                     V.V</div> --}}
 
             </div>
-            <div class="sign-box">
+            <div class="col-12 d-flex justify-content-between align-items-center mt-2 pt-1">
+                <div class="sign-box" style="margin-top: 0;">
+                    Applicant Sign: ____________________
+                </div>
+                <div class="page-badge">
+                    PAGE 32
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page 2 Sheet: Platinum Packages Services (Matching Image 1) -->
+    @php
+        $defaultServicesContent = '<ul>
+    <li>Meet & assist at the airport Jeddah/Medinah Hajj Terminal. (Sub to Approval Handling).</li>
+    <li>Group arrival transfer by Bus from Airport to hotel is provided by NAQABA / SAUDI MOULLEM.</li>
+    <li>Average 04 person sharing Accommodation in Aziziya with air condition A class building with proper beds (Pillow, Bed sheet, Blanket).</li>
+    <li>Fullboard meal (Breakfast, Lunch & dinner) with hot & Coldrink to serve in Aziziya building except Hajj Days.</li>
+    <li>Aziziya Services please reference to Page # 25 & 25A.</li>
+    <li>Accommodation in Makkah hotels with Breakfast & Dinner (by Saudi Star Standard).</li>
+    <li>Accommodation in Medinah hotels with Breakfast & Dinner (by Saudi Star Standard).</li>
+    <li>During peak days from the 1st to the 14th of Zill Hajj, the check-in time at hotels in Makkah and Medinah is after Isha prayers, in accordance with hotel policies and due to the large number of check-ins and check-outs. The check-out time is 12 PM</li>
+    <li>Fullboard meal to be serve in Mina from 08 Zil hajj to 12 Zil hajj.</li>
+    <li>5 days Platinum Arrangment between 08 Zil hajj to 12 Zil hajj with retaining room in Aziziya.</li>
+    <li>Private Special Luxury Busses with Bathroom (Mina - Arafat - Muzdalfa - Mina).</li>
+    <li>Transfer Makkah to Medinah or Medinah to Makkah by Bus/Train.</li>
+    <li>Best location MAKTAB (A) in mina very near to Jamarat, with Sofa Cum Bed (size 50 to 55cm) Private Toilet, for Group MAKTAB (A) Category Hujjaj. (Indian and western) (Services by Saudi Company)</li>
+    <li>(Mashaer Hajj Services) Pillow, Bed sheet, blanket, Air conditioned tent, buffet meal & Hot & Coldrink. Avg 16 people to a tent (Tent may be combined). (Services by Saudi Company)</li>
+    <li>Tent in Arafat with meals and Hot & Coldrink. Floor Mat & snack box in Muzdalfa. (Services by Saudi Company)</li>
+    <li>Mic and Speaker are installed to the religious speeches for guidance.</li>
+</ul>
+
+<p><strong>Airline Ticket not included in this package<br>
+(Approx PKR 335,000/- FROM KARACHI & PKR 345,000/- FROM NORTH PAKISTAN.)</strong></p>
+
+<p>Different fares for Hajis coming from international destination.</p>
+<ul>
+    <li>Saudi Airline, Emirates, Oman, PIA, Qatar, SereneAir, FlyNas, Turkish Airlines, Fly Dubai etc Inclusive PSF.</li>
+    <li>International ticket may be upgraded to Business class by paying suppliment. (Subject to Availability)</li>
+    <li>Ziyarat in Medinah with guidance.</li>
+    <li>Hajj training program and guidance in Pakistan / Saudia.</li>
+    <li>Religious guide book etc.</li>
+    <li>Assitance in doing Qurbani Approx Charges SAR 720/-</li>
+    <li>Assitance in Tawaf - e - Ziyara.</li>
+</ul>
+
+<p><strong>IMPORTANT NOTES:</strong></p>
+<ol>
+    <li>No of days of stay in Makkah can be reduced but prices remain the same.</li>
+    <li>Shuttle will be provided two times a day for drop to Haram till 07 Zil hajj, (Shuttle services subject to Saudi Laws and traffic).</li>
+    <li>Abraaj Tower Means Swiss Maqam, Hajar tower, Swissotel, Safwa orchid, Al marwa etc & Project of Jabal e Omar, means Hayat Regency, Address Hotel, Jumeirah Hotel, Hilton Convention, Double Tree, Marriot Hotel etc.</li>
+    <li>Kaba view Supplement SAR 3800/- per person.</li>
+    <li>Rates & Hotels subject to change (Currency Difference) prices are subject to change. Even after booking /Saudi Talimaat changes.</li>
+</ol>';
+    @endphp
+
+    <div class="sheet mb-4" id="packageSheet2">
+        <div class="services-header-banner">
+            <h2>{{ $package->services_title ?? 'PLATINUM PACKAGES SERVICES (WITH AZIZIYA)' }}</h2>
+        </div>
+
+        <div class="services-sheet-body">
+            {!! $package->services_content ?? $defaultServicesContent !!}
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mt-3 pt-2" style="border-top: 1px solid #ccc;">
+            <div class="sign-box" style="margin-top: 0; font-size: 0.75rem;">
                 Applicant Sign: ____________________
+            </div>
+            <div class="page-badge">
+                PAGE 34
             </div>
         </div>
     </div>
 
     <script>
         function downloadPackagePDF() {
-            const element = document.getElementById('packageSheet');
-            if (!element) return;
+            const sheet1 = document.getElementById('packageSheet1');
+            const sheet2 = document.getElementById('packageSheet2');
+            if (!sheet1) return;
 
             const filename = '{{ $package->code ?? 'Package' }}_{{ $package->days ?? '14' }}_Days_Package.pdf';
+            const jsPDFClass = (window.jspdf && window.jspdf.jsPDF) ? window.jspdf.jsPDF : (window.jsPDF || null);
 
-            if (typeof html2canvas !== 'undefined') {
-                html2canvas(element, {
+            if (typeof html2canvas !== 'undefined' && jsPDFClass) {
+                // Render Sheet 1 (Page 1)
+                html2canvas(sheet1, {
                     scale: 2,
                     useCORS: true,
                     logging: false,
                     scrollY: 0
-                }).then(function(canvas) {
-                    const imgData = canvas.toDataURL('image/jpeg', 0.98);
-                    const jsPDFClass = (window.jspdf && window.jspdf.jsPDF) ? window.jspdf.jsPDF : (window.jsPDF || null);
-                    if (jsPDFClass) {
-                        const pdf = new jsPDFClass('p', 'mm', 'a4');
-                        const pdfWidth = 210;
-                        const pdfHeight = 297;
-                        const margin = 2; // 2mm margin
-                        const printableWidth = pdfWidth - (margin * 2);
-                        const printableHeight = pdfHeight - (margin * 2);
+                }).then(function(canvas1) {
+                    const imgData1 = canvas1.toDataURL('image/jpeg', 0.98);
+                    const pdf = new jsPDFClass('p', 'mm', 'a4');
+                    const pdfWidth = 210;
+                    const pdfHeight = 297;
+                    const margin = 2; // 2mm margin
+                    const printableWidth = pdfWidth - (margin * 2);
+                    const printableHeight = pdfHeight - (margin * 2);
 
-                        let renderWidth = printableWidth;
-                        let renderHeight = (canvas.height * renderWidth) / canvas.width;
-                        let posX = margin;
-                        let posY = margin;
+                    let renderWidth1 = printableWidth;
+                    let renderHeight1 = (canvas1.height * renderWidth1) / canvas1.width;
+                    let posX1 = margin;
+                    let posY1 = margin;
 
-                        if (renderHeight > printableHeight) {
-                            const ratio = printableHeight / renderHeight;
-                            renderHeight = printableHeight;
-                            renderWidth = renderWidth * ratio;
-                            posX = margin + ((printableWidth - renderWidth) / 2);
-                        }
-
-                        pdf.addImage(imgData, 'JPEG', posX, posY, renderWidth, renderHeight);
-                        pdf.save(filename);
-                        return;
+                    if (renderHeight1 > printableHeight) {
+                        const ratio = printableHeight / renderHeight1;
+                        renderHeight1 = printableHeight;
+                        renderWidth1 = renderWidth1 * ratio;
+                        posX1 = margin + ((printableWidth - renderWidth1) / 2);
                     }
 
-                    // Fallback to standard html2pdf
-                    html2pdf().set({
-                        margin: [2, 2, 2, 2],
-                        filename: filename,
-                        image: { type: 'jpeg', quality: 0.98 },
-                        html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
-                        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-                    }).from(element).save();
+                    pdf.addImage(imgData1, 'JPEG', posX1, posY1, renderWidth1, renderHeight1);
+
+                    // Render Sheet 2 (Page 2) if it exists
+                    if (sheet2) {
+                        html2canvas(sheet2, {
+                            scale: 2,
+                            useCORS: true,
+                            logging: false,
+                            scrollY: 0
+                        }).then(function(canvas2) {
+                            pdf.addPage('a4', 'portrait');
+                            const imgData2 = canvas2.toDataURL('image/jpeg', 0.98);
+
+                            let renderWidth2 = printableWidth;
+                            let renderHeight2 = (canvas2.height * renderWidth2) / canvas2.width;
+                            let posX2 = margin;
+                            let posY2 = margin;
+
+                            if (renderHeight2 > printableHeight) {
+                                const ratio = printableHeight / renderHeight2;
+                                renderHeight2 = printableHeight;
+                                renderWidth2 = renderWidth2 * ratio;
+                                posX2 = margin + ((printableWidth - renderWidth2) / 2);
+                            }
+
+                            pdf.addImage(imgData2, 'JPEG', posX2, posY2, renderWidth2, renderHeight2);
+                            pdf.save(filename);
+                        }).catch(function(err) {
+                            console.error('Error rendering sheet 2:', err);
+                            pdf.save(filename);
+                        });
+                    } else {
+                        pdf.save(filename);
+                    }
                 }).catch(function(err) {
                     console.error('Error generating PDF:', err);
-                    html2pdf().set({
-                        margin: [2, 2, 2, 2],
-                        filename: filename,
-                        image: { type: 'jpeg', quality: 0.98 },
-                        html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
-                        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-                    }).from(element).save();
                 });
             } else {
                 html2pdf().set({
@@ -1054,7 +1202,7 @@
                     image: { type: 'jpeg', quality: 0.98 },
                     html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
                     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-                }).from(element).save();
+                }).from(sheet1).save();
             }
         }
 

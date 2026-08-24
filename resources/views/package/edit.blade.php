@@ -65,6 +65,8 @@
                                 type="button">MAKTAB ADDRESS</button></li>
                         <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-notes"
                                 type="button">Notes</button></li>
+                        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-services"
+                                type="button">SERVICES (PAGE 2)</button></li>
                     </ul>
 
                     <div class="tab-content card">
@@ -1261,6 +1263,70 @@
                                 </div>
                             </div>
                         </div>
+
+                        {{-- Services (Page 2) --}}
+                        @php
+                            $defaultServicesContent = '<ul>
+    <li>Meet & assist at the airport Jeddah/Medinah Hajj Terminal. (Sub to Approval Handling).</li>
+    <li>Group arrival transfer by Bus from Airport to hotel is provided by NAQABA / SAUDI MOULLEM.</li>
+    <li>Average 04 person sharing Accommodation in Aziziya with air condition A class building with proper beds (Pillow, Bed sheet, Blanket).</li>
+    <li>Fullboard meal (Breakfast, Lunch & dinner) with hot & Coldrink to serve in Aziziya building except Hajj Days.</li>
+    <li>Aziziya Services please reference to Page # 25 & 25A.</li>
+    <li>Accommodation in Makkah hotels with Breakfast & Dinner (by Saudi Star Standard).</li>
+    <li>Accommodation in Medinah hotels with Breakfast & Dinner (by Saudi Star Standard).</li>
+    <li>During peak days from the 1st to the 14th of Zill Hajj, the check-in time at hotels in Makkah and Medinah is after Isha prayers, in accordance with hotel policies and due to the large number of check-ins and check-outs. The check-out time is 12 PM</li>
+    <li>Fullboard meal to be serve in Mina from 08 Zil hajj to 12 Zil hajj.</li>
+    <li>5 days Platinum Arrangment between 08 Zil hajj to 12 Zil hajj with retaining room in Aziziya.</li>
+    <li>Private Special Luxury Busses with Bathroom (Mina - Arafat - Muzdalfa - Mina).</li>
+    <li>Transfer Makkah to Medinah or Medinah to Makkah by Bus/Train.</li>
+    <li>Best location MAKTAB (A) in mina very near to Jamarat, with Sofa Cum Bed (size 50 to 55cm) Private Toilet, for Group MAKTAB (A) Category Hujjaj. (Indian and western) (Services by Saudi Company)</li>
+    <li>(Mashaer Hajj Services) Pillow, Bed sheet, blanket, Air conditioned tent, buffet meal & Hot & Coldrink. Avg 16 people to a tent (Tent may be combined). (Services by Saudi Company)</li>
+    <li>Tent in Arafat with meals and Hot & Coldrink. Floor Mat & snack box in Muzdalfa. (Services by Saudi Company)</li>
+    <li>Mic and Speaker are installed to the religious speeches for guidance.</li>
+</ul>
+
+<p><strong>Airline Ticket not included in this package<br>
+(Approx PKR 335,000/- FROM KARACHI & PKR 345,000/- FROM NORTH PAKISTAN.)</strong></p>
+
+<p>Different fares for Hajis coming from international destination.</p>
+<ul>
+    <li>Saudi Airline, Emirates, Oman, PIA, Qatar, SereneAir, FlyNas, Turkish Airlines, Fly Dubai etc Inclusive PSF.</li>
+    <li>International ticket may be upgraded to Business class by paying suppliment. (Subject to Availability)</li>
+    <li>Ziyarat in Medinah with guidance.</li>
+    <li>Hajj training program and guidance in Pakistan / Saudia.</li>
+    <li>Religious guide book etc.</li>
+    <li>Assitance in doing Qurbani Approx Charges SAR 720/-</li>
+    <li>Assitance in Tawaf - e - Ziyara.</li>
+</ul>
+
+<p><strong>IMPORTANT NOTES:</strong></p>
+<ol>
+    <li>No of days of stay in Makkah can be reduced but prices remain the same.</li>
+    <li>Shuttle will be provided two times a day for drop to Haram till 07 Zil hajj, (Shuttle services subject to Saudi Laws and traffic).</li>
+    <li>Abraaj Tower Means Swiss Maqam, Hajar tower, Swissotel, Safwa orchid, Al marwa etc & Project of Jabal e Omar, means Hayat Regency, Address Hotel, Jumeirah Hotel, Hilton Convention, Double Tree, Marriot Hotel etc.</li>
+    <li>Kaba view Supplement SAR 3800/- per person.</li>
+    <li>Rates & Hotels subject to change (Currency Difference) prices are subject to change. Even after booking /Saudi Talimaat changes.</li>
+</ol>';
+                        @endphp
+                        <div class="tab-pane fade card" id="tab-services">
+                            <div class="card-body">
+                                <h5 class="mb-3">Package Services & Notes (Page 2 in Brochure / PDF)</h5>
+                                <div class="row g-3">
+                                    <div class="col-md-12">
+                                        <label class="form-label fw-semibold">Services Header Title</label>
+                                        <input type="text" name="services_title" class="form-control"
+                                            placeholder="e.g. PLATINUM PACKAGES SERVICES (WITH AZIZIYA)"
+                                            value="{{ old('services_title', $package->services_title ?? 'PLATINUM PACKAGES SERVICES (WITH AZIZIYA)') }}">
+                                    </div>
+
+                                    <div class="col-md-12 mt-3">
+                                        <label class="form-label fw-semibold">Services & Important Notes Content</label>
+                                        <textarea name="services_content" id="services-editor" class="form-control">{{ old('services_content', $package->services_content ?? $defaultServicesContent) }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="text-end" style="margin: 20px">
                             <button type="submit" class="btn btn-success">Save</button>
                         </div>
@@ -1540,6 +1606,20 @@
                                 ['color', ['color']],
                                 ['para', ['ul', 'ol', 'paragraph']],
                                 ['view', ['codeview']]
+                            ]
+                        });
+                        jQuery('#services-editor').summernote({
+                            placeholder: 'Write package services and terms here...',
+                            tabsize: 2,
+                            height: 350,
+                            toolbar: [
+                                ['style', ['style']],
+                                ['font', ['bold', 'underline', 'clear']],
+                                ['color', ['color']],
+                                ['para', ['ul', 'ol', 'paragraph']],
+                                ['table', ['table']],
+                                ['insert', ['link', 'picture']],
+                                ['view', ['fullscreen', 'codeview', 'help']]
                             ]
                         });
                     });
