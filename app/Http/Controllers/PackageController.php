@@ -105,7 +105,7 @@ class PackageController extends Controller
             $this->saveRelations($request, $package, $data);
         });
 
-        return redirect()->route('package.show')->with('success', 'Package updated successfully.');
+        return redirect()->route('package.show', $package->id)->with('success', 'Package updated successfully.');
     }
     public function destroy($id)
     {
