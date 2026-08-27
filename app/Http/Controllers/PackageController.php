@@ -155,7 +155,6 @@ class PackageController extends Controller
             'medina_arrival' => 'nullable|in:before_hajj,after_hajj',
             'hajj_duration' => 'nullable|in:short,long',
 
-            // Hijri start info
             'hijri_start_day' => 'nullable|integer|min:1|max:30',
             'hijri_start_month' => 'nullable|integer|min:1|max:12',
 
@@ -167,7 +166,6 @@ class PackageController extends Controller
             'mina_type' => 'nullable|string|max:100',
             'giveaway_note' => 'nullable|string',
 
-            // Makkah / Madinah Sharing Breakdown
             'makkah_a' => 'nullable|array',
             'makkah_a.double' => 'nullable|integer|min:0',
             'makkah_a.triple' => 'nullable|integer|min:0',
@@ -382,24 +380,20 @@ class PackageController extends Controller
 
         $package->itinerary()->updateOrCreate(['package_id' => $package->id], $itineraryData);
 
-        // Terms & Condition
         $package->terms()->updateOrCreate(
             ['package_id' => $package->id],
             ['content' => $data['terms']['terms_content'] ?? null]
         );
 
-        // Transport (repeatable)
         foreach ($data['transports'] as $row) {
             $package->transports()->create($row);
         }
 
-        // Flights (repeatable)
         foreach ($data['flights'] as $row) {
             $row['is_preferred'] = filter_var($row['is_preferred'] ?? false, FILTER_VALIDATE_BOOLEAN);
             $package->transportFlights()->create($row);
         }
 
-        // Trains (repeatable)
         foreach ($data['trains'] as $row) {
             $package->transportTrains()->create($row);
         }
