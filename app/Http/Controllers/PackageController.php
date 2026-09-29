@@ -195,7 +195,20 @@ class PackageController extends Controller
             'madinah_taxi_fare' => 'nullable|string|max:100',
             'services_title' => 'nullable|string|max:255',
             'services_content' => 'nullable|string',
+            'feature_icons' => 'nullable|array',
         ]);
+
+        if ($request->hasFile('feature_icons_files')) {
+            $featureIcons = $package['feature_icons'] ?? [];
+            foreach ($request->file('feature_icons_files') as $key => $file) {
+                if ($file && $file->isValid()) {
+                    $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+                    $file->move(public_path('uploads/package_icons'), $filename);
+                    $featureIcons[$key]['icon'] = 'uploads/package_icons/' . $filename;
+                }
+            }
+            $package['feature_icons'] = $featureIcons;
+        }
 
         $accommodations = $request->validate([
             'accommodations' => 'nullable|array',

@@ -17,6 +17,7 @@ class Package extends Model
         'makkah_b' => 'array',
         'madinah_a' => 'array',
         'madinah_b' => 'array',
+        'feature_icons' => 'array',
     ];
 
     public function accommodations()

@@ -974,60 +974,88 @@
         <div class="price-disclaimer">{!! $package->price_disclaimer ?? '"Book Early, Prices and Packages Subject to Change."' !!}</div>
 
         <!-- Bottom Icons and Terms/Notes -->
+        @php
+            $feat = $package->feature_icons ?? [];
+
+            $item1Zone = $feat['item_1']['badge_zone'] ?? ('ZONE ' . ($package->category_zone ?? '1'));
+            $item1Maktab = $feat['item_1']['badge_maktab'] ?? ('MAKTAB ' . ($package->maktab ?? 'A-CATEGORY'));
+            $item1Title = $feat['item_1']['title'] ?? 'BEST LOCATION IN MINA';
+            $item1Desc = $feat['item_1']['desc'] ?? "AVG16 PEOPLE TO A TENT\n<small>SOFACUM BED SIZE 50-55 CM EACH \n(TENT MAY BE COMBINED) \nAS PER SAUDI TALIMAAT</small>";
+
+            $item2Icon = $feat['item_2']['icon'] ?? 'assets/images/package_images/1.png';
+            $item2Text = $feat['item_2']['text'] ?? "MAKKAH AND \n MEDINAH HOTELS \n HALF BOARD BASIS";
+
+            $item3Icon = $feat['item_3']['icon'] ?? 'assets/images/package_images/2.png';
+            $item3Text = $feat['item_3']['text'] ?? "FULL BOARD BUFFET \n MEAL IN MINA & ARAFAT \n <small>For Group Maktab A Category \nHujjaj</small>";
+
+            $item4Icon = $feat['item_4']['icon'] ?? 'assets/images/package_images/2.png';
+            $item4Text = $feat['item_4']['text'] ?? "AZIZIYA ACCOMMODATION \nQUAD SHARING, FULL \nBOARD BUFFET";
+
+            $item5Icon = $feat['item_5']['icon'] ?? 'assets/images/package_images/3.png';
+            $item5Text = $feat['item_5']['text'] ?? "PRIVATE BATHROOM \n IN MINA & ARAFAT FOR \n UB GROUP";
+
+            $item6Icon = $feat['item_6']['icon'] ?? 'assets/images/package_images/4.png';
+            $item6Text = $feat['item_6']['text'] ?? "<small>BULLET TRAIN MAK-MED OR MED-MAK</small>\n PRIVATE LUXURY BUSSES \n MODEL 2025 FOR MASHAER \n DAYS WITH BATHROOM";
+        @endphp
+
         <div class="row align-items-start">
             <div class="col-lg-5 col-5 mb-2 align-self-start">
                 <div class="icon-box">
                     <div class="row">
+                        <!-- Block 1: Zone & Maktab -->
                         <div class="col-6 icon-item">
                             <div class="text-center mb-1">
-                                <span class="zone-badge">ZONE {{ $package->category_zone ?? '1' }}<small>MAKTAB
-                                        {{ $package->maktab ?? 'A-CATEGORY' }}</small></span>
+                                <span class="zone-badge">{{ $item1Zone }}@if(!empty($item1Maktab))<small>{{ $item1Maktab }}</small>@endif</span>
                             </div>
-                            <div class="desc">BEST LOCATION IN MINA</div>
-                            <div class="desc">AVG16 PEOPLE TO A TENT<br>
-                                <small>SOFACUM BED SIZE 50-55 CM EACH <br>(TENT MAY
-                                    BE COMBINED) <br>AS PER SAUDI TALIMAAT</small>
-                            </div>
+                            @if(!empty($item1Title))
+                                <div class="desc fw-bold">{!! nl2br($item1Title) !!}</div>
+                            @endif
+                            <div class="desc">{!! nl2br($item1Desc) !!}</div>
                         </div>
+
+                        <!-- Block 2: Hotels & Meals -->
                         <div class="col-6 icon-item">
                             <div>
-                                <img src="{{ asset('assets/images/package_images/1.png') }}" alt="Food"
+                                <img src="{{ asset($item2Icon) }}" alt="Icon"
                                     width="26" height="26" style="object-fit: contain;">
                             </div>
-                            {{-- <div class="label">MAKKAH AND <br> MEDINAH HOTELS</div> --}}
-                            <div class="desc">MAKKAH AND <br> MEDINAH HOTELS <br> HALF BOARD BASIS</div>
+                            <div class="desc">{!! nl2br($item2Text) !!}</div>
                         </div>
+
+                        <!-- Block 3: Mina & Arafat Meal -->
                         <div class="col-6 icon-item">
                             <div>
-                                <img src="{{ asset('assets/images/package_images/2.png') }}" alt="Food"
+                                <img src="{{ asset($item3Icon) }}" alt="Icon"
                                     width="26" height="26" style="object-fit: contain;">
                             </div>
-                            <div class="desc">
-                                FULL BOARD BUFFET <br>
-                                MEAL IN MINA & ARAFAT <br>
-                                <small>For Group Maktab A Category <br>Hujjaj</small>
-                            </div>
+                            <div class="desc">{!! nl2br($item3Text) !!}</div>
                         </div>
+
+                        <!-- Block 4: Aziziya Accommodation -->
                         <div class="col-6 icon-item">
                             <div>
-                                <img src="{{ asset('assets/images/package_images/2.png') }}" alt="Food"
+                                <img src="{{ asset($item4Icon) }}" alt="Icon"
                                     width="26" height="26" style="object-fit: contain;">
                             </div>
-                            <div class="desc">AZIZIYA ACCOMMODATION <br>QUAD SHARING, FULL <br>BOARD BUFFET <br> </div>
+                            <div class="desc">{!! nl2br($item4Text) !!}</div>
                         </div>
+
+                        <!-- Block 5: Private Bathroom -->
                         <div class="col-6 icon-item">
                             <div>
-                                <img src="{{ asset('assets/images/package_images/3.png') }}" alt="Food"
+                                <img src="{{ asset($item5Icon) }}" alt="Icon"
                                     width="26" height="26" style="object-fit: contain;">
                             </div>
-                            <div class="desc">PRIVATE BATHROOM <br> IN MINA & ARAFAT FOR <br> UB GROUP</div>
+                            <div class="desc">{!! nl2br($item5Text) !!}</div>
                         </div>
+
+                        <!-- Block 6: Transport & Luxury Busses -->
                         <div class="col-6 icon-item">
                             <div>
-                                <img src="{{ asset('assets/images/package_images/4.png') }}" alt="Food"
+                                <img src="{{ asset($item6Icon) }}" alt="Icon"
                                     width="26" height="26" style="object-fit: contain;">
                             </div>
-                            <div class="desc"><small>BULLET TRAIN MAK-MED OR MED-MAK</small><br> PRIVATE LUXURY BUSSES <br> MODEL 2025 FOR MASHAER <br> DAYS WITH BATHROOM</div>
+                            <div class="desc">{!! nl2br($item6Text) !!}</div>
                         </div>
                     </div>
                 </div>

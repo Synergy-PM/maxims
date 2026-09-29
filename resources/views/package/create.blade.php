@@ -34,7 +34,7 @@
                     <h4 class="fs-18 fw-semibold m-0">Package / <strong>Create</strong></h4>
                 </div>
 
-                @if ($errors->any())
+                @if (isset($errors) && $errors->any())
                     <div class="alert alert-danger">
                         <ul class="m-0">
                             @foreach ($errors->all() as $error)
@@ -64,6 +64,8 @@
                                 type="button">MAKTAB ADDRESS</button></li>
                         <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-notes"
                                 type="button">Notes</button></li>
+                        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-feature-icons"
+                                type="button">FEATURE ICONS BOX</button></li>
                         <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-services"
                                 type="button">SERVICES (PAGE 2)</button></li>
                     </ul>
@@ -784,6 +786,210 @@
                                         <label class="form-label fw-semibold">Madinah Airport Taxi Fare (SAR / Person)</label>
                                         <input type="text" name="madinah_taxi_fare" class="form-control"
                                             placeholder="e.g. 150" value="{{ old('madinah_taxi_fare', '150') }}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Feature Icons Box --}}
+                        @php
+                            $feat = old('feature_icons', []);
+
+                            $defZoneBadge = $feat['item_1']['badge_zone'] ?? 'ZONE 1';
+                            $defMaktabBadge = $feat['item_1']['badge_maktab'] ?? 'MAKTAB A-CATEGORY';
+                            $defItem1Title = $feat['item_1']['title'] ?? 'BEST LOCATION IN MINA';
+                            $defItem1Desc = $feat['item_1']['desc'] ?? "AVG16 PEOPLE TO A TENT\nSOFACUM BED SIZE 50-55 CM EACH\n(TENT MAY BE COMBINED)\nAS PER SAUDI TALIMAAT";
+
+                            $defItem2Icon = $feat['item_2']['icon'] ?? 'assets/images/package_images/1.png';
+                            $defItem2Text = $feat['item_2']['text'] ?? "MAKKAH AND\nMEDINAH HOTELS\nHALF BOARD BASIS";
+
+                            $defItem3Icon = $feat['item_3']['icon'] ?? 'assets/images/package_images/2.png';
+                            $defItem3Text = $feat['item_3']['text'] ?? "FULL BOARD BUFFET\nMEAL IN MINA & ARAFAT\nFor Group Maktab A Category Hujjaj";
+
+                            $defItem4Icon = $feat['item_4']['icon'] ?? 'assets/images/package_images/2.png';
+                            $defItem4Text = $feat['item_4']['text'] ?? "AZIZIYA ACCOMMODATION\nQUAD SHARING, FULL\nBOARD BUFFET";
+
+                            $defItem5Icon = $feat['item_5']['icon'] ?? 'assets/images/package_images/3.png';
+                            $defItem5Text = $feat['item_5']['text'] ?? "PRIVATE BATHROOM\nIN MINA & ARAFAT FOR\nUB GROUP";
+
+                            $defItem6Icon = $feat['item_6']['icon'] ?? 'assets/images/package_images/4.png';
+                            $defItem6Text = $feat['item_6']['text'] ?? "BULLET TRAIN MAK-MED OR MED-MAK\nPRIVATE LUXURY BUSSES\nMODEL 2025 FOR MASHAER\nDAYS WITH BATHROOM";
+
+                            $presetIcons = [
+                                'assets/images/package_images/1.png' => 'Icon 1 - Dining / Half Board (Cutlery)',
+                                'assets/images/package_images/2.png' => 'Icon 2 - Buffet / Tent (Meals)',
+                                'assets/images/package_images/3.png' => 'Icon 3 - Bathroom / Washroom',
+                                'assets/images/package_images/4.png' => 'Icon 4 - Transport / Train & Luxury Bus',
+                            ];
+                        @endphp
+
+                        <div class="tab-pane fade card" id="tab-feature-icons">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center justify-content-between mb-3">
+                                    <div>
+                                        <h5 class="mb-1">Feature Icons & Box Details (Page 1 Left Box)</h5>
+                                        <p class="text-muted fs-13 mb-0">Customize the 6 items, icons, and text displayed inside the gold-bordered box on the package brochure.</p>
+                                    </div>
+                                </div>
+
+                                <div class="row g-3">
+                                    <!-- Item 1: Zone & Maktab Info -->
+                                    <div class="col-md-6">
+                                        <div class="border rounded p-3 h-100 bg-light bg-opacity-25">
+                                            <h6 class="fw-bold text-primary mb-3">Block 1: Zone & Maktab Banner</h6>
+                                            <div class="row g-2 mb-2">
+                                                <div class="col-md-6">
+                                                    <label class="form-label fw-semibold fs-12">Zone Badge Text</label>
+                                                    <input type="text" name="feature_icons[item_1][badge_zone]" class="form-control form-control-sm"
+                                                        value="{{ $defZoneBadge }}" placeholder="e.g. ZONE 1">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-label fw-semibold fs-12">Maktab Sub-Badge Text</label>
+                                                    <input type="text" name="feature_icons[item_1][badge_maktab]" class="form-control form-control-sm"
+                                                        value="{{ $defMaktabBadge }}" placeholder="e.g. MAKTAB A-CATEGORY">
+                                                </div>
+                                            </div>
+                                            <div class="mb-2">
+                                                <label class="form-label fw-semibold fs-12">Heading / Line 1</label>
+                                                <input type="text" name="feature_icons[item_1][title]" class="form-control form-control-sm"
+                                                    value="{{ $defItem1Title }}" placeholder="e.g. BEST LOCATION IN MINA">
+                                            </div>
+                                            <div>
+                                                <label class="form-label fw-semibold fs-12">Details / Description</label>
+                                                <textarea name="feature_icons[item_1][desc]" class="form-control form-control-sm" rows="3"
+                                                    placeholder="Enter text (new lines supported)">{{ $defItem1Desc }}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Item 2: Hotels Meal -->
+                                    <div class="col-md-6">
+                                        <div class="border rounded p-3 h-100 bg-light bg-opacity-25">
+                                            <h6 class="fw-bold text-primary mb-3">Block 2: Hotels & Meal Plan</h6>
+                                            <div class="row g-2 mb-2 align-items-center">
+                                                <div class="col-md-7">
+                                                    <label class="form-label fw-semibold fs-12">Preset Icon</label>
+                                                    <select name="feature_icons[item_2][icon]" class="form-select form-select-sm">
+                                                        @foreach($presetIcons as $path => $label)
+                                                            <option value="{{ $path }}" {{ $defItem2Icon == $path ? 'selected' : '' }}>{{ $label }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <label class="form-label fw-semibold fs-12">Custom Icon (Optional)</label>
+                                                    <input type="file" name="feature_icons_files[item_2]" class="form-control form-control-sm" accept="image/*">
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <label class="form-label fw-semibold fs-12">Description Text</label>
+                                                <textarea name="feature_icons[item_2][text]" class="form-control form-control-sm" rows="3"
+                                                    placeholder="Enter text (new lines supported)">{{ $defItem2Text }}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Item 3: Mina & Arafat Meal -->
+                                    <div class="col-md-6">
+                                        <div class="border rounded p-3 h-100 bg-light bg-opacity-25">
+                                            <h6 class="fw-bold text-primary mb-3">Block 3: Mina & Arafat Meal</h6>
+                                            <div class="row g-2 mb-2 align-items-center">
+                                                <div class="col-md-7">
+                                                    <label class="form-label fw-semibold fs-12">Preset Icon</label>
+                                                    <select name="feature_icons[item_3][icon]" class="form-select form-select-sm">
+                                                        @foreach($presetIcons as $path => $label)
+                                                            <option value="{{ $path }}" {{ $defItem3Icon == $path ? 'selected' : '' }}>{{ $label }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <label class="form-label fw-semibold fs-12">Custom Icon (Optional)</label>
+                                                    <input type="file" name="feature_icons_files[item_3]" class="form-control form-control-sm" accept="image/*">
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <label class="form-label fw-semibold fs-12">Description Text</label>
+                                                <textarea name="feature_icons[item_3][text]" class="form-control form-control-sm" rows="3"
+                                                    placeholder="Enter text (new lines supported)">{{ $defItem3Text }}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Item 4: Aziziya Accommodation -->
+                                    <div class="col-md-6">
+                                        <div class="border rounded p-3 h-100 bg-light bg-opacity-25">
+                                            <h6 class="fw-bold text-primary mb-3">Block 4: Aziziya Accommodation</h6>
+                                            <div class="row g-2 mb-2 align-items-center">
+                                                <div class="col-md-7">
+                                                    <label class="form-label fw-semibold fs-12">Preset Icon</label>
+                                                    <select name="feature_icons[item_4][icon]" class="form-select form-select-sm">
+                                                        @foreach($presetIcons as $path => $label)
+                                                            <option value="{{ $path }}" {{ $defItem4Icon == $path ? 'selected' : '' }}>{{ $label }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <label class="form-label fw-semibold fs-12">Custom Icon (Optional)</label>
+                                                    <input type="file" name="feature_icons_files[item_4]" class="form-control form-control-sm" accept="image/*">
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <label class="form-label fw-semibold fs-12">Description Text</label>
+                                                <textarea name="feature_icons[item_4][text]" class="form-control form-control-sm" rows="3"
+                                                    placeholder="Enter text (new lines supported)">{{ $defItem4Text }}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Item 5: Private Bathroom -->
+                                    <div class="col-md-6">
+                                        <div class="border rounded p-3 h-100 bg-light bg-opacity-25">
+                                            <h6 class="fw-bold text-primary mb-3">Block 5: Private Bathroom</h6>
+                                            <div class="row g-2 mb-2 align-items-center">
+                                                <div class="col-md-7">
+                                                    <label class="form-label fw-semibold fs-12">Preset Icon</label>
+                                                    <select name="feature_icons[item_5][icon]" class="form-select form-select-sm">
+                                                        @foreach($presetIcons as $path => $label)
+                                                            <option value="{{ $path }}" {{ $defItem5Icon == $path ? 'selected' : '' }}>{{ $label }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <label class="form-label fw-semibold fs-12">Custom Icon (Optional)</label>
+                                                    <input type="file" name="feature_icons_files[item_5]" class="form-control form-control-sm" accept="image/*">
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <label class="form-label fw-semibold fs-12">Description Text</label>
+                                                <textarea name="feature_icons[item_5][text]" class="form-control form-control-sm" rows="3"
+                                                    placeholder="Enter text (new lines supported)">{{ $defItem5Text }}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Item 6: Transport / Luxury Bus -->
+                                    <div class="col-md-6">
+                                        <div class="border rounded p-3 h-100 bg-light bg-opacity-25">
+                                            <h6 class="fw-bold text-primary mb-3">Block 6: Transport & Luxury Bus</h6>
+                                            <div class="row g-2 mb-2 align-items-center">
+                                                <div class="col-md-7">
+                                                    <label class="form-label fw-semibold fs-12">Preset Icon</label>
+                                                    <select name="feature_icons[item_6][icon]" class="form-select form-select-sm">
+                                                        @foreach($presetIcons as $path => $label)
+                                                            <option value="{{ $path }}" {{ $defItem6Icon == $path ? 'selected' : '' }}>{{ $label }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <label class="form-label fw-semibold fs-12">Custom Icon (Optional)</label>
+                                                    <input type="file" name="feature_icons_files[item_6]" class="form-control form-control-sm" accept="image/*">
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <label class="form-label fw-semibold fs-12">Description Text</label>
+                                                <textarea name="feature_icons[item_6][text]" class="form-control form-control-sm" rows="3"
+                                                    placeholder="Enter text (new lines supported)">{{ $defItem6Text }}</textarea>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
